@@ -24,16 +24,23 @@ Intel Macs and physical installs (without a VM) have not been tested.
 
 ## Download
 
-Pick the folder for your computer. Download the disk file you need and the check files next to it.
+Pick the disk file for your computer, then download the check files for the same architecture next to it. The download links below go straight to each file — the bare folder URLs do not list their contents, so don't try to browse to them.
 
-| Your computer | Folder | Disk file | Size |
-| --- | --- | --- | --- |
-| Apple Silicon Mac, UTM | [arm64](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/) | `decrypt-os-beta4-rc7-arm64.utm.tar` | `~3.1 GB` |
-| ARM64 host, QEMU | [arm64](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/) | `decrypt-os-beta4-rc7-arm64.qcow2` | `~3.1 GB` |
-| PC, VirtualBox or VMware | [x86_64](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/) | `decrypt-os-beta4-rc7-x86_64.vmdk` | `~7.0 GB` |
-| PC, QEMU/KVM on Linux | [x86_64](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/) | `decrypt-os-beta4-rc7-x86_64.qcow2` | `~3.4 GB` |
+| Your computer | Disk file | Size |
+| --- | --- | --- |
+| Apple Silicon Mac, UTM | [decrypt-os-beta4-rc7-arm64.utm.tar](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/decrypt-os-beta4-rc7-arm64.utm.tar) | `~3.1 GB` |
+| ARM64 host, QEMU | [decrypt-os-beta4-rc7-arm64.qcow2](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/decrypt-os-beta4-rc7-arm64.qcow2) | `~3.1 GB` |
+| PC, VirtualBox or VMware | [decrypt-os-beta4-rc7-x86_64.vmdk](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/decrypt-os-beta4-rc7-x86_64.vmdk) | `~7.0 GB` |
+| PC, QEMU/KVM on Linux | [decrypt-os-beta4-rc7-x86_64.qcow2](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/decrypt-os-beta4-rc7-x86_64.qcow2) | `~3.4 GB` |
 
-Sizes are approximate and rounded; see `MANIFEST.json` in each folder for the exact byte count.
+Sizes are approximate and rounded; see `MANIFEST.json` (linked below) for the exact byte count.
+
+Check files for your architecture (same folder as the disk file, direct links):
+
+| Architecture | Check files |
+| --- | --- |
+| arm64 | [SHA256SUMS](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/SHA256SUMS) · [MANIFEST.json](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/MANIFEST.json) · [MANIFEST.json.sshsig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/MANIFEST.json.sshsig) · [MANIFEST.json.sig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/MANIFEST.json.sig) · [allowed_signers](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/allowed_signers) · [release-public.pem](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/release-public.pem) · [IMPORT.md](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/IMPORT.md) |
+| x86_64 | [SHA256SUMS](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/SHA256SUMS) · [MANIFEST.json](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/MANIFEST.json) · [MANIFEST.json.sshsig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/MANIFEST.json.sshsig) · [MANIFEST.json.sig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/MANIFEST.json.sig) · [allowed_signers](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/allowed_signers) · [release-public.pem](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/release-public.pem) · [IMPORT.md](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/IMPORT.md) |
 
 Every folder also has these files:
 
