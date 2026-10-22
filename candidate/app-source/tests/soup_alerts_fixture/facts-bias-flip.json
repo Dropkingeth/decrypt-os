@@ -1,0 +1,74 @@
+{
+  "event": "pine_facts",
+  "execution_context": {
+    "cbdr_trigger": "bar_close_touch",
+    "chart_seconds": 1,
+    "decision_time": 1618411688000,
+    "entry_bar_open": 1618411687000,
+    "runner_delay_bars": 1
+  },
+  "execution_profile": "soup-pine-authority-v3",
+  "facts": [
+    {
+      "close_side": "long",
+      "kind": "bias_flip"
+    }
+  ],
+  "price": 9991.25,
+  "root": "MNQ",
+  "schema_version": "decrypt-soup-management-v3",
+  "signalId": "soup-fx.f07",
+  "strategy_build": "soup-pine-authority-2026-09-13-r4",
+  "strategy_snapshot": {
+    "constants": {
+      "fixture_constant_a": 1,
+      "fixture_flag_b": true,
+      "fixture_window_c": "0000-0001"
+    },
+    "inputs": {
+      "be_offset_handles": 3.5,
+      "cat_stop_handles": 55,
+      "close_all_eod": false,
+      "enable_live_engine_alerts": true,
+      "eod_session": "1530-1600",
+      "excl_0000_0001": "0000-0001",
+      "excl_0000_0002": "0000-0001",
+      "excl_0000_0003": "0000-0001",
+      "excl_0000_0004": "0000-0001",
+      "excl_0000_0005": "0000-0001",
+      "excl_0000_0006": "0000-0001",
+      "excl_0000_0007": "0000-0001",
+      "excl_0000_0008": "0000-0001",
+      "fixture_bool_01": false,
+      "fixture_bool_02": true,
+      "fixture_bool_03": false,
+      "fixture_bool_04": false,
+      "fixture_bool_05": true,
+      "fixture_bool_06": false,
+      "fixture_int_01": 23,
+      "fixture_int_02": 340,
+      "fixture_int_03": 8,
+      "fixture_int_04": 21,
+      "fixture_number_01": 0.35,
+      "fixture_number_02": 0.45,
+      "fixture_text_01": "4",
+      "fixture_text_02": "0000-0001",
+      "fixture_text_03": "0000-0001",
+      "initial_hard_stop_handles": 18,
+      "pause_after_cbdr_tp": false,
+      "progress_fail_adverse_ratio": 0.55,
+      "progress_fail_checkpoint_seconds": 70,
+      "tp1_handles": 9.5,
+      "use_catastrophe_stop": false,
+      "use_cbdr_tp_for_eod_runner": false,
+      "use_counter_ifvg_5s": false,
+      "use_initial_hard_stop": true,
+      "use_ltf_tp_exec": false,
+      "use_progress_fail_rule": false
+    }
+  },
+  "stream_id": "fx-soup-01",
+  "symbol": "MNQH2021",
+  "timestamp": 1618411687000,
+  "trade_id": "soup-fx.t01:long"
+}

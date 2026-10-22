@@ -1,0 +1,1254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bridge Advanced</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0910;--bg-1:#110e16;--bg-2:#18131f;--line:#26202e;--line-2:#3a3044;--ink:#fff5eb;--ink-2:#cfc1b3;--ink-3:#8b7f76;--ink-4:#5e554f;--amber:#ff9f43;--purple:#c56cf0;--coral:#ff6b81;--font:'Space Grotesk','Adwaita Sans','Noto Sans',system-ui,sans-serif;--mono:'JetBrains Mono','JetBrainsMono Nerd Font','Noto Sans Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{background:var(--bg)}
+body{margin:0;font:14px/1.4 var(--font);color:var(--ink);background:var(--bg);min-width:960px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:3px}
+.hidden{display:none!important}
+/* layout */
+main{max-width:1800px;margin:0 auto;padding:0 22px 24px;display:grid;grid-template-columns:minmax(0,1fr) clamp(320px,26vw,420px);column-gap:32px;align-items:start}
+.top,.strip,.drift{grid-column:1/-1}
+.side{position:sticky;top:0;max-height:100vh;overflow:auto;padding-bottom:20px}
+/* header */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0 10px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);min-width:0;flex-wrap:wrap}
+.brand b{color:var(--ink);font-weight:600;white-space:nowrap;font-size:13px}
+.brand i{width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,var(--amber),var(--coral) 60%,var(--purple));display:inline-block;flex:none}
+.badge{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:none;color:var(--amber);border:1px solid var(--amber);padding:4px 8px;border-radius:3px;white-space:nowrap}
+.tools{display:flex;gap:8px;flex:none}
+.strip{display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px;padding:9px 0;border-bottom:1px solid var(--line);font:12px/1.3 var(--mono);color:var(--ink-3)}
+.strip .mkt{color:var(--ink-2)}.strip .mkt.open{color:var(--ink)}
+.strip .hold{color:var(--amber)}
+.strip .feed.bad{color:var(--coral)}
+.clock{margin-left:auto;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.clock .dot{width:7px;height:7px;border-radius:50%;background:var(--ink);flex:none}
+.stale .clock .dot{background:var(--coral)}.stale .clock{color:var(--coral)}
+@media (prefers-reduced-motion:no-preference){.live .clock .dot{animation:pulse 3s ease-out infinite}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,245,235,.45)}70%{box-shadow:0 0 0 7px rgba(255,245,235,0)}100%{box-shadow:0 0 0 0 rgba(255,245,235,0)}}
+.drift{margin:0;padding:8px 12px;list-style:none;border-left:3px solid var(--amber);background:var(--bg-1);font-size:13px;color:var(--ink-2)}
+.drift:empty{display:none}
+.stale .col,.stale .side{opacity:.55}
+/* needs a person (red, top of page) */
+.needs{grid-column:1/-1;margin:10px 0 0;padding:10px 14px;border:1px solid var(--coral);border-left-width:3px;border-radius:6px;background:rgba(255,107,129,.08);display:grid;gap:8px}
+.needs .nh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.needs .nh span{font-size:13px;color:var(--ink-2)}
+.needs ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.needs li{display:grid;gap:3px;font-size:13px;color:var(--ink-2)}
+.needs .ns{display:flex;justify-content:space-between;gap:10px;align-items:baseline;color:var(--ink);font-weight:500}
+.needs .ns time{font:11px var(--mono);color:var(--ink-3)}
+.nf{color:var(--coral);font-weight:600}
+.nu{font:11.5px var(--mono);color:var(--ink-3);overflow-wrap:anywhere}
+.db .warn-box{border:1px solid var(--amber);border-radius:6px;padding:10px 12px;color:var(--amber);font-size:13.5px}
+.db .warn-box b{color:var(--amber)}
+.result .lead{font-size:14px}
+/* restart log */
+.log{list-style:none;margin:0;padding:0;display:grid;gap:3px;font:11.5px/1.4 var(--mono);color:var(--ink-3)}
+.log li{display:flex;flex-wrap:wrap;gap:0 8px;align-items:baseline}
+.log li.ph{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-4);margin-top:4px}
+.log .u{color:var(--ink-2)}
+.log .w{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.log .w.bad{color:var(--coral)}.log .w.warn{color:var(--amber)}.log .w.dim{color:var(--ink-4)}
+.log .d{flex:1 1 100%;overflow-wrap:anywhere}
+.pend details{font-size:12px;color:var(--ink-3)}.pend summary{cursor:pointer}.pend details>*:not(summary){margin-top:4px}
+.pend .pn{font-size:12px;color:var(--ink-2)}
+.db .steps{padding:0;list-style:none;font:11.5px/1.5 var(--mono);color:var(--ink-3)}
+/* sections */
+section{padding:14px 0 12px;border-bottom:1px solid var(--line);min-width:0}
+.sh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 10px}
+.sh h2{margin:0;font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.sh .r{font:12px/1 var(--mono);color:var(--ink-3)}
+.lh{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 4px}
+.lh h3{margin:0;font-size:17px;font-weight:600;color:var(--ink)}
+.lh .acts{margin-left:auto}
+.meta{margin:0 0 8px;font:12px/1.5 var(--mono);color:var(--ink-3)}
+.meta b{color:var(--ink-2);font-weight:500}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:center;margin:0 0 8px;font:12px/1.3 var(--mono)}
+.kv dt{color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase;font-size:10.5px}
+.kv dd{margin:0;display:flex;align-items:center;gap:8px;min-width:0;color:var(--ink-2);overflow-wrap:anywhere}
+.notes{margin:0 0 8px;padding:0;list-style:none;font-size:12.5px;color:var(--ink-3)}
+.warn{color:var(--amber)}.bad{color:var(--coral)}.info{color:var(--purple)}
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:6px;font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--ink);flex:none}
+.pill.amber{color:var(--amber)}.pill.amber i{background:var(--amber)}
+.pill.coral{color:var(--coral)}.pill.coral i{background:var(--coral)}
+.pill.purple{color:var(--purple)}.pill.purple i{background:var(--purple)}
+.pill.dim{color:var(--ink-3)}.pill.dim i{background:none;border:1.5px solid var(--ink-4)}
+.tag{font:600 9.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 5px;border-radius:3px;border:1px solid currentColor;white-space:nowrap}
+.tag.amber{color:var(--amber)}.tag.coral{color:var(--coral);background:rgba(255,107,129,.12)}.tag.purple{color:var(--purple)}.tag.dim{color:var(--ink-3)}
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--line-2);border-radius:4px;background:transparent;color:var(--ink-2);font:500 12px/1.2 var(--font);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--bg-2);color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.primary{background:var(--amber);border-color:var(--amber);color:#1a1008;font-weight:600}
+.btn.primary:hover{background:#ffb168}
+.btn.danger{color:var(--coral);border-color:var(--coral)}
+.btn.danger:hover{background:rgba(255,107,129,.12)}
+.btn.danger.primary{background:var(--coral);color:#1a0a0e}
+.btn.sm{padding:2px 7px;font-size:11px}
+.btn.copy{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px}
+.linkish{background:none;border:0;padding:0;color:var(--amber);cursor:pointer;text-decoration:underline;font-size:12.5px}
+/* menu */
+.menu{position:relative;display:inline-block}
+.menu summary{list-style:none;cursor:pointer}
+.menu summary::-webkit-details-marker{display:none}
+.menu ul{position:absolute;right:0;top:calc(100% + 4px);z-index:5;margin:0;padding:4px;list-style:none;min-width:150px;background:var(--bg-2);border:1px solid var(--line-2);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.menu ul button{display:block;width:100%;text-align:left;padding:6px 10px;border:0;background:none;border-radius:4px;color:var(--ink-2);cursor:pointer;font-size:12.5px}
+.menu ul button:hover:not(:disabled){background:var(--bg-1);color:var(--ink)}
+.menu ul button:disabled{opacity:.4;cursor:not-allowed}
+/* cards */
+.cards{list-style:none;margin:0;padding:0;display:grid;gap:6px;min-height:34px;border-radius:6px}
+.cards.over{outline:1px dashed var(--amber);outline-offset:3px}
+.cards .empty{padding:8px 12px;font-size:13px;color:var(--ink-3);border:1px dashed var(--line-2);border-radius:6px}
+.card{display:grid;grid-template-columns:22px minmax(0,1fr);gap:4px 10px;padding:9px 12px 9px 8px;background:var(--bg-1);border:1px solid var(--line);border-radius:6px;position:relative}
+.card.leader{grid-template-columns:minmax(0,1fr);padding-left:14px;border-left:3px solid var(--amber)}
+.card.dragging{opacity:.4}
+.card.before::before{content:'';position:absolute;left:0;right:0;top:-4px;height:2px;background:var(--amber)}
+.cards.end::after{content:'';display:block;height:2px;background:var(--amber);margin-top:-4px}
+.card>:not(.handle){grid-column:2}.card.leader>*{grid-column:1}
+.handle{grid-row:1/span 4;align-self:center;width:22px;height:34px;border:0;background:none;color:var(--ink-4);cursor:grab;font:700 16px/1 var(--mono);letter-spacing:-.2em;padding:0}
+.handle:hover{color:var(--ink-2)}
+.card .ct{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.card .ct b{font-size:15px;font-weight:600}
+.card .role{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+.card .sub{font:11.5px/1.4 var(--mono);color:var(--ink-3);display:flex;flex-wrap:wrap;gap:2px 10px}
+.card .sub .pos{color:var(--ink-2)}
+.card .sub .off{color:var(--purple)}
+.card .pause{font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card .acts{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px}
+.card .acts .sp{flex:1 1 40px}
+/* side */
+.side section:first-child{padding-top:14px}
+.plist{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.pend{padding:8px 10px 8px 12px;border-left:3px solid var(--line-2);background:var(--bg-1);border-radius:0 6px 6px 0;font-size:13px;display:grid;gap:4px}
+.pend.amber{border-left-color:var(--amber)}.pend.coral{border-left-color:var(--coral)}.pend.purple{border-left-color:var(--purple)}.pend.ok{border-left-color:var(--ink)}
+.pend .pt{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.pend time{font:11px var(--mono);color:var(--ink-3)}
+.pend .ps{color:var(--ink);font-weight:500}
+.pend .pe{font-size:12px;color:var(--ink-3)}
+.pend .pe b{color:var(--amber);font-weight:500}
+.pend .pa{display:flex;gap:6px;margin-top:2px}
+.pend.empty{display:block;color:var(--ink-3);border-left-color:var(--line)}
+/* dialog */
+dialog{background:var(--bg-1);color:var(--ink);border:1px solid var(--line-2);border-radius:8px;padding:0;width:min(720px,92vw);max-height:90vh}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px 10px;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;font-size:17px;font-weight:600}
+.dh .x{border:0;background:none;color:var(--ink-3);font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
+.db{padding:14px 18px 18px;display:grid;gap:12px;overflow:auto;max-height:calc(90vh - 56px)}
+.db p{margin:0}.fb{display:grid;gap:12px}
+.db h4{margin:0 0 4px;font:600 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.db ul,.db ol{margin:0;padding-left:18px;display:grid;gap:3px;font-size:13px;color:var(--ink-2)}
+.db ul.plain{padding:0;list-style:none}
+.db .lead{font-size:15px;font-weight:500}
+.db .danger-box{border:1px solid var(--coral);border-radius:6px;padding:10px 12px;color:var(--coral);font-size:13.5px}
+.db .quiet{font-size:12.5px;color:var(--ink-3)}
+.db details{border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.db summary{cursor:pointer;font-size:13px;color:var(--ink-2)}
+pre{margin:6px 0 0;font:11.5px/1.5 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink-2);max-height:220px;overflow:auto}
+.gen{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 10px;align-items:center;font:12.5px var(--mono)}
+.gen dt{color:var(--ink-3);text-transform:uppercase;font-size:10.5px;letter-spacing:.08em}.gen dd{margin:0;overflow-wrap:anywhere;color:var(--ink)}
+.field{display:grid;gap:4px;font-size:13px}
+.field>span{color:var(--ink-3);font-size:12px}
+.field input,.field select,.field textarea{font:13px var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:4px;padding:6px 8px;width:100%}
+.field input.mono{font-family:var(--mono)}
+.field .hint{font-size:12px;color:var(--ink-3)}.field .hint.bad{color:var(--coral)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choices{display:grid;gap:4px;margin:0;padding:0;list-style:none}
+.choices label{display:flex;gap:10px;align-items:center;padding:6px 8px;border:1px solid var(--line);border-radius:4px;font-size:13px;cursor:pointer}
+.choices label.off{opacity:.5;cursor:not-allowed}
+.choices .m{font:12px var(--mono);color:var(--ink-3);margin-left:auto}
+.dfoot{display:flex;gap:8px;justify-content:flex-end;align-items:center;flex-wrap:wrap;padding-top:4px}
+.dfoot .st{margin-right:auto;font-size:12.5px;color:var(--ink-3)}
+.result{border-left:3px solid var(--line-2);padding:8px 12px;background:var(--bg-2);display:grid;gap:4px;font-size:13px}
+.result.ok{border-left-color:var(--ink)}.result.amber{border-left-color:var(--amber)}.result.bad{border-left-color:var(--coral)}
+table.hist{border-collapse:collapse;width:100%;font-size:12.5px}
+.hist th{text-align:left;font:500 10.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:0 8px 6px 0}
+.hist td{padding:6px 8px 6px 0;border-top:1px solid var(--line);vertical-align:top}
+.hist td.t{font:11.5px var(--mono);color:var(--ink-3);white-space:nowrap}
+.notoken{padding:40px 22px;font-size:16px;color:var(--ink-2)}
+/* logins */
+.lgs{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.lgs .empty{padding:8px 12px;font-size:13px;color:var(--ink-3);border:1px dashed var(--line-2);border-radius:6px}
+.lg{display:grid;gap:4px;padding:9px 12px;background:var(--bg-1);border:1px solid var(--line);border-left:3px solid var(--line-2);border-radius:6px}
+.lg.await{border-left-color:var(--amber);background:rgba(255,159,67,.06)}
+.lg .ct{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.lg .ct b{font-size:15px;font-weight:600}
+.lg .sub{font:11.5px/1.4 var(--mono);color:var(--ink-3);display:flex;flex-wrap:wrap;gap:2px 10px}
+.lg .st{font-size:13px;color:var(--ink-2)}.lg .st.await{color:var(--amber)}
+.lg .acts{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:4px}
+.lg .acts .hint{font-size:12px;color:var(--ink-3)}
+.lg details{font-size:12px;color:var(--ink-3)}.lg summary{cursor:pointer;width:max-content}
+.lg .units{list-style:none;margin:4px 0 0;padding:0;font:11.5px/1.5 var(--mono);display:grid;gap:2px;color:var(--ink-2)}
+.lg .units .off{color:var(--ink-4)}
+.lfoot{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:8px;font-size:12.5px;color:var(--ink-3)}
+.lg.bad{border-left-color:var(--coral);background:rgba(255,107,129,.06)}
+.lg .st.ok{color:var(--ink)}.lg .st.warn{color:var(--amber)}.lg .st.bad{color:var(--coral)}
+.lg .st.quiet,.lg .blk{font-size:12.5px;color:var(--ink-3)}
+/* coming soon: a chip, never a button that refuses */
+.soon{display:inline-flex;align-items:center;gap:6px;font:500 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);border:1px dashed var(--line-2);border-radius:3px;padding:3px 7px;white-space:nowrap;cursor:help}
+.soon-text{font-size:12.5px;color:var(--ink-3)}
+.pill.off{color:var(--ink-3)}.pill.off i{background:var(--ink-4)}
+.kv .na{color:var(--ink-3)}
+.kv .inactive{color:var(--ink-3)}
+/* page footer: export */
+.foot{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:14px 0 6px;font-size:12.5px;color:var(--ink-3)}
+.foot .st{color:var(--ink-2)}
+/* login preview: files, units, tokens */
+.frows{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 10px;font:11.5px/1.5 var(--mono);color:var(--ink-2)}
+.frows .a{color:var(--ink-3);text-transform:uppercase;font-size:10px;letter-spacing:.08em;padding-top:2px;white-space:nowrap}
+.frows .by{grid-column:1/-1;font:500 12px/1.2 var(--font);color:var(--ink-3);margin:6px 0 1px}
+.frows .by:first-child{margin-top:0}
+.frows .d{color:var(--ink-3);font-family:var(--font);font-size:12px}
+.frows details{border:0;padding:0;margin-top:2px}.frows summary{font-size:11.5px;color:var(--ink-3)}
+.db .steps li.run{color:var(--amber)}.db .steps li.todo{color:var(--ink-4)}
+.db .warn-box.hold b{display:block;margin-bottom:2px}
+</style>
+</head>
+<body>
+<main id="main">
+  <header class="top">
+    <div class="brand"><i></i><b>Bridge Advanced</b><span id="badge" class="badge hidden">Sandbox — changes go to a test copy, nothing live</span></div>
+    <div class="tools">
+      <button class="btn" id="b-addwh">Add webhook</button>
+      <button class="btn" id="b-addacc">Add account</button>
+      <button class="btn" id="b-addlogin">Add login</button>
+      <button class="btn" id="b-hist">History</button>
+    </div>
+  </header>
+  <div class="strip" id="strip"></div>
+  <div class="needs hidden" id="needs" role="region" aria-label="Needs a person" aria-live="polite"></div>
+  <ul class="drift" id="drift"></ul>
+  <div class="col" id="col">
+    <div id="webhooks"></div>
+    <section id="unassigned">
+      <div class="sh"><h2>Not assigned</h2><span class="r">Drop a follower here to take it off its webhook</span></div>
+      <ol class="cards" id="unassigned-list" data-wh=""></ol>
+    </section>
+    <section id="logins">
+      <div class="sh"><h2>Logins</h2><span class="r">Tradovate logins the bridge runs. Each has its own window.</span></div>
+      <ol class="lgs" id="logins-list"></ol>
+      <div class="lfoot" id="logins-foot"></div>
+    </section>
+    <footer class="foot" id="foot"></footer>
+  </div>
+  <aside class="side">
+    <section>
+      <div class="sh"><h2>Pending changes</h2><span class="r" id="pend-count"></span></div>
+      <ol class="plist" id="pending" aria-live="polite" aria-relevant="additions text"></ol>
+    </section>
+    <section>
+      <div class="sh"><h2>Recent</h2></div>
+      <ol class="plist" id="recent"></ol>
+    </section>
+  </aside>
+</main>
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <div class="dh"><h2 id="dlg-title"></h2><button class="x" id="dlg-x" aria-label="Close">×</button></div>
+  <div class="db" id="dlg-body"></div>
+</dialog>
+
+<script>
+'use strict';
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+function h(tag,attrs,...kids){const el=document.createElement(tag);if(attrs)for(const k in attrs){const v=attrs[k];if(v==null||v===false)continue;if(k==='class')el.className=v;else if(k.startsWith('on'))el.addEventListener(k.slice(2),v);else if(k==='dataset')Object.assign(el.dataset,v);else el.setAttribute(k,v===true?'':v)}for(const c of kids.flat(Infinity)){if(c==null||c===false)continue;el.append(c.nodeType?c:String(c))}return el}
+const fmtT=e=>e?new Date(e*1000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
+const fmtDT=e=>e?new Date(e*1000).toLocaleString([],{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
+const PROFILES=['unrestricted','cross-account-window'];
+const TYPE={pause:'Pause',resume:'Resume',pause_webhook:'Pause webhook',resume_webhook:'Resume webhook',flatten:'Flatten now',set_enabled:'Lane on or off',reorder:'Reorder',move_account:'Move',add_account:'Add account',retire_account:'Retire',add_webhook:'Add webhook',remove_webhook:'Remove webhook',rotate_stream_id:'Rotate stream ID',add_login:'Add login',start_login:'Start login',remove_login:'Remove login',register_webhook:'Register webhook',export:'Export',rollback:'Rollback'};
+/* Login changes: the engine's step names in order (shown as a checklist while it runs) and the verb for the progress line. */
+const LOGIN_STEPS={add_login:['preflight','dry run','backup','install.py add-login','check','login switch','flatten token','browser','restart','verify'],start_login:['start','signed in'],remove_login:['units','backup','write','backup kept','verify']};
+LOGIN_STEPS.rollback=LOGIN_STEPS.remove_login;
+const LOGIN_VERB={add_login:'Adding',start_login:'Starting',remove_login:'Removing',rollback:'Removing'};
+const SIGNIN_TONE={connected:'ok',signed_out:'amber',starting:'amber',bad_token:'bad'};
+const STATUS={previewed:['preview, not confirmed','dim'],waiting_flat:['waiting for flat','amber'],applying:['applying','amber'],applied:['applied','ok'],failed:['failed','coral'],cancelled:['cancelled','dim'],rolled_back:['rolled back','dim'],planned:['planned','purple'],manual:['manual steps','purple'],done:['done','ok']};
+/* overview.coming_soon / webhooks[].coming_soon → a muted chip with the sentence as its tooltip (never a refusing button) */
+function soon(cs,what){return h('span',{class:'soon',title:cs&&cs.text||'',tabindex:'0',role:'note'},(what?what+' · ':'')+'coming soon')}
+const WH_TONE={live:'',planned:'purple',off:'off'};
+const isOff=w=>w.state==='off';
+const S={token:null,mock:false,data:null,lastOk:0,err:null,drag:null,key:'',watch:null};
+/* Outcome of a change: [pill label, tone, sentence]. A failed change is one of three things:
+   not applied (preflight refused it, nothing written), failed and rolled back, or failed and needs a person. */
+const FLAT_CLASS={flat:['flat','ok','Flat with nothing working'],refused:['refused · nothing sent','amber','Refused — nothing was sent'],incomplete:['incomplete · check Tradovate','amber','Incomplete — check the account in Tradovate'],unknown:['unknown outcome','coral','Unknown outcome — check the Bridge window'],rejected_request:['request rejected · nothing sent','coral','Request rejected — nothing was sent'],dry_run:['dry run · nothing sent','dim','Dry run — nothing was sent']};
+function outcome(c){
+  const r=c.result||{},eta=c.eta||{};
+  if(c.status==='waiting_flat'){
+    if(eta.kind==='cooldown'||eta.reason==='cooldown')return ['cooling down','amber','Cooling down: restart limit'];
+    if(eta.kind==='after_signin'||eta.reason==='signin')return ['waiting for sign-in','amber','Waiting for Tradovate sign-in'];
+    if(eta.kind==='blocked')return eta.reason==='daemon_down'?['blocked · needs a person','coral','Blocked: a bridge daemon is down, needs a person']:['blocked','coral','Blocked'];
+  }
+  if(c.type==='flatten'&&r.flatten&&r.flatten.outcome_class&&(c.status==='failed'||c.status==='applied')){
+    const f=FLAT_CLASS[r.flatten.outcome_class];
+    if(f)return c.status==='applied'&&r.flatten.outcome_class==='dry_run'?['applied · dry run','ok','Applied (dry run, nothing sent)']:f.slice();
+  }
+  if(c.status==='failed'){
+    if(r.needs_person)return ['failed · needs a person','coral','Failed — needs a person'];
+    if(notApplied(c))return ['not applied · services not ready','amber','Not applied (services not ready)'];
+    if(r.rolled_back)return ['failed · rolled back','coral','Failed and rolled back'];
+    return ['failed','coral','Failed'];
+  }
+  const [l,t]=STATUS[c.status]||[c.status,'dim'];return [l,t,l[0].toUpperCase()+l.slice(1)];
+}
+const notApplied=c=>{const r=c.result||{};return !r.rolled_back&&((r.steps||[]).some(s=>s.name==='preflight'&&s.ok===false)||/^Not applied\b/.test(c.error||''))};
+const didRestart=c=>!!(((c.result||{}).restart_log||[]).length||((c.plan||{}).restarts||[]).length);
+const restartNote=()=>S.data&&S.data.restarter==='systemd'?'Restarted and healthy. The next real alert is the true proof.':'Restart simulated in this build; no service was restarted.';
+/* result.restart_log → list, grouped by phase (apply, then the re-run on the old files) */
+function restartLog(log){
+  const ul=h('ul',{class:'log'});let ph=null;
+  for(const r of log||[]){
+    const p=r.phase==='rollback'?'rollback':'apply';
+    if(p!==ph){ph=p;ul.append(h('li',{class:'ph'},p==='rollback'?'Re-run on the old files':'Apply'))}
+    const [word,tone]=r.ok===true?['ok','']:r.ok===false?['failed','bad']:r.action==='skipped'?['skipped','warn']:['not reached','dim'];
+    ul.append(h('li',null,h('span',{class:'u'},r.unit||'?'),h('span',null,r.action||''),h('span',{class:'w '+tone},word),r.detail&&h('span',{class:'d'},r.detail)));
+  }
+  return ul;
+}
+function stepsList(steps){return h('ul',{class:'steps'},steps.map(s=>h('li',null,(s.ok?'✓ ':'✗ ')+s.name+(s.detail?' · '+s.detail:''))))}
+/* "Applying… step N" line while a change runs; the log fills in as the engine saves each unit */
+function applyingLine(c){
+  const log=(c.result||{}).restart_log||[],n=log.length;
+  if(!n)return 'Applying… checking services, then backup and write.';
+  if(log[n-1].phase==='rollback')return 'Restoring the old files… step '+log.filter(r=>r.phase==='rollback').length;
+  const total=((c.plan||{}).restarts||[]).reduce((s,r)=>s+(r.unit==='tvbridge-firing.service'?2:1),0);
+  return 'Applying… step '+n+(total>=n?' of '+total:'');
+}
+function progressBlock(c){
+  const r=c.result||{};
+  return [h('div',{class:'pe'},applyingLine(c)),r.restart_log&&r.restart_log.length?restartLog(r.restart_log):null];
+}
+const findChange=id=>S.data?[...S.data.pending,...S.data.recent].find(c=>c.id===id):null;
+const cap=s=>s?s[0].toUpperCase()+s.slice(1):s;
+/* Why a confirmed change is still waiting (eta.kind / eta.reason). Null for kinds the caller shows as plain text. */
+function waitLines(eta){
+  eta=eta||{};const kind=eta.kind,reason=eta.reason,text=eta.text||'';
+  if(kind==='cooldown'||reason==='cooldown'){
+    const cool=(eta.cooldown||[]).filter(x=>x&&x.unit),wait=Math.max(0,...cool.map(x=>x.free_in_s||0)),min=Math.max(1,Math.round(wait/60));
+    return [h('div',{class:'pe'},'Cooling down: restart limit, applies in ~'+min+' min. Cancel is still available.'),
+      cool.length?h('div',{class:'pe mono'},cool.map(x=>x.unit+(x.burst?' · '+x.used+' of '+x.burst+' starts used in '+Math.round((x.interval_s||0)/60)+' min':'')).join(' · ')):null];
+  }
+  if(kind==='after_signin'||reason==='signin'){
+    const labels=(eta.waiting_for_signin||[]).join(', '),rest=text.replace(/^Waits for Tradovate sign-in[^.]*\.\s*/,'');
+    return [h('div',{class:'pe'},h('b',null,'Waits for Tradovate sign-in'+(labels?' ('+labels+')':'')+'.'),rest?' '+rest:' Applies after the next sign-in. Nothing signs in from here.'),
+      (eta.waiting_on||[]).length?h('div',{class:'pe'},'Also waiting on ',h('b',null,eta.waiting_on.map(lbl).join(', ')),' to be flat.'):null];
+  }
+  if(kind==='blocked'){
+    const body=text.replace(/^Blocked:\s*/,'');
+    return [h('div',{class:'pe bad'},'Blocked: '+(reason==='daemon_down'?body.replace(/ is down: needs a person\./,' is down, needs a person.'):body||'reason not given'))];
+  }
+  return null;
+}
+/* result.needs_person / overview.needs_person → lines: firing state, the plain text, units, backup path */
+function needsLines(np){
+  const state=np.firing_state||'',stopped=!!np.firing_stopped;
+  const word=stopped?'stopped'+(state&&!/^(stopped|inactive)$/.test(state)?' ('+state+')':''):'running'+(state&&state!=='active'&&state!=='running'?' ('+state+')':'');
+  const text=(np.text||'').replace(/^Needs a person:\s*/i,'').replace(/\s*The firing service is [a-z ]+(?::[^.]*)?\.\s*/i,' ').replace(/\s*Backup for a manual restore: \S+?\.(?=\s|$)\s*/,' ').replace(/\s{2,}/g,' ').trim();
+  const units=np.units||[];
+  return [
+    stopped?h('div',{class:'nf'},'Firing service: '+word+' — followers will not fire until this is fixed.'):h('div',{class:'nu'},'Firing service: '+word+'.'),
+    text&&h('div',null,cap(text)),
+    !!units.length&&!units.every(u=>text.includes(u))&&h('div',{class:'nu'},'Check: '+units.join(' · ')),
+    np.backup&&h('div',{class:'nu'},'Backup for a manual restore: '+np.backup)];
+}
+function copyBtn(text){const b=h('button',{class:'btn copy',type:'button','aria-label':'Copy '+text},'Copy');b.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(text);b.textContent='Copied'}catch(e){b.textContent='Copy failed'}setTimeout(()=>b.textContent='Copy',1500)});return b}
+function pill(text,tone){return h('span',{class:'pill '+(tone||'')},h('i'),text)}
+const toneOf=t=>({green:'',amber:'amber',red:'coral'})[t]||'dim';
+const acc=k=>S.data.accounts.find(a=>a.key===k);
+const lbl=k=>{const a=acc(k);return a?a.label:k};
+const wh=id=>S.data.webhooks.find(w=>w.id===id);
+
+/* ---------- API ---------- */
+async function api(path,body){
+  if(S.mock)return MOCK.call(path,body);
+  const opt={headers:{'X-Admin-Token':S.token||''}};
+  if(body!==undefined){opt.method='POST';opt.headers['Content-Type']='application/json';opt.body=JSON.stringify(body)}
+  const r=await fetch(path,opt);let j=null;try{j=await r.json()}catch(e){}
+  if(!r.ok){const err=new Error((j&&j.detail)||('Request failed (HTTP '+r.status+')'));err.code=j&&j.error;err.status=r.status;throw err}
+  return j;
+}
+async function poll(){
+  try{S.data=await api('/api/overview');S.lastOk=Date.now();S.err=null}
+  catch(e){S.err=e.message}
+  renderStrip();if(S.data)renderAll();
+  if(S.watch&&S.data){const c=findChange(S.watch.id);if(c)S.watch.update(c)}   // live progress in an open confirm dialog
+}
+
+/* ---------- header ---------- */
+function renderStrip(){
+  const d=S.data,age=(Date.now()-S.lastOk)/1000,stale=!!S.err||age>10;
+  document.body.classList.toggle('stale',stale);document.body.classList.toggle('live',!stale);
+  const st=$('#strip');st.replaceChildren();
+  if(d){
+    $('#badge').classList.toggle('hidden',d.mode!=='sandbox');
+    st.append(h('span',{class:'mkt '+d.market.state},'Market '+d.market.state+(d.market.reason?' · '+d.market.reason:'')));
+    if(d.market.weekend_hold)st.append(h('span',{class:'hold'},d.market.weekend_hold_text||'Weekend login hold is on.'));
+    st.append(h('span',{class:'feed'+(d.status_source.ok?'':' bad')},d.status_source.ok?'Position feed ok · '+Math.round(d.status_source.age_s)+' s':'Position feed down: '+(d.status_source.error||'flat checks are blocked')));
+    if(d.restarter)st.append(h('span',{class:'mode'},'Restarts: '+(d.restarter==='systemd'?'live':d.restarter==='simulated'?'simulated':d.restarter)));
+  }
+  const when=S.lastOk?fmtT(S.lastOk/1000):'never';
+  st.append(h('span',{class:'clock',role:'status'},h('i',{class:'dot'}),S.err?'Offline · '+S.err+' · last update '+when:stale?'Stale · last update '+when:'Updated '+when));
+}
+
+/* ---------- main render ---------- */
+function renderAll(){
+  const d=S.data,key=JSON.stringify({...d,generated_at:0,status_source:0});
+  if(key===S.key)return;
+  if(S.drag||$('#col details[open]'))return;   // don't yank the DOM mid-interaction; next poll retries
+  S.key=key;
+  renderNeeds(d.needs_person||[]);
+  $('#drift').replaceChildren(...d.drift.map(t=>h('li',null,t)));
+  $('#webhooks').replaceChildren(...d.webhooks.map(webhookSection));
+  const un=d.accounts.filter(a=>!a.webhook);
+  fillList($('#unassigned-list'),un.map(a=>card(a,null)),'No unassigned accounts.');
+  renderLogins(d);
+  renderHeaderAndFoot(d);
+  const open=new Set([...document.querySelectorAll('.side details[open]')].map(x=>x.dataset.id));   // keep opened step lists open across polls
+  const pend=$('#pending');
+  fillList(pend,d.pending.map(changeItem),'Nothing pending.');
+  $('#pend-count').textContent=d.pending.length?d.pending.length+' open':'';
+  fillList($('#recent'),d.recent.map(changeItem),'No finished changes yet.');
+  document.querySelectorAll('.side details').forEach(x=>{if(open.has(x.dataset.id))x.open=true});
+}
+function renderNeeds(list){
+  const el=$('#needs');el.classList.toggle('hidden',!list.length);
+  if(!list.length){el.replaceChildren();return}
+  el.replaceChildren(
+    h('div',{class:'nh'},h('span',{class:'tag coral'},'Needs a person'),list.length>1&&h('span',null,list.length+' changes')),
+    h('ul',null,list.map(n=>h('li',null,
+      h('div',{class:'ns'},h('span',null,n.summary||n.change_id),h('time',null,fmtT(n.at))),
+      needsLines(n)))));
+}
+/* Header: Add webhook becomes Register webhook (an off one) while webhooks with their own strategy are coming soon.
+   Footer: Export whole setup (read only, secrets redacted). */
+function renderHeaderAndFoot(d){
+  const cs=d.coming_soon||{},b=$('#b-addwh');
+  b.textContent=cs.add_webhook?'Register webhook':'Add webhook';b.title=cs.add_webhook?cs.add_webhook.text:'';
+  const ex=d.export,foot=$('#foot');
+  foot.replaceChildren(...(ex&&ex.available?[h('button',{class:'btn sm',onclick:exportFlow},'Export whole setup'),h('span',null,'Settings and units, no passwords or keys · a .tar.gz of every config, unit and drop-in; token values read <redacted>. Nothing changes.'),h('span',{class:'st',id:'export-st',role:'status'})]:[]));
+}
+/* GET /api/export needs the token header, so a plain link can't do it: fetch, then save the blob under the server's file name. */
+async function exportFlow(){
+  const st=$('#export-st');if(st)st.textContent='Preparing…';
+  try{
+    let blob,name;
+    if(S.mock){const r=await api('/api/export');name=r.name;blob=new Blob(['mock export, not a real archive\n'],{type:'application/gzip'})}
+    else{const r=await fetch((S.data.export||{}).url||'/api/export',{headers:{'X-Admin-Token':S.token||''}});
+      if(!r.ok){let j=null;try{j=await r.json()}catch(e){}throw new Error((j&&j.detail)||'Export failed (HTTP '+r.status+')')}
+      const m=/filename="?([^";]+)"?/.exec(r.headers.get('Content-Disposition')||'');name=m?m[1]:'bridge-setup.tar.gz';blob=await r.blob()}
+    const a=h('a',{href:URL.createObjectURL(blob),download:name});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+    if(st)st.textContent='Saved '+name+' (listed in History as Export).';
+  }catch(e){if(st)st.textContent='Export failed: '+e.message}
+  poll();
+}
+function fillList(ol,items,empty){ol.replaceChildren(...(items.length?items:[h('li',{class:ol.classList.contains('plist')?'pend empty':'empty'},empty)]))}
+
+/* ---------- logins ---------- */
+/* overview.logins[] rows. `setup` is null for the primary login (and when login_setup is off): no controls then. */
+function renderLogins(d){
+  const ls=d.login_setup||{},avail=ls.available!==false,cs=(d.coming_soon||{}).add_login;
+  const rows=(d.logins||[]).map(loginRow),seen=new Set((d.logins||[]).map(l=>l.id));
+  for(const x of ls.incomplete||[])if(!seen.has(x.id))rows.push(incompleteRow(x));   // an add that never reached logins.json
+  fillList($('#logins-list'),rows,'No logins.');
+  $('#logins-foot').replaceChildren(...(avail?[h('button',{class:'btn sm',onclick:addLoginFlow},'Add login')]:
+    [soon(cs||{text:ls.reason||''},'Add login'),h('span',{class:'soon-text'},(cs&&cs.text)||ls.reason||'Add login is not available in this install.'),h('button',{class:'btn sm',onclick:addLoginFlow},'Steps by hand')]));
+  const hb=$('#b-addlogin');hb.classList.toggle('hidden',!avail);
+}
+function loginRow(l){
+  const s=l.setup,names=(l.accounts||[]).map(lbl),n=names.length,stage=s&&s.stage;
+  const inc=stage==='incomplete'&&(((S.data||{}).login_setup||{}).incomplete||[]).find(x=>x.id===l.id);
+  return h('li',{class:'lg'+(stage==='awaiting_signin'?' await':stage==='incomplete'?' bad':''),dataset:{login:l.id}},
+    h('div',{class:'ct'},h('b',null,l.label),h('span',{class:'tag '+(l.primary?'amber':'dim')},l.primary?'Primary':'Followers only'),stage==='incomplete'?h('span',{class:'tag coral'},'Needs a person'):pill(l.state_label||'—',toneOf(l.tone))),
+    h('div',{class:'sub'},h('span',null,n?n+' account'+(n===1?'':'s')+' · '+names.join(', '):'No accounts yet'),
+      s&&(s.devtools_port||s.bridge_url)&&h('span',null,'DevTools '+(s.devtools_port||'?')+' · '+(s.bridge_url||''))),
+    s&&(stage==='incomplete'?incompleteLines(l,inc||{text:l.label+': the add did not finish. Use Remove to clean up what its record lists.'}):loginSetup(l,s)));
+}
+/* login_setup.incomplete[] entry with no row of its own */
+function incompleteRow(x){
+  const label=x.label||('Login '+x.id.toUpperCase());
+  return h('li',{class:'lg bad',dataset:{login:x.id}},
+    h('div',{class:'ct'},h('b',null,label),h('span',{class:'tag dim'},'Followers only'),h('span',{class:'tag coral'},'Needs a person')),
+    h('div',{class:'sub'},h('span',null,'Not in the login registry')),
+    incompleteLines({id:x.id,label},x));
+}
+function incompleteLines(l,x){
+  return [h('div',{class:'st bad'},x.text),x.error&&h('div',{class:'nu'},x.error),
+    h('div',{class:'acts'},h('button',{class:'btn',onclick:()=>removeLoginFlow(l)},'Remove'),h('span',{class:'hint'},'To undo: Remove login '+l.label+' (type its name to confirm).'))];
+}
+/* Per-row setup state. origin "outside" (Login B): nothing to press here, only the hint. */
+function loginSetup(l,s){
+  const mine=s.origin!=='outside',sg=s.signin;
+  const text=s.stage==='awaiting_signin'?'Window open. Sign in to Tradovate in the '+l.label+' window, then press Start.':s.stage==='stopped'?'Stopped':s.stage==='unknown'?'Unit state unknown':null;
+  const acts=h('div',{class:'acts'});
+  if(mine){
+    if(s.stage==='awaiting_signin'&&s.can_start!==false)acts.append(h('button',{class:'btn primary',onclick:()=>startLoginFlow(l)},'Start'));
+    if(s.stage!=='unknown'){acts.append(h('button',{class:'btn',disabled:!s.can_remove,onclick:()=>removeLoginFlow(l)},'Remove'));if(!s.can_remove&&s.remove_blocker)acts.append(h('span',{class:'hint'},s.remove_blocker))}
+  }
+  const blk=(s.account_blockers||[])[0];
+  const u=s.units,rows=u?Object.values(u).filter(x=>x&&x.unit):[];
+  return [text&&h('div',{class:'st'+(s.stage==='awaiting_signin'?' await':'')},text),
+    sg&&sg.text&&h('div',{class:'st '+({connected:'ok',signed_out:'warn',starting:'warn',bad_token:'bad'}[sg.state]||'')},sg.text),
+    !mine&&(s.remove_blocker||s.start_blocker)&&h('div',{class:'blk'},s.remove_blocker||s.start_blocker),
+    blk&&h('div',{class:'blk'},'Add account: '+blk),
+    acts.childElementCount?acts:null,
+    rows.length?h('details',null,h('summary',null,'Units'),h('ul',{class:'units'},rows.map(x=>h('li',{class:x.active==='active'?'':'off'},x.unit+' · '+(x.active||'?')+' · '+(x.enabled||'?'))))):null];
+}
+function startLoginFlow(l){previewChange('start_login',{login:l.id},{title:'Start '+l.label,confirmLabel:'Start '+l.label})}
+function removeLoginFlow(l){previewChange('remove_login',{login:l.id},{title:'Remove '+l.label,confirmLabel:'Remove '+l.label})}
+
+/* One webhook. state: live (running), planned (files staged, publish step pending) or off (registered only:
+   no strategy, leader, followers or stream ID; takes no accounts and no alerts). */
+function webhookSection(w){
+  const off=isOff(w),cs=w.coming_soon||{},leader=w.leader?acc(w.leader):null,followers=(w.followers||[]).map(acc).filter(Boolean);
+  const active=w.url_active!=null?w.url_active:w.state==='live';
+  const head=h('div',{class:'lh'},h('h3',null,w.name),
+    pill(w.status_text||(w.state==='live'?'live':'planned'),WH_TONE[w.state]||'purple'),
+    w.paused&&pill('paused'+(w.pause&&w.pause.reason?' · '+w.pause.reason:''),'amber'),
+    w.state!=='live'&&cs.activate_webhook&&soon(cs.activate_webhook,'Turn on'),
+    h('div',{class:'acts'},w.id!=='main'&&h('button',{class:'btn sm',onclick:()=>previewChange('remove_webhook',{webhook:w.id})},'Remove webhook')));
+  const meta=h('p',{class:'meta'},'Strategy ',h('b',null,(w.strategy||{}).name||'None yet'),' · ticker ',h('b',null,w.ticker||'—'),' · leader ',h('b',null,leader?leader.label:w.leader||'None yet'),' · ',followers.length+' follower'+(followers.length===1?'':'s'),w.soup.port!=null?' · Soup port '+w.soup.port+(off?' (reserved)':''):'');
+  const weak=w.stream_id_strength==='weak';
+  const kv=h('dl',{class:'kv'},
+    h('dt',null,'URL'),h('dd',null,w.url?[h('span',{class:active?'':'inactive'},w.url),active?copyBtn(w.url):h('span',{class:'na'},'not active yet')]:h('span',{class:'na'},'—')),
+    h('dt',null,'Stream ID'),h('dd',null,w.stream_id?[h('span',null,w.stream_id),copyBtn(w.stream_id),
+      weak&&h('span',{class:'warn'},'Easy to guess.'),
+      weak&&(cs.rotate_stream_id?soon(cs.rotate_stream_id,'Rotate'):h('button',{class:'btn sm',onclick:()=>previewChange('rotate_stream_id',{webhook:w.id})},'Rotate stream ID'))]:h('span',{class:'na'},'None yet')));
+  const notes=(w.notes||[]).length?h('ul',{class:'notes'},w.notes.map(n=>h('li',null,n))):null;
+  if(off)return h('section',{class:'wh'},head,meta,kv,notes);
+  const list=h('ol',{class:'cards',dataset:{wh:w.id},'aria-label':'Followers of '+w.name+' in firing order'});
+  fillList(list,followers.map((a,i)=>card(a,w,i)),'No followers. Drag one here or use Move to… on a follower.');
+  dropZone(list);
+  return h('section',{class:'wh'},head,meta,kv,notes,
+    leader?h('ol',{class:'cards',style:'margin-bottom:6px'},card(leader,w,-1)):h('p',{class:'bad'},'Leader '+w.leader+' is missing from accounts.'),
+    list);
+}
+
+function card(a,w,idx){
+  const isLeader=a.role==='leader',p=a.pause,followers=w?w.followers:[];
+  const li=h('li',{class:'card'+(isLeader?' leader':''),dataset:{key:a.key}},
+    !isLeader&&h('button',{class:'handle',type:'button','aria-label':'Reorder '+a.label+'. Arrow up or down moves it.',title:'Drag to reorder or move',onkeydown:e=>{if(e.key==='ArrowUp'){e.preventDefault();moveBy(a,w,-1)}if(e.key==='ArrowDown'){e.preventDefault();moveBy(a,w,1)}}},'⋮⋮'),
+    h('div',{class:'ct'},h('b',null,a.label),
+      h('span',{class:'role'},isLeader?'Leader':w?'Follower · '+(idx+1)+' of '+followers.length:'Not assigned'),
+      pill(a.status.label||'—',toneOf(a.status.tone))),
+    h('div',{class:'sub'},h('span',null,a.login_label+' · '+a.account_name_masked),h('span',{class:'pos'},a.position.text+(a.position.orders_text&&a.position.orders_text!=='none'?' · '+a.position.orders_text:'')),
+      h('span',null,'profile '+a.prop_profile),!a.enabled&&h('span',{class:'off'},'lane off')),
+    p.on&&h('div',{class:'pause'},h('span',{class:'tag '+(p.set_by==='system'?'coral':'amber')},p.set_by==='system'?'Safety pause':'Admin pause'),h('span',null,(p.reason||'No reason recorded')+(p.at?' · '+fmtT(p.at):''))),
+    actions(a,w,idx));
+  if(!isLeader)dragSource(li,a,w);
+  return li;
+}
+function actions(a,w,idx){
+  const n=w?w.followers.length:0,isLeader=a.role==='leader';
+  const acts=h('div',{class:'acts'},
+    a.pause.on?h('button',{class:'btn',onclick:()=>resumeFlow(a)},'Resume'):h('button',{class:'btn',onclick:()=>pauseFlow(a,w)},'Pause'));
+  if(!isLeader){
+    if(w)acts.append(h('button',{class:'btn',onclick:()=>previewChange('set_enabled',{account:a.key,enabled:!a.enabled})},a.enabled?'Turn lane off':'Turn lane on'));
+    acts.append(h('details',{class:'menu'},h('summary',{class:'btn',role:'button','aria-haspopup':'true'},'More ▾'),h('ul',null,
+      w&&h('li',null,h('button',{type:'button',disabled:idx<=0,onclick:()=>moveBy(a,w,-1)},'Move up')),
+      w&&h('li',null,h('button',{type:'button',disabled:idx>=n-1,onclick:()=>moveBy(a,w,1)},'Move down')),
+      h('li',null,h('button',{type:'button',onclick:()=>moveToFlow(a)},'Move to…')),
+      h('li',null,h('button',{type:'button',onclick:()=>previewChange('retire_account',{account:a.key},{lead:'Pauses '+a.label+', waits until it is flat, then removes it from firing and its login. Journals are kept.'})},'Retire')))));
+  }
+  acts.append(h('span',{class:'sp'}),h('button',{class:'btn danger',title:'Sends real orders for '+a.label+' only: cancels its working orders, closes the position, keeps it paused.',onclick:()=>flattenFlow(a)},'Flatten now'));
+  return acts;
+}
+document.addEventListener('click',e=>{document.querySelectorAll('details.menu[open]').forEach(d=>{if(!d.contains(e.target))d.open=false})});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('details.menu[open]').forEach(d=>d.open=false)});
+
+/* ---------- reorder / move ---------- */
+function moveBy(a,w,dir){
+  if(!w)return;const f=w.followers.slice(),i=f.indexOf(a.key),j=i+dir;
+  if(i<0||j<0||j>=f.length)return;f.splice(i,1);f.splice(j,0,a.key);
+  previewChange('reorder',{webhook:w.id,followers:f});
+}
+function moveToFlow(a){
+  const opts=S.data.webhooks.filter(w=>w.id!==a.webhook&&!isOff(w)).map(w=>({id:w.id,name:w.name+(w.state==='planned'?' (planned)':'')}));
+  if(a.webhook)opts.push({id:'',name:'Not assigned'});
+  const form=h('form',{class:'fb',onsubmit:e=>{e.preventDefault();const v=new FormData(form).get('to');previewChange('move_account',{account:a.key,to_webhook:v||null})}},
+    h('p',null,'Move '+a.label+(a.webhook?' from '+wh(a.webhook).name:'')+' to:'),
+    h('ul',{class:'choices'},opts.map((o,i)=>h('li',null,h('label',null,h('input',{type:'radio',name:'to',value:o.id,required:true,checked:i===0}),o.name)))),
+    h('p',{class:'quiet'},'The move waits until '+a.label+' is flat with no working orders.'),
+    h('div',{class:'dfoot'},h('button',{class:'btn',type:'button',onclick:closeDlg},'Cancel'),h('button',{class:'btn primary',type:'submit'},'Preview move')));
+  openDlg('Move '+a.label,form);
+}
+function dragSource(li,a,w){
+  li.draggable=true;
+  li.addEventListener('dragstart',e=>{S.drag={key:a.key,from:w?w.id:''};e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',a.key);li.classList.add('dragging')});
+  li.addEventListener('dragend',()=>{S.drag=null;li.classList.remove('dragging');clearDrop();renderAll()});
+}
+function clearDrop(){document.querySelectorAll('.cards.over,.cards.end').forEach(l=>l.classList.remove('over','end'));document.querySelectorAll('.card.before').forEach(c=>c.classList.remove('before'))}
+function dropZone(list){
+  list.addEventListener('dragover',e=>{if(!S.drag)return;e.preventDefault();e.dataTransfer.dropEffect='move';clearDrop();list.classList.add('over');
+    const cards=[...list.querySelectorAll('.card:not(.dragging)')],i=cards.findIndex(c=>e.clientY<c.getBoundingClientRect().top+c.offsetHeight/2);
+    list.dataset.idx=i<0?cards.length:i;if(i<0)list.classList.add('end');else cards[i].classList.add('before')});
+  list.addEventListener('dragleave',e=>{if(!list.contains(e.relatedTarget)){list.classList.remove('over','end');clearDrop()}});
+  list.addEventListener('drop',e=>{e.preventDefault();const d=S.drag;if(!d)return;const to=list.dataset.wh,idx=+list.dataset.idx||0;clearDrop();S.drag=null;
+    if(to===d.from){if(!to)return;const w=wh(to),f=w.followers.filter(k=>k!==d.key);f.splice(idx,0,d.key);if(f.join()===w.followers.join())return;previewChange('reorder',{webhook:w.id,followers:f})}
+    else previewChange('move_account',{account:d.key,to_webhook:to||null,index:idx})});
+}
+dropZone($('#unassigned-list'));
+
+/* ---------- card flows ---------- */
+function pauseFlow(a,w){
+  const isLeader=a.role==='leader';
+  const form=h('form',{onsubmit:e=>{e.preventDefault();previewChange('pause',{account:a.key,reason:new FormData(form).get('reason').trim()},{lead:'Stops new entries. An open trade finishes with its stops and exits.'})}},
+    h('div',{class:'fb'},
+      h('p',{class:'lead'},'Stops new entries. An open trade finishes with its stops and exits.'),
+      isLeader&&w&&h('p',{class:'warn'},a.label+' is the leader of '+w.name+'. Pausing it pauses the whole webhook, because followers enter only after the leader.'),
+      h('label',{class:'field'},h('span',null,'Reason (recorded in the audit log)'),h('input',{name:'reason',required:true,maxlength:'120',autofocus:true})),
+      h('div',{class:'dfoot'},h('button',{class:'btn',type:'button',onclick:closeDlg},'Cancel'),h('button',{class:'btn primary',type:'submit'},'Preview pause'))));
+  openDlg('Pause '+a.label,form);
+}
+function resumeFlow(a){
+  previewChange('resume',{account:a.key},{lead:a.pause.set_by==='system'?'A safety event paused '+a.label+'. Check the cause before resuming.':'New entries start again for '+a.label+'.'});
+}
+function flattenFlow(a){
+  previewChange('flatten',{account:a.key},{danger:true,lead:'Real orders. For '+a.label+' only: cancels its working orders (targets), closes the position, then keeps it paused. One call to the bridge, never retried on its own.',confirmLabel:'Flatten '+a.label+' now'});
+}
+
+/* ---------- preview → confirm ---------- */
+async function previewChange(type,params,o={}){
+  const body=openDlg(o.title||TYPE[type]||type,h('p',{class:'quiet'},'Preparing preview…'));
+  let ch;try{ch=await api('/api/changes',{type,params})}catch(e){body.replaceChildren(errBlock(e),h('div',{class:'dfoot'},h('button',{class:'btn',onclick:closeDlg},'Close')));return}
+  renderPreview(body,ch,o,()=>previewChange(type,params,o));
+}
+function errBlock(e){return h('div',{class:'result bad'},h('b',null,e.status===401||e.status===403?'Not allowed':'Request failed'),h('span',null,e.message))}
+function keyList(keys){return h('ul',{class:'plain'},keys.map(k=>h('li',null,lbl(k))))}
+function renderPreview(body,ch,o,again){
+  const p=ch.plan,blocked=p.blockers.length>0,needText=p.confirm&&p.confirm.required,isLogin=!!p.login;
+  body.replaceChildren();
+  if(isLogin)loginPreview(body,ch);else genericPreview(body,ch,o);
+  let input=null;
+  if(needText)body.append(block('Confirm',h('label',{class:'field'},h('span',null,p.confirm.prompt||('Type "'+p.confirm.expect+'" to confirm.')),input=h('input',{class:'mono',autocomplete:'off',spellcheck:'false','aria-describedby':'dlg-title'}))));
+  // Weekend hold: shown right above Confirm for Add login and Start, because the sign-in is the trader's own step.
+  if(isLogin&&(ch.type==='add_login'||ch.type==='start_login')&&S.data&&S.data.market&&S.data.market.weekend_hold)body.append(h('div',{class:'warn-box hold'},h('b',null,'Weekend hold'),S.data.market.weekend_hold_text||'Weekend login hold is on.',' You can confirm now; sign in only after the open.'));
+  const st=h('span',{class:'st'},blocked?'Can\'t confirm while blocked.':needText?'Confirm turns on when the text matches.':'');
+  const cancel=h('button',{class:'btn',onclick:async()=>{cancel.disabled=true;try{await api('/api/changes/'+ch.id+'/cancel',{})}catch(e){}closeDlg();poll()}},'Cancel');
+  const confirm=h('button',{class:'btn primary'+(o.danger?' danger':''),disabled:true},o.confirmLabel||(isLogin&&ch.type==='add_login'?'Add '+p.login.label:'Confirm'));
+  const gate=()=>{confirm.disabled=blocked||(needText&&input.value!==p.confirm.expect)};
+  if(input)input.addEventListener('input',gate);gate();
+  confirm.addEventListener('click',async()=>{
+    confirm.disabled=cancel.disabled=true;st.textContent='Applying…';
+    // A structural confirm can take minutes (the restart sequence runs inside it). Polling keeps going and
+    // writes the engine's restart_log into this box until the call returns.
+    let prog=null;
+    if(ch.type==='flatten'){
+      const who=(p.confirm&&p.confirm.expect)||lbl((ch.params||{}).account);
+      st.textContent='Flattening '+who+'… don\'t close this window.';
+      prog=h('div',{class:'result bad',role:'status'},h('b',null,'Flattening '+who+'… don\'t close this window.'),h('span',{class:'quiet'},'One call to the bridge, up to 60 s. It is never retried on its own; the answer appears here.'));
+      body.append(prog);prog.scrollIntoView({block:'nearest'});
+    }else if(isLogin){
+      // Login changes save result.steps as each one finishes; the poll copies them into this checklist.
+      const lab=p.login.label,verb=LOGIN_VERB[ch.type]||'Applying';
+      st.textContent=verb+' '+lab+'…';
+      prog=h('div',{class:'result amber',role:'status'},h('b',null,verb+' '+lab+'… don\'t close this window.'),
+        h('span',{class:'quiet'},ch.type==='start_login'?'A second or two. Nothing here signs in; the login guard starts the bridge once it sees you signed in.':'Usually '+(ch.type==='add_login'?'about 15 s':'about 10 s')+'. Each step is listed as it finishes.'),
+        loginSteps(ch,true));
+      body.append(prog);prog.scrollIntoView({block:'nearest'});
+      S.watch={id:ch.id,update:c=>{if(c.status!=='applying')return;prog.lastChild.replaceWith(loginSteps(c,true))}};
+    }else if((p.restarts||[]).length&&!p.immediate){
+      prog=h('div',{class:'result amber',role:'status'},h('b',null,'Applying… checking services, then backup and write.'),h('span',{class:'quiet'},'This can take a few minutes. The steps appear here as each service comes back.'));
+      body.append(prog);prog.scrollIntoView({block:'nearest'});
+      S.watch={id:ch.id,update:c=>{if(c.status!=='applying')return;prog.replaceChildren(h('b',null,applyingLine(c)),(c.result&&c.result.restart_log&&c.result.restart_log.length)?restartLog(c.result.restart_log):h('span',{class:'quiet'},'This can take a few minutes. The steps appear here as each service comes back.'))}};
+    }
+    try{const r=await api('/api/changes/'+ch.id+'/confirm',needText?{preview_hash:ch.preview_hash,confirm_text:input.value}:{preview_hash:ch.preview_hash});S.watch=null;renderResult(body,r)}
+    catch(e){S.watch=null;
+      if(e.code==='stale_preview'){st.textContent='Something changed since the preview. Previewing again…';again()}
+      else{const seen=findChange(ch.id);
+        if(seen&&seen.status!=='previewed'&&seen.status!=='applying')renderResult(body,seen);   // the call dropped but the service finished it
+        else{if(prog)prog.remove();body.append(errBlock(e),prog?h('p',{class:'quiet'},ch.type==='flatten'?'The outcome is unknown from here: check the Bridge window, then this change under Recent. Nothing is sent again on its own.':'The service may still be running this change. Watch Pending and Recent for its result.'):null,h('div',{class:'dfoot'},h('button',{class:'btn',onclick:closeDlg},'Close')))}}}
+    poll();
+  });
+  body.append(h('div',{class:'dfoot'},st,cancel,confirm));
+  if(input)input.focus();
+}
+/* Add / Start / Remove login preview (plan.login). Order: summary, blockers, warnings, files by who writes them,
+   units, ports, token names, restarts, what the trader does next, when. Token values never exist in the API. */
+/* Short form: summary, blockers, the plain lines (plan.warnings; a weekend/incomplete line stays amber), what the trader
+   does next, when. Files, units, ports, token names and restarts sit under one closed "Details" disclosure. */
+function loginPreview(body,ch){
+  const p=ch.plan,L=p.login,type=ch.type==='rollback'?'remove_login':ch.type,files=p.files||[];
+  body.append(h('p',{class:'lead'},ch.summary));
+  if(p.blockers.length)body.append(block('Blocked',h('ul',{class:'bad'},p.blockers.map(t=>h('li',null,t)))));
+  const hot=t=>/^Weekend hold|did not finish/.test(t);
+  if(p.warnings.length)body.append(h('ul',{class:'plain'},p.warnings.map(t=>h('li',{class:hot(t)?'warn':''},t))));
+  if(p.manual_steps.length)body.append(block('What you do next',h('ol',null,p.manual_steps.map(t=>h('li',null,t)))));
+  if(!p.blockers.length)body.append(h('p',{class:'quiet'},'When: '+(ch.eta.text||'—')));
+  const det=[];
+  if(files.length){
+    const grid=h('div',{class:'frows'});
+    for(const [by,title] of [['install.py','Bridge install tool (install.py)'],['this page','This page']]){
+      const mine=files.filter(f=>(f.by||'this page')===by);if(!mine.length)continue;
+      if(files.some(f=>(f.by||'this page')!==by))grid.append(h('div',{class:'by'},title));
+      mine.forEach(f=>grid.append(h('div',{class:'a'},f.action),h('div',null,f.path+(f.to?' → '+f.to:''),f.detail&&h('span',{class:'d'},' · '+f.detail),f.diff&&h('details',null,h('summary',null,'Diff'),h('pre',null,f.diff)))));
+    }
+    det.push(block(type==='add_login'?'Files it creates or changes':'Files it changes',grid));
+  }
+  const units=L.units||[];
+  if(units.length)det.push(block('Units',h('div',{class:'frows'},units.map(u=>[h('div',{class:'a'},u.when||''),h('div',null,u.unit+' · '+u.action,u.why&&h('span',{class:'d'},' — '+u.why))]))));
+  if(L.devtools_port||L.bridge_port)det.push(block('Ports',h('p',{class:'mono'},'DevTools '+L.devtools_port+' · bridge '+L.bridge_port+(L.bridge_url?' · '+L.bridge_url:''))));
+  if((L.tokens||[]).length)det.push(block('Tokens',h('div',{class:'frows'},L.tokens.map(t=>[h('div',{class:'a'},t.kind),h('div',null,t.name,h('span',{class:'d'},' · '+(t.files||[]).join(', ')+(t.note?' · '+t.note:'')))])),h('p',{class:'quiet'},'New tokens are written to files only and are never shown.')));
+  if(p.restarts.length)det.push(block('Restarts',h('ul',null,p.restarts.map(r=>h('li',null,r.unit+' · '+r.why+' · about '+r.seconds+' s')))));
+  if(det.length){const n=files.length,parts=[n&&n+' file'+(n===1?'':'s'),units.length&&units.length+' unit'+(units.length===1?'':'s'),(L.tokens||[]).length&&'token names',p.restarts.length&&'restarts'].filter(Boolean);
+    body.append(h('details',null,h('summary',null,'Details · '+parts.join(', ')),h('div',{class:'fb',style:'margin-top:10px'},det)))}
+}
+/* Checklist of a login change: done steps as recorded, then the engine's remaining step names (first one running). */
+function loginSteps(c,live){
+  const done=((c.result||{}).steps)||[],plan=LOGIN_STEPS[c.type]||[];
+  const last=Math.max(-1,...done.map(s=>plan.indexOf(s.name))),failed=done.some(s=>s.ok===false),rest=plan.slice(last+1);
+  return h('ul',{class:'steps'},done.map(s=>h('li',null,(s.ok?'✓ ':'✗ ')+s.name+(s.detail?' · '+s.detail:''))),
+    live&&!failed&&rest.map((n,i)=>h('li',{class:i?'todo':'run'},(i?'· ':'… ')+n)));
+}
+function genericPreview(body,ch,o){
+  const p=ch.plan,blocked=p.blockers.length>0;
+  if(o.lead)body.append(h('p',{class:o.danger?'danger-box':'lead'},o.lead));
+  body.append(h('p',{class:o.lead?'':'lead'},ch.summary));
+  // Flatten now on a leader: its pause also blocks the accounts that follow it. Said once, prominently.
+  const fp=p.flatten,also=fp?(fp.also_blocks||[]):[];let warnings=p.warnings;
+  if(also.length){
+    body.append(h('div',{class:'warn-box'},h('b',null,'Leader: its pause also blocks new entries on '+also.map(lbl).join(', ')+'.'),' Their open trades keep their own stops and exits; flatten them separately if you want them out too. Soup sees the close as an outside close and stops managing that trade.'));
+    warnings=warnings.filter(t=>!/^This is a leader\./.test(t));
+  }
+  if(p.affected.length)body.append(block('Affected',keyList(p.affected)));
+  const daemonRestart=(p.restarts||[]).some(r=>/^tvbridge-daemon/.test(r.unit||''));
+  const wl=waitLines(ch.eta);
+  body.append(block('When',wl?wl:h('p',null,ch.eta.text||'—',ch.eta.waiting_on.length?[' Waiting on: ',ch.eta.waiting_on.map(lbl).join(', '),'.']:null),
+    (p.wait_on||[]).length?h('p',{class:'quiet'},'Waits until these are flat: '+p.wait_on.map(lbl).join(', ')+'.'):null,
+    daemonRestart&&(p.wait_on||[]).length?h('p',{class:'quiet'},'Restarting a bridge login pauses all following for a few seconds, so every account on this webhook must be flat.'):null));
+  if(blocked)body.append(block('Blocked',h('ul',{class:'bad'},p.blockers.map(t=>h('li',null,t))),ch.type==='flatten'?h('p',{class:'quiet'},'Nothing is sent while blocked. Flatten now never signs in.'):null));
+  if(warnings.length)body.append(block('Warnings',h('ul',{class:'warn'},warnings.map(t=>h('li',null,t)))));
+  if(p.manual_steps.length)body.append(block('Steps for you',h('ol',null,p.manual_steps.map(t=>h('li',null,t)))));
+  const g=p.generated||{};
+  if(ch.type==='register_webhook'&&(g.url||g.path||g.port))body.append(block('Reserved',h('dl',{class:'gen'},
+    [h('dt',null,'URL'),h('dd',{class:'inactive'},g.url||g.path||'—'),h('span',{class:'na quiet'},'not active yet')],
+    g.port&&[h('dt',null,'Soup port'),h('dd',null,g.port),h('span')])));
+  else if(g.stream_id||g.url||g.path)body.append(block('Generated',h('dl',{class:'gen'},
+    g.stream_id&&[h('dt',null,'Stream ID'),h('dd',null,g.stream_id),copyBtn(g.stream_id)],
+    g.url&&[h('dt',null,'URL'),h('dd',null,g.url),copyBtn(g.url)],
+    !g.url&&g.path&&[h('dt',null,'Path'),h('dd',null,g.path),copyBtn(g.path)]),
+    g.stream_id&&h('p',{class:'quiet'},'Paste the stream ID into the strategy\'s "📡 Alert stream ID" input in TradingView. Alerts without this exact ID are refused.')));
+  if(p.coming_soon&&p.coming_soon.text)body.append(h('p',{class:'soon-text'},soon(p.coming_soon),' ',p.coming_soon.text));
+  if(p.restarts.length)body.append(block('Restarts',h('ul',null,p.restarts.map(r=>h('li',null,r.unit+' · '+r.why+' · about '+r.seconds+' s')))));
+  if(p.files.length)body.append(h('details',null,h('summary',null,p.files.length+' file'+(p.files.length===1?'':'s')+' change'),
+    h('ul',{class:'plain'},p.files.map(f=>h('li',null,h('span',{class:'mono'},f.action+' '+f.path+(f.to?' → '+f.to:'')),f.diff?h('pre',null,f.diff):null)))));
+}
+function block(title,...kids){return h('div',null,h('h4',null,title),kids)}
+function renderResult(body,ch){
+  const [,tone,sentence]=outcome(ch),r=ch.result||{},eta=ch.eta||{},restarted=didRestart(ch);
+  const box=h('div',{class:'result '+(tone==='ok'?'ok':tone==='coral'?'bad':tone==='dim'?'':'amber')},h('b',null,sentence));
+  if(ch.status==='waiting_flat'){
+    const wl=waitLines(eta);
+    if(wl)box.append(...wl.filter(Boolean),h('span',{class:'quiet'},'It applies on its own and stays under Pending until then, where Cancel is available.'));
+    else box.append(h('span',null,eta.text),h('span',{class:'quiet'},'It applies on its own and stays listed under Pending until then, where Cancel is available.'));
+  }
+  if(ch.type==='flatten'&&r.flatten){
+    box.append(...flattenBlock(ch).filter(Boolean));
+    if(r.steps&&r.steps.length)box.append(stepsList(r.steps));
+    body.replaceChildren(...[h('p',{class:'lead'},ch.summary),box,r.flatten.outcome_class==='unknown'?resendForm(ch,body):null,h('div',{class:'dfoot'},h('button',{class:'btn primary',onclick:closeDlg},'Close'))].filter(Boolean));
+    return;
+  }
+  if(ch.plan&&ch.plan.login&&(ch.status==='applied'||ch.status==='failed')){loginResult(body,ch);return}
+  if(ch.status==='applying')box.append(h('div',{class:'pe'},applyingLine(ch)),h('span',{class:'quiet'},'Still running. Watch Pending for the result.'));
+  if(ch.status==='planned')box.append(h('span',null,'Saved. It goes live with the multi-lane publish step.'));
+  if(ch.status==='applied'&&restarted)box.append(h('span',null,restartNote()));
+  if(ch.status==='failed'){
+    box.append(h('span',null,ch.error||'Unknown error'));
+    if(r.needs_person)box.append(...needsLines(r.needs_person).filter(Boolean));
+    else if(r.rolled_back)box.append(h('span',null,'Every file was restored from the backup'+(restarted?', and the services were restarted on the old files.':'.')));
+    else if(notApplied(ch))box.append(h('span',null,'Nothing was written and no service was restarted. Try again once the services are healthy.'));
+  }
+  if(r.steps&&r.steps.length)box.append(stepsList(r.steps));
+  if(r.restart_log&&r.restart_log.length)box.append(h('h4',null,'Restarts'),restartLog(r.restart_log));
+  if(ch.plan&&ch.plan.manual_steps&&ch.plan.manual_steps.length)box.append(h('ol',null,ch.plan.manual_steps.map(t=>h('li',null,t))));
+  body.replaceChildren(h('p',{class:'lead'},ch.summary),box,h('div',{class:'dfoot'},h('button',{class:'btn primary',onclick:closeDlg},'Close')));
+}
+/* Result of a login change: result.login {stage, state, text, backup}. Add login ends in the "sign in, then press
+   Start" state; Start ends in one of four sign-in states, all `applied` (the units run either way). */
+function loginResult(body,ch){
+  const r=ch.result||{},lg=r.login||{},L=ch.plan.login||{},label=lg.label||L.label||'the login',type=ch.type,[,,sentence]=outcome(ch);
+  const hold=S.data&&S.data.market&&S.data.market.weekend_hold;
+  let box,foot=[h('button',{class:'btn primary',onclick:closeDlg},'Close')];
+  if(ch.status==='failed'){
+    box=h('div',{class:'result bad'},h('b',null,sentence),h('span',null,ch.error||'Unknown error'),
+      r.needs_person?needsLines(r.needs_person).filter(Boolean):r.rolled_back?h('span',null,'Everything this change did was undone: units stopped, files back from the backup.'):notApplied(ch)?h('span',null,'Nothing was written and no service was touched. Try again once the services are healthy.'):null);
+  }else if(type==='add_login'){
+    const row=()=>{closeDlg();const el=document.querySelector('.lg[data-login="'+lg.id+'"]');if(el)el.scrollIntoView({block:'center'})};
+    box=h('div',{class:'result amber'},h('b',null,lg.text||label+' is ready for your sign-in. Sign in to Tradovate in its window, then press Start.'),
+      h('span',null,'Its bridge stays off until then. Start turns on its login guard, which starts the bridge once it sees you signed in. Nothing here signs in.'),
+      hold&&h('span',{class:'warn'},S.data.market.weekend_hold_text+' Sign in only after the open.'),
+      (lg.devtools_port||lg.bridge_port)&&h('span',{class:'mono quiet'},'DevTools '+lg.devtools_port+' · bridge '+lg.bridge_port+(lg.browser_unit?' · '+lg.browser_unit:'')));
+    foot=[h('button',{class:'btn',onclick:row},'Close'),h('button',{class:'btn primary',onclick:()=>startLoginFlow({id:lg.id||L.id,label})},'Start')];
+  }else if(type==='start_login'){
+    // Start returns at once with state "starting"; the live state is logins[].setup.signin on the row.
+    const t=SIGNIN_TONE[lg.state]||'amber',row=()=>{closeDlg();const el=document.querySelector('.lg[data-login="'+(lg.id||L.id)+'"]');if(el)el.scrollIntoView({block:'center'})};
+    box=h('div',{class:'result '+t},h('b',null,lg.text||sentence),
+      lg.state==='connected'?h('span',null,h('button',{class:'linkish',onclick:()=>addAccountFlow(lg.id||L.id)},'Add account'),' — accounts on '+label+' start paused.'):
+      lg.state==='bad_token'?h('span',null,'Its units stay on. This needs a look on the VM; nothing here reads or changes tokens.'):
+      h('span',{class:'quiet'},'Nothing more to press. The '+label+' row under Logins shows connected, signed out or starting as the guard reports it.'));
+    foot=[h('button',{class:'btn primary',onclick:row},'Close')];
+  }else{
+    box=h('div',{class:'result ok'},h('b',null,lg.text||label+' removed.'+(lg.backup?' Backup: '+lg.backup+'.':'')),
+      lg.profile_backup&&h('span',{class:'mono quiet'},'Browser profile: '+lg.profile_backup),
+      h('span',{class:'quiet'},'Nothing else was restarted. Its files and browser profile are kept as the backup, not deleted.'));
+  }
+  const n=(r.steps||[]).length;
+  body.replaceChildren(...[h('p',{class:'lead'},ch.summary),box,
+    n?h('details',{open:ch.status==='failed'||null},h('summary',null,n+' step'+(n===1?'':'s')),loginSteps(ch,false)):null,
+    r.restart_log&&r.restart_log.length?h('details',null,h('summary',null,'Restarts'),restartLog(r.restart_log)):null,
+    h('div',{class:'dfoot'},...foot)].filter(Boolean));
+}
+/* The pause line after a flatten reads the live account (overview.accounts[key].pause); result.flatten.kill_switch_after
+   is a snapshot taken at send time and can be missing or stale, so it is only the fallback for an account not in the overview. */
+function pauseNow(ch){
+  const a=S.data&&acc((ch.params||{}).account);
+  if(a&&a.pause)return {on:!!a.pause.on,reason:a.pause.reason,at:a.pause.at,live:true};
+  const ka=((ch.result||{}).flatten||{}).kill_switch_after;
+  return ka?{on:!!ka.on,reason:ka.reason,at:ka.at,live:false}:null;
+}
+/* Flatten now result: result.flatten + reply, most important line first */
+function flattenBlock(ch){
+  const r=ch.result||{},fl=r.flatten||{},rp=fl.reply||{},hasReply=!!fl.reply,out=[];
+  out.push(h('span',{class:'lead'},fl.detail||(FLAT_CLASS[fl.outcome_class]||[])[2]||'No detail from the bridge.'));
+  if(rp.protective_stop_working===false)out.push(h('span',{class:'nf'},'Position is open without a working stop.'));
+  else if(rp.protective_stop_working===true)out.push(h('span',null,'A protective stop is working.'));
+  if(rp.net_position!=null)out.push(h('span',null,'Net position: '+rp.net_position+(rp.net_position===0?' (flat)':'')));
+  if(hasReply){
+    const sw=rp.still_working||[],cx=rp.cancelled||[];
+    out.push(h('span',{class:sw.length?'warn':''},'Still working: '+sw.length+' order'+(sw.length===1?'':'s')+(sw.length?' · ':''),sw.length?h('span',{class:'mono quiet'},sw.join(', ')):null));
+    out.push(h('span',null,'Cancelled: '+cx.length+' order'+(cx.length===1?'':'s')));
+  }
+  const ks=rp.kill_switch,ka=pauseNow(ch);
+  const sw=ks==='set'?'Pause switch set by the bridge':ks==='already_set'?'Pause switch was already set':hasReply?'Pause switch not set by the bridge':null;
+  if(ka)out.push(h('span',{class:ka.on?'':'warn'},(sw?sw+' · ':'')+cap((ka.on?'stays paused'+(ka.reason?': '+ka.reason:'')+(ka.at?' · '+fmtT(ka.at):''):'not paused now')+'.')));
+  else if(sw)out.push(h('span',null,sw+'.'));
+  if(rp.duplicate)out.push(h('span',null,'Answer to an earlier call with this change id; nothing was sent again.'));
+  const also=(rp.also_blocks&&rp.also_blocks.length?rp.also_blocks:((ch.plan||{}).flatten||{}).also_blocks)||[];
+  if(also.length)out.push(h('span',null,'Also blocks new entries on: '+also.map(lbl).join(', ')+'.'));
+  const small=[rp.command_id&&'command '+rp.command_id,fl.seconds!=null&&fl.seconds+' s',fl.http_status&&'HTTP '+fl.http_status,fl.transport_error&&fl.transport_error,(r.flatten_attempts||0)>1&&'attempt '+r.flatten_attempts].filter(Boolean).join(' · ');
+  if(small)out.push(h('span',{class:'mono quiet'},small));
+  return out;
+}
+/* Send again: only after an unknown outcome; same change id, so the bridge answers from its journal. */
+function resendForm(ch,body){
+  const expect=((ch.plan||{}).confirm||{}).expect||lbl((ch.params||{}).account);
+  const input=h('input',{class:'mono',autocomplete:'off',spellcheck:'false'}),btn=h('button',{class:'btn danger primary',disabled:true},'Send again'),st=h('span',{class:'st'},'Send again turns on when the text matches.');
+  input.addEventListener('input',()=>{btn.disabled=input.value!==expect});
+  btn.addEventListener('click',async()=>{btn.disabled=input.disabled=true;st.textContent='Sending again for '+expect+'… don\'t close this window.';
+    try{const r=await api('/api/changes/'+ch.id+'/resend',{confirm_text:input.value});renderResult(body,r)}
+    catch(e){st.textContent='';input.disabled=false;btn.disabled=false;body.insertBefore(errBlock(e),body.lastElementChild)}
+    poll()});
+  return h('div',null,h('h4',null,'Send again'),
+    h('p',null,'Safe to send again: it reuses this change id, and the bridge answers a repeated id from its journal without sending twice. Check the Bridge window first if you can.'),
+    h('label',{class:'field'},h('span',null,'Type '+expect+' to send the same flatten again.'),input),h('div',{class:'dfoot'},st,btn));
+}
+function resendFlow(c){const body=openDlg('Send again · '+lbl((c.params||{}).account),null);renderResult(body,c)}
+
+/* ---------- pending / recent ---------- */
+function changeItem(c){
+  const [label,tone]=outcome(c),r=c.result||{},eta=c.eta||{waiting_on:[]},log=r.restart_log||[];
+  const li=h('li',{class:'pend '+tone},
+    h('div',{class:'pt'},pill(label,tone==='ok'?'':tone),h('time',null,fmtT(c.updated_at||c.created_at))),
+    h('div',{class:'ps'},c.summary),
+    (c.status==='waiting_flat'||c.status==='previewed')&&(waitLines(eta)||h('div',{class:'pe'},eta.text,(eta.waiting_on||[]).length?[' Waiting on ',h('b',null,eta.waiting_on.map(lbl).join(', ')),'.']:null)),
+    c.status==='applying'&&(c.type==='flatten'?h('div',{class:'pe'},'Flattening… one call to the bridge, up to 60 s.'):progressBlock(c)),
+    c.status==='applied'&&c.type!=='flatten'&&didRestart(c)&&h('div',{class:'pn'},restartNote()),
+    c.type==='flatten'&&r.flatten&&[h('div',{class:'pe'+(tone==='coral'?' bad':'')},r.flatten.detail),(r.flatten.reply||{}).protective_stop_working===false&&h('div',{class:'nf'},'Position is open without a working stop.'),(pn=>pn&&!pn.on&&h('div',{class:'pe warn'},'Not paused now.'))(pauseNow(c))],
+    c.status==='applied'&&r.login&&r.login.text&&h('div',{class:'pe'+({signed_out:' warn',starting:' warn',bad_token:' bad'}[r.login.state]||'')},r.login.text),
+    c.status==='failed'&&c.error&&!(c.type==='flatten'&&r.flatten)&&h('div',{class:'pe bad'},c.error),
+    c.status==='failed'&&r.needs_person&&h('div',{class:'pe'},needsLines(r.needs_person)),
+    c.status==='failed'&&!r.needs_person&&r.rolled_back&&h('div',{class:'pe'},'Files restored from the backup'+(log.some(x=>x.phase==='rollback')?'; services restarted on the old files.':'.')),
+    c.status!=='applying'&&!!log.length&&h('details',{dataset:{id:c.id}},h('summary',null,'Restart steps · '+log.length),restartLog(log)));
+  const pa=h('div',{class:'pa'});
+  if(c.status==='previewed'||c.status==='waiting_flat')pa.append(h('button',{class:'btn sm',onclick:async e=>{e.target.disabled=true;e.target.textContent='Cancelling…';try{await api('/api/changes/'+c.id+'/cancel',{})}catch(err){e.target.textContent=err.message}poll()}},'Cancel'));
+  if(c.status==='applied'&&!['flatten','rollback','start_login','remove_login'].includes(c.type))pa.append(h('button',{class:'btn sm',onclick:()=>rollbackFlow(c)},c.type==='add_login'?'Undo':'Rollback'));
+  if(c.type==='flatten'&&c.status==='failed'&&r.flatten&&r.flatten.outcome_class==='unknown')pa.append(h('button',{class:'btn sm danger',onclick:()=>resendFlow(c)},'Send again'));
+  if(pa.childElementCount)li.append(pa);
+  return li;
+}
+async function rollbackFlow(c){
+  const undo=c.type==='add_login',body=openDlg((undo?'Undo · ':'Rollback · ')+c.summary,h('p',{class:'quiet'},'Asking the service…'));
+  let r;try{r=await api('/api/changes/'+c.id+'/rollback',{})}catch(e){body.replaceChildren(errBlock(e),h('div',{class:'dfoot'},h('button',{class:'btn',onclick:closeDlg},'Close')));return}
+  // Undo of an Add login is the same change as Remove login (typed label, backup kept); the login preview shows it.
+  renderPreview(body,r,r.plan&&r.plan.login?{confirmLabel:'Remove '+r.plan.login.label}:{lead:'Restores the files this change touched from its backup.'},()=>rollbackFlow(c));
+}
+
+/* ---------- wizards ---------- */
+function addWebhookFlow(){
+  const d=S.data,strats=d.strategies,leaders=d.accounts.filter(a=>a.role!=='leader');
+  const notes=h('p',{class:'hint'}),sel=h('select',{name:'strategy',required:true,onchange:()=>{const s=strats.find(x=>x.id===sel.value);notes.textContent=s?s.notes+' Build '+s.build+'.':''}},strats.map(s=>h('option',{value:s.id},s.name)));
+  sel.dispatchEvent(new Event('change'));
+  const form=h('form',{onsubmit:e=>{e.preventDefault();const f=new FormData(form);const p={name:f.get('name').trim(),strategy:f.get('strategy'),leader:f.get('leader')};if(f.get('ticker').trim())p.ticker=f.get('ticker').trim();previewChange('add_webhook',p,{title:'Add webhook',lead:'Creates the webhook as planned. It starts working after the multi-lane publish step.'})}},
+    h('div',{class:'fb'},
+      h('label',{class:'field'},h('span',null,'Name'),h('input',{name:'name',required:true,maxlength:'40',autofocus:true,placeholder:'Scalper'})),
+      h('label',{class:'field'},h('span',null,'Strategy payload it accepts'),sel,notes),
+      h('label',{class:'field'},h('span',null,'Leader (an account that is not already a leader)'),h('select',{name:'leader',required:true},leaders.map(a=>h('option',{value:a.key},a.label+' · '+a.login_label+(a.webhook?' · now follower on '+wh(a.webhook).name:' · not assigned')))),leaders.length?null:h('span',{class:'hint warn'},'Every account is already a leader. Add an account first.')),
+      h('label',{class:'field'},h('span',null,'Ticker (optional)'),h('input',{name:'ticker',class:'mono',maxlength:'20'})),
+      h('p',{class:'quiet'},'The preview shows the generated stream ID and URL. You paste the stream ID into the strategy\'s alert in TradingView.'),
+      h('div',{class:'dfoot'},h('button',{class:'btn',type:'button',onclick:closeDlg},'Cancel'),h('button',{class:'btn primary',type:'submit',disabled:!leaders.length},'Preview'))));
+  openDlg('Add webhook',form);
+}
+/* Register webhook: one that stays off (reserved path and port, no strategy, leader or stream ID; registry only). */
+function registerWebhookFlow(){
+  const cs=((S.data||{}).coming_soon||{}).add_webhook;
+  const err=h('span',{class:'hint bad hidden',role:'alert'}),input=h('input',{name:'name',required:true,maxlength:'40',autofocus:true,placeholder:'W2',autocomplete:'off'});
+  const st=h('span',{class:'st'}),go=h('button',{class:'btn primary',type:'submit'},'Preview');
+  const form=h('form',{onsubmit:async e=>{e.preventDefault();const name=input.value.trim();if(!name)return;err.classList.add('hidden');go.disabled=true;st.textContent='Preparing preview…';
+    try{const ch=await api('/api/changes',{type:'register_webhook',params:{name}});renderPreview(openDlg('Register webhook',null),ch,{confirmLabel:'Register '+name},()=>previewChange('register_webhook',{name}))}
+    catch(e){go.disabled=false;st.textContent='';if(e.status===400){err.textContent=e.message;err.classList.remove('hidden');input.focus()}else form.prepend(errBlock(e))}}},
+    h('div',{class:'fb'},
+      h('p',{class:'lead'},'Registers a webhook that stays off: a reserved URL and Soup port, no strategy, leader, accounts or stream ID. Nothing runs and no alert is accepted until you approve a strategy.'),
+      cs&&h('p',{class:'soon-text'},cs.text),
+      h('label',{class:'field'},h('span',null,'Name'),input,h('span',{class:'hint'},'1 to 40 characters'),err),
+      h('div',{class:'dfoot'},st,h('button',{class:'btn',type:'button',onclick:closeDlg},'Cancel'),go)));
+  openDlg('Register webhook',form);
+}
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,32);
+function addAccountFlow(preset){   // preset: a login id (from a Start login result); the header button passes the click event
+  const d=S.data,body=openDlg('Add account',null);
+  const pick=h('div',{class:'fb'});
+  const typed=h('input',{name:'mname',maxlength:'60',placeholder:'as shown in Tradovate'});
+  // A login this page just added can be blocked for accounts until its peers restart (setup.account_blockers): the
+  // option stays listed but off, with the backend's first sentence under the select.
+  const blockers=l=>((l.setup||{}).account_blockers)||[];
+  const loginSel=h('select',{name:'login',required:true},d.logins.map(l=>h('option',{value:l.id},l.label+' · '+l.mode.replace('_',' ')+' · '+l.state_label+(blockers(l).length?' · not yet':''))));
+  if(typeof preset==='string'&&d.logins.some(l=>l.id===preset))loginSel.value=preset;
+  const blkLine=h('span',{class:'hint warn'}),next=h('button',{class:'btn primary',type:'submit'},'Next');
+  const showBlk=()=>{const l=d.logins.find(x=>x.id===loginSel.value),b=l?blockers(l)[0]:'';blkLine.textContent=b||'';next.disabled=!!b};
+  showBlk();
+  async function loadVisible(){
+    pick.replaceChildren(h('p',{class:'quiet'},'Asking Tradovate what this login can see…'));
+    try{const r=await api('/api/logins/'+encodeURIComponent(loginSel.value)+'/visible');
+      pick.replaceChildren(...[
+        r.accounts.length?h('ul',{class:'choices'},r.accounts.map(x=>h('li',null,h('label',{class:x.already_configured?'off':''},h('input',{type:'radio',name:'acct',value:x.name,disabled:x.already_configured,onchange:()=>{typed.value=''}}),x.name,x.already_configured&&h('span',{class:'m'},'already set up as '+(x.key||'?')))))):null,
+        r.note&&h('p',{class:'quiet'},r.note),r.error&&h('p',{class:'warn'},r.error),
+        !r.accounts.length&&!r.note&&!r.error&&h('p',{class:'quiet'},'No accounts visible on this login.')].filter(Boolean));
+    }catch(e){pick.replaceChildren(h('p',{class:'warn'},'Could not list accounts: '+e.message))}
+    pick.append(h('label',{class:'field'},h('span',null,pick.querySelector('.choices')?'Or type the account name':'Type the account name'),typed));
+  }
+  typed.addEventListener('input',()=>{const r=step1.querySelector('input[name=acct]:checked');if(r&&typed.value)r.checked=false});
+  loginSel.addEventListener('change',()=>{showBlk();loadVisible()});
+  const step1=h('form',{onsubmit:e=>{e.preventDefault();const r=step1.querySelector('input[name=acct]:checked');const name=typed.value.trim()||(r?r.value:'');if(!name){pick.prepend(h('p',{class:'warn'},'Pick an account or type its name.'));return}step2(loginSel.value,name)}},
+    h('div',{class:'fb'},
+      h('label',{class:'field'},h('span',null,'Login'),loginSel,blkLine),
+      h('div',{class:'field'},h('span',null,'Account'),pick),
+      h('div',{class:'dfoot'},h('button',{class:'btn',type:'button',onclick:closeDlg},'Cancel'),next)));
+  body.replaceChildren(step1);loadVisible();
+  function step2(login,name){
+    const login_label=(d.logins.find(l=>l.id===login)||{}).label||login;
+    const keyIn=h('input',{name:'key',class:'mono',required:true,pattern:'[a-z0-9][a-z0-9-]*',maxlength:'32'});let keyTouched=false;keyIn.addEventListener('input',()=>keyTouched=true);
+    const labelIn=h('input',{name:'label',required:true,maxlength:'40',autofocus:true,value:name,oninput:()=>{if(!keyTouched)keyIn.value=slug(labelIn.value)}});
+    keyIn.value=slug(name);
+    const form=h('form',{onsubmit:e=>{e.preventDefault();const f=new FormData(form);const idv=f.get('account_id').trim();previewChange('add_account',{login,key:f.get('key'),label:f.get('label').trim(),account_name:name,account_id:idv?+idv:null,prop_profile:f.get('prop_profile'),webhook:f.get('webhook')||null},{title:'Add account',lead:'New accounts start paused. Resume it from its card when you are ready.'})}},
+      h('div',{class:'fb'},
+        h('p',{class:'quiet'},login_label+' · '+name),
+        h('div',{class:'row2'},h('label',{class:'field'},h('span',null,'Label'),labelIn),h('label',{class:'field'},h('span',null,'Key (used in file names)'),keyIn)),
+        h('div',{class:'row2'},
+          h('label',{class:'field'},h('span',null,'Prop profile'),h('select',{name:'prop_profile',required:true},PROFILES.map(p=>h('option',{value:p},p)))),
+          h('label',{class:'field'},h('span',null,'Account ID (optional)'),h('input',{name:'account_id',class:'mono',pattern:'[0-9]*',placeholder:'blank: looked up by name'}))),
+        h('label',{class:'field'},h('span',null,'Webhook'),h('select',{name:'webhook'},d.webhooks.filter(w=>!isOff(w)).map(w=>h('option',{value:w.id},w.name+' · follows '+lbl(w.leader))),h('option',{value:''},'Not assigned'))),
+        h('p',null,'New accounts start paused.'),
+        h('div',{class:'dfoot'},h('button',{class:'btn',type:'button',onclick:()=>{body.replaceChildren(step1)}},'Back'),h('button',{class:'btn primary',type:'submit'},'Preview'))));
+    body.replaceChildren(form);labelIn.focus();
+  }
+}
+/* Add login, step 1: one field. The preview (install.py dry run, a second or two) follows; nothing is written
+   before Confirm. Without login_setup in the profile the service answers with manual steps instead (old flow). */
+function addLoginFlow(){
+  const ls=(S.data||{}).login_setup,cs=((S.data||{}).coming_soon||{}).add_login;
+  const guided=!!ls&&ls.available!==false,next=ls&&ls.next_id;
+  const err=h('span',{class:'hint bad hidden',role:'alert'}),input=h('input',{name:'label',required:true,maxlength:'40',autofocus:true,placeholder:'Login '+(next||'C').toUpperCase(),autocomplete:'off','aria-describedby':'al-hint'});
+  const st=h('span',{class:'st'}),go=h('button',{class:'btn primary',type:'submit'},guided?'Preview':'Show steps');
+  const form=h('form',{onsubmit:async e=>{e.preventDefault();const label=input.value.trim();if(!label)return;
+    err.classList.add('hidden');go.disabled=true;st.textContent=guided?'Asking the install tool for a dry run…':'Preparing…';
+    try{const ch=await api('/api/changes',{type:'add_login',params:{label}});renderPreview(openDlg('Add login',null),ch,guided?{}:{lead:'The service prepares the login. You run the steps it lists and do the first Tradovate sign-in yourself.'},()=>previewChange('add_login',{label}))}
+    catch(e){go.disabled=false;st.textContent='';if(e.status===400){err.textContent=e.message;err.classList.remove('hidden');input.focus()}else form.prepend(errBlock(e))}}},
+    h('div',{class:'fb'},
+      !guided&&(cs||ls&&ls.reason)&&h('p',{class:'soon-text'},(cs&&cs.text)||ls.reason),
+      h('p',{class:'lead'},guided?'Sets up a new Tradovate login with its own window. You sign in there yourself.':'Prepares a new login. You run the steps it lists and do the first Tradovate sign-in yourself.'),
+      guided&&h('p',{class:'quiet'},(next?'It will be Login '+next.toUpperCase()+' (id '+next+'). ':'')+'The preview lists every file, unit and port before anything is written.'),
+      h('label',{class:'field'},h('span',null,'Name'),input,h('span',{class:'hint',id:'al-hint'},'Letters, digits, spaces and . _ ( ) + - · up to 40 characters'),err),
+      h('div',{class:'dfoot'},st,h('button',{class:'btn',type:'button',onclick:closeDlg},'Cancel'),go)));
+  openDlg('Add login',form);
+}
+async function historyFlow(){
+  const body=openDlg('History',h('p',{class:'quiet'},'Loading…'));
+  let r;try{r=await api('/api/audit?limit=100')}catch(e){body.replaceChildren(errBlock(e));return}
+  body.replaceChildren(r.entries.length?h('table',{class:'hist'},h('thead',null,h('tr',null,['When','Type','Status','Summary','Files'].map(t=>h('th',null,t)))),
+    h('tbody',null,r.entries.map(e=>{const [sl,st]=auditOutcome(e);return h('tr',null,h('td',{class:'t'},fmtDT(e.at)),h('td',null,TYPE[e.type]||e.type),h('td',null,pill(sl,st==='ok'?'':st)),
+      h('td',null,e.summary,e.restarts&&e.restarts.length?h('div',{class:'quiet mono'},restartSummary(e.restarts)):null,e.needs_person&&e.needs_person.length?h('div',{class:'bad mono'},'Needs a person: '+e.needs_person.join(' · ')):null,
+        e.flatten&&h('div',{class:'quiet'},(FLAT_CLASS[e.flatten.outcome_class]||[e.flatten.outcome_class])[0]+(e.flatten.detail?' · '+e.flatten.detail:''))),
+      h('td',{class:'t'},(e.files||[]).length))}))):h('p',{class:'quiet'},'No entries yet.'));
+}
+/* Audit entries carry only restarts[{phase,unit,action,ok}] and needs_person[units], so the outcome is read from those. */
+function auditOutcome(e){
+  if(e.flatten&&e.flatten.outcome_class&&(e.status==='failed'||e.status==='applied')){const f=FLAT_CLASS[e.flatten.outcome_class];if(f)return e.status==='applied'&&e.flatten.outcome_class==='dry_run'?['applied · dry run','ok']:f.slice(0,2)}
+  if(e.status!=='failed')return STATUS[e.status]||[e.status,'dim'];
+  if(e.needs_person&&e.needs_person.length)return ['failed · needs a person','coral'];
+  if((e.restarts||[]).some(x=>x.phase==='rollback'))return ['failed · rolled back','coral'];
+  return ['failed','coral'];
+}
+function restartSummary(list){
+  const by={};for(const x of list){const p=x.phase==='rollback'?'re-run on old files':'apply';const b=by[p]||(by[p]={ok:0,bad:0,skip:0});if(x.ok===true)b.ok++;else if(x.ok===false)b.bad++;else b.skip++}
+  return Object.entries(by).map(([p,b])=>p+': '+[b.ok&&b.ok+' ok',b.bad&&b.bad+' failed',b.skip&&b.skip+' not reached or skipped'].filter(Boolean).join(', ')).join(' · ');
+}
+
+/* ---------- dialog ---------- */
+const dlg=$('#dlg');
+function openDlg(title,content){document.querySelectorAll('details.menu[open]').forEach(d=>d.open=false);$('#dlg-title').textContent=title;const b=$('#dlg-body');b.replaceChildren();if(content)b.append(content);if(!dlg.open)dlg.showModal();return b}
+function closeDlg(){dlg.close()}
+$('#dlg-x').addEventListener('click',closeDlg);
+dlg.addEventListener('click',e=>{if(e.target===dlg)closeDlg()});
+
+/* ---------- boot ---------- */
+async function claimToken(code){
+  /* The launcher's one-time code (never the token itself) is traded for the token once. */
+  try{const r=await fetch('/api/claim',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
+    if(r.ok){const j=await r.json();if(j&&j.token)sessionStorage.setItem('adminToken',j.token)}}catch(e){}
+}
+async function boot(){
+  const q=new URLSearchParams(location.search);S.mock=q.get('mock')==='1';
+  const c=/[#&]c=([^&]+)/.exec(location.hash);
+  if(c){history.replaceState(null,'',location.pathname+location.search);await claimToken(decodeURIComponent(c[1]))}
+  const m=/[#&]t=([^&]+)/.exec(location.hash);
+  if(m){sessionStorage.setItem('adminToken',decodeURIComponent(m[1]));history.replaceState(null,'',location.pathname+location.search)}
+  S.token=sessionStorage.getItem('adminToken');
+  if(!S.token&&!S.mock){document.body.replaceChildren(h('p',{class:'notoken'},'Open this page from the Bridge Advanced launcher.'));return}
+  $('#b-addwh').addEventListener('click',()=>(S.data&&S.data.coming_soon&&S.data.coming_soon.add_webhook)?registerWebhookFlow():addWebhookFlow());
+  $('#b-addacc').addEventListener('click',addAccountFlow);
+  $('#b-addlogin').addEventListener('click',addLoginFlow);
+  $('#b-hist').addEventListener('click',historyFlow);
+  poll();setInterval(poll,3000);
+}
+
+/* ================= MOCK (only with ?mock=1) =================
+   In-page stand-in for tvbridge-admin so every flow can be clicked through
+   without the service. Not used otherwise. */
+const MOCK=(()=>{
+  let D=null,n=0;const C={},X=[];const now=()=>Date.now()/1000;   // X: read-only audit entries (export)
+  const A=k=>D.accounts.find(a=>a.key===k),W=id=>D.webhooks.find(w=>w.id===id),L=k=>(A(k)||{label:k}).label;
+  const rnd=()=>Array.from({length:4},()=>Math.random().toString(36).slice(2,6)).join('-');
+  const inTrade=keys=>keys.filter(k=>{const a=A(k);return a&&a.position.flat===false});
+  const sum=r=>r.reduce((s,x)=>s+x.seconds,0);
+  function build(type,p){
+    const ch={id:'c-mock-'+(++n),type,params:p,status:'previewed',created_at:now(),updated_at:now(),summary:'',preview_hash:'h'+n,result:null,error:null,
+      plan:{immediate:false,requires_flat:true,affected:[],wait_on:[],files:[],restarts:[],warnings:[],blockers:[],manual_steps:[],confirm:{required:false,expect:null,prompt:null},generated:{}}};
+    const P=ch.plan,a=p.account,lab=a?L(a):'',acct=a?A(a):null;
+    const imm=()=>{P.immediate=true;P.requires_flat=false};
+    const daemon=why=>P.restarts.push({unit:'tvbridge-daemon.service',why,seconds:15});
+    const cfg=diff=>P.files.push({path:'tvbridge/config.json',action:'modify',to:null,diff});
+    const firing=diff=>P.files.push({path:'tvbridge/firing.json',action:'modify',to:null,diff});
+    if(a&&!acct)throw err(404,'not_found','No account with key '+a+'.');
+    switch(type){
+      case 'pause':imm();P.affected=[a];ch.summary='Pause '+lab+': '+p.reason;P.files.push({path:'tvbridge/logins/'+acct.login+'/ENTRIES-DISABLED-'+a,action:'create',diff:'+admin: '+p.reason});
+        if(acct.role==='leader')P.warnings.push(lab+' leads '+W(acct.webhook).name+'. Pausing it pauses the whole webhook.');if(acct.pause.on)P.blockers.push(lab+' is already paused.');break;
+      case 'resume':imm();P.affected=[a];ch.summary='Resume '+lab;P.files.push({path:'tvbridge/logins/'+acct.login+'/ENTRIES-DISABLED-'+a,action:'rename',to:'tvbridge/logins/'+acct.login+'/ENTRIES-DISABLED-'+a+'.removed-20210104T0000Z',diff:''});
+        if(!acct.pause.on)P.blockers.push(lab+' is not paused.');if(acct.pause.set_by==='system'){P.confirm={required:true,expect:lab,prompt:'A safety event set this pause. Type '+lab+' to resume anyway.'};P.warnings.push('Reason recorded: '+acct.pause.reason)}break;
+      case 'flatten':imm();P.affected=[a];ch.summary='Flatten now: '+lab+' (close position, cancel working orders, then pause)';P.confirm={required:true,expect:lab,prompt:'Closes the position and cancels working orders for '+lab+' now, then pauses it. Type '+lab+' to confirm.'};
+        P.flatten={reason:'Flatten now (Bridge Advanced)',key:acct.role==='leader'?'main':a,login:acct.login,also_blocks:acct.role==='leader'&&acct.webhook?W(acct.webhook).followers.slice():[]};
+        if(P.flatten.also_blocks.length)P.warnings.push('This is a leader. Its pause also blocks new entries on: '+P.flatten.also_blocks.map(L).join(', ')+'. Their open trades keep their own stops and exits; flatten them separately if you want them out too. Soup sees the close as an outside close and stops managing that trade.');
+        P.warnings.push('Build preview: the close is recorded as a dry run and nothing is sent.');if(acct.position.flat)P.warnings.push(lab+' is already flat; this only cancels working orders.');break;
+      case 'set_enabled':P.affected=[a];ch.summary=lab+': lane '+(p.enabled?'on':'off');cfg('-      "enabled": '+!p.enabled+',\n+      "enabled": '+p.enabled+',');firing('  "'+a+'": {"enabled": '+p.enabled+'}');daemon('reads lane flags at start');if(acct.role==='leader')P.blockers.push('A leader lane can\'t be turned off.');break;
+      case 'reorder':{const w=W(p.webhook);P.affected=p.followers.slice();ch.summary=w.name+': firing order '+p.followers.map(L).join(' → ');firing('-  "order": ['+w.followers.map(k=>'"'+k+'"').join(', ')+']\n+  "order": ['+p.followers.map(k=>'"'+k+'"').join(', ')+']');daemon('reads firing order at start');break}
+      case 'move_account':{const to=p.to_webhook?W(p.to_webhook):null;P.affected=[a];ch.summary='Move '+lab+(acct.webhook?' from '+W(acct.webhook).name:'')+' to '+(to?to.name:'Not assigned');
+        if(acct.role==='leader')P.blockers.push('A leader can\'t be moved. Leaders are fixed.');firing('  "'+a+'": {"webhook": '+JSON.stringify(p.to_webhook)+'}');daemon('reads firing order at start');if(to&&to.soup.unit)P.restarts.push({unit:to.soup.unit,why:'new follower on its lane',seconds:20});
+        if(to&&to.state==='planned')P.warnings.push(to.name+' is planned; '+lab+' gets no alerts until the publish step.');break}
+      case 'add_account':P.affected=[p.key];ch.summary='Add '+p.label+' ('+p.key+') on '+(D.logins.find(l=>l.id===p.login)||{}).label+(p.webhook?', follower on '+W(p.webhook).name:', not assigned');
+        if(A(p.key))P.blockers.push('Key '+p.key+' is already in use.');if(p.account_id!=null&&D.accounts.some(x=>x.account_id===p.account_id))P.blockers.push('Account ID '+p.account_id+' is already configured.');if(D.accounts.some(x=>x.account_name_masked===p.account_name))P.blockers.push(p.account_name+' is already configured.');if(p.account_id==null)P.warnings.push('No account ID given: the bridge looks it up by name at apply time.');
+        P.files.push({path:'tvbridge/logins/'+p.login+'/config.json',action:'modify',diff:'+    {"key": "'+p.key+'", "label": "'+p.label+'"}'},{path:'tvbridge/journal/'+p.key+'/',action:'mkdir',to:null,diff:''},{path:'tvbridge/firing.json',action:'modify',diff:'+  "'+p.key+'"'},{path:'tvbridge/logins/'+p.login+'/ENTRIES-DISABLED-'+p.key,action:'create',diff:'+admin: new account starts paused'});
+        daemon('loads the new follower');P.warnings.push('The account starts paused.');break;
+      case 'retire_account':P.affected=[a];ch.summary='Retire '+lab;if(acct.role==='leader')P.blockers.push('A leader can\'t be retired.');P.files.push({path:'tvbridge/logins/'+acct.login+'/config.json',action:'modify',diff:'-    {"key": "'+a+'", …}'},{path:'tvbridge/firing.json',action:'modify',diff:'-  "'+a+'"'});daemon('drops the follower');P.warnings.push('Journals for '+a+' are kept.');break;
+      case 'add_webhook':{const path='/webhook/'+(p.name||'x').toLowerCase().replace(/[^a-z0-9]+/g,'-'),sid=rnd();ch.status='previewed';P.requires_flat=false;P.affected=[p.leader];ch.summary='Add webhook '+p.name+' ('+(D.strategies.find(s=>s.id===p.strategy)||{}).name+'), leader '+L(p.leader);
+        P.generated={stream_id:sid,path,url:'https://webhooks.example.com'+path};P.files.push({path:'soup-lanes/'+path.split('/').pop()+'/pairing.json',action:'create',diff:'+{"stream_id": "'+sid+'", "leader": "'+p.leader+'"}'});
+        P.manual_steps.push('In TradingView, paste the stream ID into "📡 Alert stream ID" for '+p.name+'.','Point the alert at '+P.generated.url+'.');if(A(p.leader).webhook)P.warnings.push(L(p.leader)+' leaves '+W(A(p.leader).webhook).name+' to lead this webhook. That waits until it is flat.');ch._final='planned';break}
+      case 'remove_webhook':{const w=W(p.webhook);P.affected=[w.leader,...w.followers].filter(Boolean);if(isOff(w)){P.requires_flat=false;ch.summary='Remove webhook '+w.name+' (off; registry only)';P.files.push({path:'admin/webhooks.json',action:'modify',to:null,diff:'-  {"id": "'+w.id+'", "state": "off", …}'});break}ch.summary='Remove webhook '+w.name;if(w.id==='main')P.blockers.push('Main can\'t be removed.');if(w.followers.length)P.blockers.push('Move its '+w.followers.length+' follower(s) first.');P.files.push({path:'soup-lanes/'+w.id+'/',action:'delete',diff:''});break}
+      case 'rotate_stream_id':{const w=W(p.webhook),sid=rnd();P.affected=[w.leader,...w.followers];ch.summary='Rotate stream ID for '+w.name;P.generated={stream_id:sid};P.files.push({path:'soup-lanes/'+w.id+'/pairing.json',action:'modify',diff:'-  "stream_id": "'+w.stream_id+'"\n+  "stream_id": "'+sid+'"'});if(w.soup.unit)P.restarts.push({unit:w.soup.unit,why:'reads pairing at start',seconds:20});
+        P.manual_steps.push('Paste the new stream ID into "📡 Alert stream ID" in TradingView before the next alert.','Confirm here once the TradingView alert is saved.');break}
+      case 'rollback':{const src=C[p.change]||D.recent.find(c=>c.id===p.change);if(!src)throw err(404,'not_found','No change '+p.change+'.');P.affected=src.plan.affected.slice();P.restarts=src.plan.restarts.slice();ch.summary='Rollback: '+src.summary;P.files=src.plan.files.map(f=>({...f,action:'modify',to:null,diff:'(restore from backup)'}));
+        if(src.status!=='applied')P.blockers.push('Only an applied change can be rolled back.');if(src.type==='flatten')P.blockers.push('A flatten can\'t be rolled back.');if(src.plan.immediate){P.immediate=true;P.requires_flat=false}break}
+      case 'add_login':{P.requires_flat=false;
+        if(!D.login_setup||!D.login_setup.available){ch.summary='Add login '+p.label;P.manual_steps.push('On the VM run: python3 scripts/install.py add-login --label "'+p.label+'"','Sign in to Tradovate in the browser window it opens.','Come back here and use Add account.');ch._final='manual';break}
+        if(!/^[A-Za-z0-9 ._()+-]{1,40}$/.test(p.label||''))throw err(400,'invalid','Use letters, digits, spaces and . _ ( ) + - for the login name.');
+        if(D.logins.some(l=>l.label.toLowerCase()===p.label.toLowerCase()))throw err(400,'invalid','A login named '+p.label+' already exists.');
+        const lid=D.login_setup.next_id,lab=p.label,ID=lid.toUpperCase(),home='tvbridge/logins/'+lid,ud='~/.config/systemd/user/';
+        ch.summary='Add '+lab+' (login '+lid+'): its files, units and its own Tradovate window';P.generated={login_id:lid};
+        P.restarts.push({unit:'tvbridge-status.service',why:'the Bridge window loads '+lab+'\'s read-only token at start, so it can show it',seconds:3});
+        P.warnings.push('Opens '+lab+'\'s own Tradovate window. You sign in there by hand; nothing here signs in.','Its bridge starts only after your sign-in (the next step, Start). Daemons A and B, the firing service and Soup are not restarted.',lab+' starts with no accounts. Accounts you add to it later start paused.','Login A\'s config lists '+lab+' as a peer for the cross-login hedge check. Daemon A reads that at its next restart; until then its check does not include '+lab+', which has no accounts yet.','The Bridge window\'s data service restarts once (about 3 s) so it can read the new login.');
+        P.manual_steps.push('Sign in to Tradovate in the '+lab+' window (never during the weekend login hold).','Back here, press Start for '+lab+'.','Then use Add account to pick accounts from '+lab+' (they start paused).');
+        const F=(path,action,detail,by,to,diff)=>P.files.push({path,action,to:to||null,diff:diff||'',by,detail});
+        F('tvbridge/logins.json','modify','add login '+lid+' ('+lab+'), DevTools 9558, loopback 8780','install.py');F(home+'/','mkdir','login directory','install.py');F(home+'/config.json','create','followers_only, no accounts, read_token_env TVBRIDGE_READ_TOKEN_'+ID,'install.py');F(home+'/login.env','create','window settings: DevTools 9558, profile-'+lid,'install.py');F(home+'/tvbridge.env','create','new TVBRIDGE_TOKEN_'+ID+' (value not shown)','install.py');F(home+'/journal/','mkdir','journal directory','install.py');F(home+'/ENTRIES-DISABLED','create','login-wide pause switch','install.py');F('~/.local/share/decrypt-os/tvbridge-browser/profile-'+lid+'/','mkdir','browser profile with its .tvbridge-login marker','install.py');F('tvbridge/logins/a/config.json','modify','peer_logins gains '+lab,'install.py');F('tvbridge/logins/peers.env','modify','add TVBRIDGE_READ_TOKEN_'+ID+' (value not shown)','install.py');F('tvbridge/logins/firing.env','modify','add TVBRIDGE_TOKEN_'+ID+' (value not shown)','install.py');
+        F(home+'/ENTRIES-DISABLED','rename','retire '+lab+'\'s login-wide pause switch, as on the other logins; every account added later starts paused with its own switch','this page',home+'/ENTRIES-DISABLED.removed-<UTC>');F('tvbridge/logins/manual-'+lid+'.env','create','mode 0600; new TVBRIDGE_MANUAL_TOKEN_'+ID+' for Flatten now (value not shown)','this page');F(ud+'tvbridge-daemon@'+lid+'.service.d/manual-token.conf','create','loads the Flatten-now token into tvbridge-daemon@'+lid+'.service, as for the other logins','this page',null,'+[Service]\n+EnvironmentFile=%h/.local/share/decrypt-os/tvbridge/logins/manual-'+lid+'.env');F(ud+'tvbridge-admin.service.d/manual-tokens.conf','modify','this page\'s own drop-in: the new token at its next restart','this page',null,'+EnvironmentFile=%h/.local/share/decrypt-os/tvbridge/logins/manual-'+lid+'.env');
+        P.login={id:lid,label:lab,devtools_port:9558,bridge_port:8780,bridge_url:'http://127.0.0.1:8780',profile_dir:'~/.local/share/decrypt-os/tvbridge-browser/profile-'+lid,
+          units:[{unit:'systemctl --user daemon-reload',action:'run',when:'now'},{unit:'tvbridge-browser@'+lid+'.service',action:'enable, start',when:'now',why:'its own Tradovate window, for your sign-in'},{unit:'tvbridge-daemon@'+lid+'.service',action:'enable',when:'Start step',why:'the login guard starts it once it sees you signed in'},{unit:'tvbridge-login-trigger@'+lid+'.service',action:'enable, start',when:'Start step'},{unit:'tvbridge-login-guard@'+lid+'.timer',action:'enable, start',when:'Start step'},{unit:'tvbridge-status.service',action:'restart',when:'now',why:'reads the new read-only token'}],
+          tokens:[{name:'TVBRIDGE_TOKEN_'+ID,kind:'order',files:[home+'/tvbridge.env','tvbridge/logins/firing.env'],note:'its daemon, guard, trigger and the firing service only'},{name:'TVBRIDGE_READ_TOKEN_'+ID,kind:'read-only',files:['tvbridge/logins/peers.env'],note:'/health and /login only: other daemons, firing, the Bridge window, this page'},{name:'TVBRIDGE_MANUAL_TOKEN_'+ID,kind:'flatten',files:['tvbridge/logins/manual-'+lid+'.env'],note:'Flatten now on this login only'}]};
+        if(Q.get('mockblock'))P.blockers.push('install.py picked bridge port 8780, which is already in use on this machine.');
+        ch._eta={kind:'now',seconds:15,text:'About 15 s once you confirm. Then sign in to Tradovate yourself in the new '+lab+' window.',waiting_on:[]};ch._login='add';break}
+      case 'start_login':{const lg=mockLoginEntry(p.login),s=lg.setup||{};imm();ch.summary='Start '+lg.label+'\'s bridge after your sign-in';
+        if(s.stage!=='awaiting_signin'){if(!s.units||s.units.browser.active!=='active')P.blockers.push(lg.label+'\'s browser window (tvbridge-browser@'+lg.id+'.service) is not running.');if(s.stage==='running')P.blockers.push(lg.label+' is already started.')}
+        P.warnings.push('Starts '+lg.label+'\'s login trigger and login guard. The guard starts its bridge daemon only when it sees '+lg.label+' signed in, so a signed-out daemon is never started.','Finish your sign-in first. If '+lg.label+' is still signed out, the guard may click into the empty sign-in form once (it looks for a saved login) and then waits for you.');
+        P.login={id:lg.id,label:lg.label,units_now:s.units,units:[{unit:'tvbridge-daemon@'+lg.id+'.service',action:'enable',when:'now',why:'the login guard starts it after it sees you signed in'},{unit:'tvbridge-login-trigger@'+lg.id+'.service',action:'enable, start',when:'now'},{unit:'tvbridge-login-guard@'+lg.id+'.timer',action:'enable, start',when:'now'}]};
+        ch._eta={kind:'now',seconds:60,text:'Usually under a minute once you are signed in.',waiting_on:[]};ch._login='start';break}
+      case 'remove_login':{const inc=(D.login_setup.incomplete||[]).find(x=>x.id===p.login);mockRemovePlan(ch,P,inc&&!D.logins.find(l=>l.id===p.login)?{id:inc.id,label:inc.label,accounts:[]}:mockLoginEntry(p.login));break}
+      case 'register_webhook':{const name=(p.name||'').trim(),wid=name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+        if(!name||name.length>40)throw err(400,'invalid','Give the webhook a name of 1 to 40 characters.');if(wid==='main')throw err(400,'invalid','main is the primary webhook.');
+        if(D.webhooks.some(w=>w.id===wid||w.name.toLowerCase()===name.toLowerCase()))throw err(400,'invalid','A webhook named '+name+' is already registered.');
+        imm();const port=Math.max(8799,...D.webhooks.map(w=>w.soup.port))+1,path='/webhook/trader-'+wid;ch.summary='Register webhook '+name+' (off, waiting for a strategy)';
+        P.generated={path,url:'https://webhooks.example.com'+path,port};P.files.push({path:'admin/webhooks.json',action:'modify',to:null,diff:'+  {"id": "'+wid+'", "name": "'+name+'", "state": "off", "port": '+port+'}'});
+        P.warnings.push(name+' stays off. Nothing runs and no alert is accepted until you approve a strategy for it.');ch._reg={id:wid,name,path,port};break}
+      default:throw err(400,'bad_type','Unknown change type '+type+'.');
+    }
+    if((type==='add_webhook'||type==='rotate_stream_id')&&D.coming_soon&&D.coming_soon[type])P.coming_soon=D.coming_soon[type];
+    if(type==='rollback'){const src=C[p.change];if(src&&src.type==='add_login'&&src.plan.login){const lg=D.logins.find(l=>l.id===src.plan.login.id);P.files=[];P.restarts=[];if(lg)mockRemovePlan(ch,P,lg);else P.blockers.push(src.plan.login.label+' is no longer in the registry.')}}
+    if(P.requires_flat){const all=P.restarts.some(r=>/daemon/.test(r.unit))?D.accounts.map(x=>x.key):[];P.wait_on=[...new Set([...P.affected,...all])].filter(k=>A(k))}
+    if(!D.status_source.ok&&P.requires_flat)P.blockers.push('Position feed is down, so flat can\'t be checked.');
+    const busy=inTrade(P.wait_on);
+    if(P.blockers.length)ch.eta={kind:'blocked',seconds:null,text:'Blocked: '+P.blockers[0],waiting_on:[]};
+    else if(ch._eta)ch.eta=ch._eta;
+    else if(ch._final==='manual')ch.eta={kind:'manual',seconds:null,text:'When you finish the steps.',waiting_on:[]};
+    else if(ch._final==='planned')ch.eta={kind:'planned',seconds:null,text:'Saved now; live after the multi-lane publish step.',waiting_on:[]};
+    else if(P.immediate)ch.eta={kind:'now',seconds:2,text:'Right away.',waiting_on:[]};
+    else if(busy.length)ch.eta={kind:'after_flat',seconds:null,text:'When '+busy.map(L).join(' and ')+(busy.length>1?' are':'\'s trade is')+' flat (stops and exits stay on); at the latest by the strategy\'s end-of-day exit. Then about '+(sum(P.restarts)+5)+' s.',waiting_on:busy};
+    else ch.eta={kind:'now',seconds:sum(P.restarts)+5,text:'Now, about '+(sum(P.restarts)+5)+' s.',waiting_on:[]};
+    return ch;
+  }
+  function apply(ch){
+    const p=ch.params,a=p.account?A(p.account):null,t=now();
+    switch(ch.type){
+      case 'pause':a.pause={on:true,set_by:'admin',reason:p.reason,at:t};a.status={label:'Paused',tone:'amber'};break;
+      case 'resume':a.pause={on:false,set_by:null,reason:null,at:null};a.status={label:a.position.flat?'Not ready':'In a trade',tone:a.position.flat?'amber':'green'};break;
+      case 'flatten':a.position={net:0,flat:true,orders_text:'none',text:'Flat'};a.pause={on:true,set_by:'admin',reason:'Paused after Flatten now',at:t};a.status={label:'Paused',tone:'amber'};
+        ch._flatten={ok:true,dry_run:true,outcome_class:'dry_run',detail:'Dry run: recorded the bridge call, sent nothing.',sent:false,reply:null,kill_switch_after:{on:true,set_by:'admin',reason:'Paused after Flatten now',at:t}};break;
+      case 'set_enabled':a.enabled=p.enabled;break;
+      case 'reorder':W(p.webhook).followers=p.followers.slice();p.followers.forEach((k,i)=>A(k).order=i+1);break;
+      case 'move_account':{if(a.webhook)W(a.webhook).followers=W(a.webhook).followers.filter(k=>k!==a.key);a.webhook=p.to_webhook;a.role=p.to_webhook?'follower':'unassigned';if(p.to_webhook){const f=W(p.to_webhook).followers;f.splice(Math.min(p.index==null?f.length:p.index,f.length),0,a.key)}break}
+      case 'add_account':{const lg=D.logins.find(l=>l.id===p.login);D.accounts.push({key:p.key,label:p.label,login:p.login,login_label:lg.label,role:p.webhook?'follower':'unassigned',webhook:p.webhook,order:null,enabled:true,prop_profile:p.prop_profile,account_name_masked:p.account_name,account_id:p.account_id,native_exits:true,pause:{on:true,set_by:'admin',reason:'New account starts paused',at:t},position:{net:0,flat:true,orders_text:'none',text:'Flat'},status:{label:'Paused',tone:'amber'}});lg.accounts.push(p.key);if(p.webhook)W(p.webhook).followers.push(p.key);break}
+      case 'retire_account':D.accounts=D.accounts.filter(x=>x.key!==a.key);if(a.webhook)W(a.webhook).followers=W(a.webhook).followers.filter(k=>k!==a.key);break;
+      case 'rotate_stream_id':{const w=W(p.webhook);w.stream_id=ch.plan.generated.stream_id;w.stream_id_strength='strong';w.notes=w.notes.filter(x=>!/guess/.test(x));break}
+      case 'add_webhook':{const g=ch.plan.generated,ld=A(p.leader);if(ld.webhook)W(ld.webhook).followers=W(ld.webhook).followers.filter(k=>k!==ld.key);ld.role='leader';ld.webhook=g.path.split('/').pop();
+        D.webhooks.push({id:ld.webhook,name:p.name,path:g.path,url:g.url,state:'planned',strategy:{id:p.strategy,name:(D.strategies.find(s=>s.id===p.strategy)||{}).name},stream_id:g.stream_id,stream_id_strength:'strong',ticker:p.ticker||'',leader:p.leader,followers:[],paused:true,pause:{on:true,set_by:'admin',reason:'New webhook, not activated',at:t},soup:{unit:null,port:null,enabled:null,locked:null},notes:['Planned: this webhook starts working after the multi-lane publish step.']});break}
+      case 'rollback':{const src=C[p.change];if(src)src.status='rolled_back';break}
+      case 'register_webhook':{const r=ch._reg;D.webhooks.push(offWebhook(r.id,r.name,r.path,r.port));break}
+      case 'remove_webhook':{const w=W(p.webhook),ld=A(w.leader);D.webhooks=D.webhooks.filter(x=>x.id!==p.webhook);if(ld){ld.role='unassigned';ld.webhook=null}break}
+    }
+    ch.result={ok:true,rolled_back:false,steps:[{name:'backup',ok:true,detail:ch.plan.files.length+' file(s)',at:t},{name:'write',ok:true,detail:'done',at:t+.2},...(ch.plan.restarts.length?[{name:'restart',ok:true,detail:ch.plan.restarts.map(r=>r.unit).join(', ')+' (simulated)',at:t+.5}]:[]),{name:'verify',ok:true,detail:'ok',at:t+.7}]};
+    if(ch.plan.restarts.length)ch.result.restart_log=ch.plan.restarts.map((r,i)=>({phase:'apply',unit:r.unit,action:'restart',ok:true,detail:'simulated',at:t+.3+i*.1}));
+    if(ch._flatten){ch.result.flatten=ch._flatten;ch.result.flatten_attempts=1;delete ch._flatten}
+  }
+  function settle(){for(const ch of Object.values(C))if(ch.status==='waiting_flat'&&!inTrade(ch.plan.wait_on||ch.plan.affected).length){apply(ch);ch.status='applied';ch.updated_at=now()}}
+  function err(status,code,detail){const e=new Error(detail);e.status=status;e.code=code;return e}
+  const strip=ch=>{const {_final,_eta,_login,_reg,...rest}=ch;return rest};
+  /* ----- logins (mock) ----- */
+  const Q=new URLSearchParams(location.search);   // mocklogin=off · mockstage=awaiting_signin|running|stopped|unknown (a Login C) · mockblock=1 · mockstart=connected|signed_out|starting|bad_token · mockfail=add|person
+  const stamp=()=>new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  const unitsOf=(id,stage)=>{const on=stage==='running',b=on||stage==='awaiting_signin',s=(u,a,e)=>({unit:u,active:a?'active':'inactive',enabled:e?'enabled':'disabled'});
+    return {browser:s('tvbridge-browser@'+id+'.service',b,true),daemon:s('tvbridge-daemon@'+id+'.service',on,on),trigger:s('tvbridge-login-trigger@'+id+'.service',on,on),guard_timer:s('tvbridge-login-guard@'+id+'.timer',on,on)}};
+  const setupOf=(id,stage,devtools,port,accounts)=>({stage,units:stage==='unknown'?null:unitsOf(id,stage),devtools_port:devtools,bridge_url:'http://127.0.0.1:'+port,added_by:null,started_by:null,origin:'this_page',signin:null,can_start:stage==='awaiting_signin',start_blocker:null,can_remove:!accounts,remove_blocker:accounts?'Retire its accounts first ('+accounts+').':null,account_blockers:[]});
+  const mockLogin=(id,label,stage)=>({id,label,primary:false,mode:'followers_only',state_label:stage==='awaiting_signin'||stage==='running'?'Logged out':stage==='stopped'?'No answer':'Unknown',tone:stage==='unknown'?'':'amber',accounts:[],setup:setupOf(id,stage,9558,8780,0)});
+  function mockLoginEntry(id){const lg=D.logins.find(l=>l.id===id);if(!lg)throw err(400,'invalid','There is no such login.');if(lg.primary)throw err(400,'invalid',lg.label+' is the primary login. It is never added, started or removed here.');if(lg.setup&&lg.setup.origin==='outside')throw err(400,'invalid',lg.label+' was not added by this page. Start or remove it by hand.');return lg}
+  const OFF_NOTE='Off — waiting for a strategy. Nothing runs and no alert is accepted until you approve a strategy.';
+  const CS={rotate_stream_id:'Changing a stream ID is coming soon: a guided, step-by-step rotation together with TradingView. It is on hold until then.',activate_webhook:'Turning a webhook on is coming soon. It needs a second strategy that has passed backtesting, and your approval.',add_webhook:'Webhooks with their own strategy and leader are coming soon. For now, Register webhook adds one that stays off.',add_login:'Add login is coming soon on this install. Until then the Add login preview lists the steps to do by hand.'};
+  const csOf=k=>({coming_soon:true,text:CS[k]});
+  const offWebhook=(id,name,path,port)=>({id,name,path,url:'https://webhooks.example.com'+path,url_active:false,state:'off',status_text:'Off — waiting for a strategy',strategy:{id:null,name:null},stream_id:null,stream_id_strength:null,ticker:null,leader:null,followers:[],paused:false,pause:null,soup:{unit:null,port,enabled:false,locked:true,installed:false},notes:[OFF_NOTE],coming_soon:{rotate_stream_id:csOf('rotate_stream_id'),activate_webhook:csOf('activate_webhook')}});
+  /* mocklogin=off · mockstage=… (a Login C) · mockw2=0 (no off webhook) · mockincomplete=1 · mockpeers=1 (Login C blocked for accounts) · mockstart=… (where the sign-in ends up) */
+  function patchLogins(){
+    const off=Q.get('mocklogin')==='off';
+    D.login_setup=off?{available:false,reason:'Add login is not set up in this install (profile login_setup).',next_id:null,incomplete:[]}:{available:true,reason:null,next_id:'c',incomplete:[]};
+    D.coming_soon={rotate_stream_id:csOf('rotate_stream_id'),activate_webhook:csOf('activate_webhook'),add_webhook:csOf('add_webhook'),...(off?{add_login:csOf('add_login')}:{})};
+    D.export={available:true,url:'/api/export'};
+    for(const w of D.webhooks){w.status_text=w.state==='live'?'Live':'Planned — not running yet';w.url_active=w.state==='live';w.coming_soon={rotate_stream_id:csOf('rotate_stream_id'),...(w.state!=='live'?{activate_webhook:csOf('activate_webhook')}:{})}}
+    if(Q.get('mockw2')!=='0')D.webhooks.push(offWebhook('w2','W2','/webhook/w2-3f9a0c12ab77',8800));
+    for(const lg of D.logins)if(!lg.primary&&!lg.setup&&D.login_setup.available){lg.setup=setupOf(lg.id,'running',9557,8778,lg.accounts.length);lg.setup.origin='outside';lg.setup.can_start=false;lg.setup.can_remove=false;lg.setup.start_blocker=lg.label+' was not added by this page.';lg.setup.remove_blocker=lg.label+' was not added by this page. Start or remove it by hand.'}
+    const stage=Q.get('mockstage');if(stage&&D.login_setup.available&&!D.logins.find(l=>l.id==='c')){const c=mockLogin('c','Login C',stage);if(stage==='running'){const want=Q.get('mockstart')||'connected';c.setup.signin={state:want,text:signinText('Login C',want)};[c.state_label,c.tone]=SIGNIN_LABEL[want]}if(Q.get('mockpeers'))c.setup.account_blockers=['Adding accounts to Login C needs a restart of Login A/B while flat and signed in to see Login C.'];D.logins.push(c);D.login_setup.next_id='d'}
+    if(Q.get('mockincomplete')&&D.login_setup.available)D.login_setup.incomplete.push({id:'d',label:'Login D',state:'add_failed',change_id:'c-mock-0',error:'tvbridge-browser@d.service did not stop',text:'Login D (id d): the add did not finish (add_failed). Use Remove to clean up what its record lists.'});
+  }
+  const SIGNIN_LABEL={connected:['Connected','green'],signed_out:['Logged out','amber'],starting:['Starting','amber'],bad_token:['Token rejected','red']};
+  const signinText=(lab,st)=>({connected:lab+' is signed in and its bridge is synced. Add its accounts with Add account.',signed_out:'The login guard sees '+lab+' signed out (login form visible). Sign in by hand in the '+lab+' window; the guard starts its bridge once you are signed in.',bad_token:lab+'\'s bridge rejected the read-only token (HTTP 403 from /health).',starting:'Not synced yet (daemon not answering yet). The login guard starts '+lab+'\'s bridge when it sees you signed in; it checks about every 30 s.'})[st];
+  function mockRemovePlan(ch,P,lg){
+    const id=lg.id,lab=lg.label,ID=id.toUpperCase(),home='tvbridge/logins/'+id,ud='~/.config/systemd/user/';
+    ch.summary='Remove '+lab+' (login '+id+'); a backup is kept';P.requires_flat=false;
+    const inc=(D.login_setup.incomplete||[]).find(x=>x.id===id);if(inc)P.warnings.push(lab+'\'s add did not finish ('+inc.state+'). This cleans up what its record lists, even parts that never reached logins.json.');
+    if(lg.accounts.length)P.blockers.push(lab+' still has accounts ('+lg.accounts.map(L).join(', ')+'). Retire them first.');
+    P.confirm={required:true,expect:lab,prompt:'Stops '+lab+'\'s window and bridge and removes it from the login registry. Its files and browser profile are kept as a backup. Type '+lab+' to confirm.'};
+    P.warnings.push('Stops and disables '+lab+'\'s browser window, bridge daemon, login trigger and login guard.','No other service is restarted. Daemon A (and the firing service, if it knows '+lab+') keep asking '+lab+' until their next restart; a login that does not answer is skipped, never blocking.');
+    const F=(path,action,detail,to,diff)=>P.files.push({path,action,to:to||null,diff:diff||'',by:'this page',detail});
+    F('tvbridge/logins.json','modify','remove login '+id);F('tvbridge/logins/a/config.json','modify','remove '+lab+' from peer_logins');F('tvbridge/logins/peers.env','modify','remove TVBRIDGE_READ_TOKEN_'+ID+' (value not shown)');F('tvbridge/logins/firing.env','modify','remove TVBRIDGE_TOKEN_'+ID+' (value not shown)');F(home,'rename','the backup: config, journals, its token files and drop-in',home+'.removed-<UTC>');F('~/.local/share/decrypt-os/tvbridge-browser/profile-'+id,'rename','its browser profile, kept','~/.local/share/decrypt-os/tvbridge-browser/profile-'+id+'.removed-<UTC>');F(ud+'tvbridge-daemon@'+id+'.service.d','rename','its daemon drop-in',home+'.removed-<UTC>/units/');F(ud+'tvbridge-admin.service.d/manual-tokens.conf','modify','this page\'s own drop-in',null,'-EnvironmentFile=%h/.local/share/decrypt-os/tvbridge/logins/manual-'+id+'.env');
+    P.login={id,label:lab,units:[['tvbridge-login-trigger@'+id+'.service','stop, disable'],['tvbridge-login-guard@'+id+'.timer','stop, disable'],['tvbridge-login-guard@'+id+'.service','stop'],['tvbridge-daemon@'+id+'.service','stop, disable'],['tvbridge-browser@'+id+'.service','stop, disable']].map(([unit,action])=>({unit,action,when:'now'}))};
+    ch._eta={kind:'now',seconds:10,text:'About 10 s once you confirm.',waiting_on:[]};ch._login='remove';
+  }
+  /* Runs a login change like the engine: status applying, result.steps saved as they happen, the confirm call
+     returns at the end. mockfail=add fails at the browser step and undoes; mockfail=person leaves a needs-a-person. */
+  async function loginApply(ch){
+    const lg=ch.plan.login,id=lg.id,lab=lg.label,ID=id.toUpperCase(),wait=ms=>new Promise(r=>setTimeout(r,ms));
+    ch.status='applying';ch.updated_at=now();ch.result={ok:false,rolled_back:false,steps:[]};
+    const tick=async(name,detail,ms)=>{await wait(ms||500);ch.result.steps.push({name,ok:true,detail,at:now()});ch.updated_at=now()};
+    const done=login=>{ch.status='applied';ch.result.ok=true;ch.result.login=login;ch.eta={kind:'now',seconds:null,text:login.text,waiting_on:[]};ch.updated_at=now();return strip(ch)};
+    const fail=async(name,detail,error,person)=>{ch.result.steps.push({name,ok:false,detail,at:now()});await wait(900);
+      ch.result.steps.push({name:'rollback',ok:!person,detail:person?'tvbridge-browser@'+id+'.service did not stop':'units stopped, drop-ins and token file removed, install.py files removed, registry and login A config restored',at:now()});
+      ch.result.rolled_back=!person;ch.status='failed';ch.error=error;
+      if(person)ch.result.needs_person={units:['tvbridge-browser@'+id+'.service','tvbridge-daemon@'+id+'.service','tvbridge-status.service'],firing_stopped:false,firing_state:'active',backup:'admin-state/backups/'+ch.id,text:'Needs a person: the add login change failed and was not fully undone (tvbridge-browser@'+id+'.service did not stop). The firing service is running. Backup for a manual restore: admin-state/backups/'+ch.id+'.'};
+      ch.eta={kind:'now',seconds:null,text:ch.error,waiting_on:[]};ch.updated_at=now();return strip(ch)};
+    if(ch._login==='add'){
+      await tick('preflight','tvbridge-status.service healthy',300);await tick('dry run','install.py add-login '+id+' --dry-run: 11 action(s), the same as the preview',900);await tick('backup','2 file(s) saved; token files are never copied');await tick('install.py add-login','login '+id+': DevTools 9558, loopback 8780; 11 action(s)',900);await tick('check','registry entry and login A\'s new peer as in the dry run; tokens of the existing logins unchanged; the bridge validators accept the new login');await tick('login switch',lab+'\'s login-wide pause switch retired, as on the other logins (each account added later starts paused with its own switch)');await tick('flatten token','TVBRIDGE_MANUAL_TOKEN_'+ID+' written (0600, not shown); drop-in for tvbridge-daemon@'+id+'.service and this page');
+      if(Q.get('mockfail')==='add')return fail('browser','tvbridge-browser@'+id+'.service: failed (exit 1)','tvbridge-browser@'+id+'.service did not become active within 10 s',false);
+      if(Q.get('mockfail')==='person')return fail('browser','tvbridge-browser@'+id+'.service: failed (exit 1)','tvbridge-browser@'+id+'.service did not become active within 10 s',true);
+      await tick('browser','tvbridge-browser@'+id+'.service enabled and started (DevTools 9558); its daemon, trigger and guard wait for the Start step',800);await tick('restart','tvbridge-status.service: simulated',600);await tick('verify','browser running, daemon not started, files in place, Bridge window answers');
+      ch.result.restart_log=[{phase:'apply',unit:'tvbridge-status.service',action:'restart',ok:true,detail:'simulated',at:now()}];
+      D.logins.push(mockLogin(id,lab,'awaiting_signin'));D.login_setup.next_id=String.fromCharCode(id.charCodeAt(0)+1);
+      return done({id,label:lab,stage:'awaiting_signin',devtools_port:9558,bridge_port:8780,browser_unit:'tvbridge-browser@'+id+'.service',next:'start_login',text:lab+' is ready for your sign-in. Sign in to Tradovate in its window, then press Start.'});
+    }
+    if(ch._login==='start'){
+      const want=Q.get('mockstart')||'connected';
+      await tick('start','enabled tvbridge-daemon@'+id+'.service; started tvbridge-login-guard@'+id+'.timer and tvbridge-login-trigger@'+id+'.service. The login guard starts the daemon when it sees '+lab+' signed in',600);
+      const l2=D.logins.find(l=>l.id===id);
+      if(l2){l2.setup=setupOf(id,'running',9558,8780,0);l2.setup.signin={state:'starting',text:signinText(lab,'starting')};[l2.state_label,l2.tone]=SIGNIN_LABEL.starting;
+        setTimeout(()=>{l2.setup.signin={state:want,text:signinText(lab,want)};[l2.state_label,l2.tone]=SIGNIN_LABEL[want];if(want==='connected'&&Q.get('mockpeers'))l2.setup.account_blockers=['Adding accounts to '+lab+' needs a restart of Login A/B while flat and signed in to see '+lab+'.']},6000)}
+      return done({id,label:lab,stage:'running',connected:false,state:'starting',text:'Started. The login guard starts '+lab+'\'s bridge when it sees you signed in (it checks about every 30 s). The '+lab+' row shows when it is synced.'});
+    }
+    const bk='tvbridge/logins/'+id+'.removed-'+stamp(),pb='~/.local/share/decrypt-os/tvbridge-browser/profile-'+id+'.removed-'+stamp();
+    await tick('units','stopped and disabled '+lab+'\'s browser, daemon, trigger and guard',700);await tick('backup','2 file(s) saved; the login folder and profile are moved, not deleted');await tick('write',lab+' removed from logins.json, the peer lists, peers.env and firing.env');await tick('backup kept',bk+' and '+pb);await tick('verify','login removed; its backup is in place');
+    D.logins=D.logins.filter(l=>l.id!==id);D.login_setup.incomplete=(D.login_setup.incomplete||[]).filter(x=>x.id!==id);if(ch.type==='rollback'){const src=C[ch.params.change];if(src)src.status='rolled_back'}
+    return done({id,label:lab,stage:'removed',backup:bk,profile_backup:pb,text:lab+' removed. Backup: '+bk+'.'});
+  }
+  async function call(path,body){
+    if(!D){D=await(await fetch('mock/overview.json')).json();D.pending.forEach(c=>C[c.id]=c);patchLogins()}
+    await new Promise(r=>setTimeout(r,120));
+    let m;
+    if(path==='/api/overview'){settle();const all=Object.values(C).map(strip).sort((x,y)=>y.created_at-x.created_at);
+      return {...D,generated_at:now(),restarter:D.restarter||'simulated',needs_person:D.needs_person||[],pending:all.filter(c=>['previewed','waiting_flat','applying'].includes(c.status)),recent:[...all.filter(c=>!['previewed','waiting_flat','applying'].includes(c.status)),...D.recent].slice(0,10)}}
+    if(path==='/api/export'){await new Promise(r=>setTimeout(r,500));const name='bridge-setup-'+stamp()+'.tar.gz';X.push({updated_at:now(),id:'x-mock-'+X.length,type:'export',status:'done',summary:'Export whole setup: 23 files, '+name+' (sha256 3f9a1c…)',plan:{files:[]}});return {name}}
+    if(path.startsWith('/api/audit')){const all=[...Object.values(C).filter(c=>c.status!=='previewed'),...X,...D.recent].sort((x,y)=>y.updated_at-x.updated_at);return {entries:all.map((c,i)=>({at:c.updated_at,change_id:c.id,type:c.type,status:c.status,summary:c.summary,actor:'operator',files:c.plan.files.map(f=>f.path),prev_hash:'p'+i,hash:'q'+i}))}}
+    if((m=/^\/api\/logins\/([^/]+)\/visible$/.exec(path))){const id=decodeURIComponent(m[1]),lg=D.logins.find(l=>l.id===id);if(!lg)throw err(404,'not_found','No login '+id+'.');
+      if(!lg.primary&&!(lg.setup&&lg.setup.signin&&lg.setup.signin.state==='connected'))return {login:id,accounts:[],error:null,note:lg.label+' is signed out, so Tradovate shows no accounts. Sign in on the VM, or type the account name.'};
+      const mine=D.accounts.filter(a=>a.login===id);return {login:id,accounts:[...mine.map(a=>({name:a.account_name_masked,already_configured:true,key:a.key})),{name:'DEMO-'+String(5+mine.length*2).padStart(4,'0'),already_configured:false,key:null},{name:'DEMO-'+String(6+mine.length*2).padStart(4,'0'),already_configured:false,key:null}],error:null,note:null}}
+    if(path==='/api/changes'&&body){const ch=build(body.type,body.params);C[ch.id]=ch;return strip(ch)}
+    if((m=/^\/api\/changes\/([^/]+)\/(confirm|cancel|rollback|resend)$/.exec(path))){const ch=C[m[1]]||D.recent.find(c=>c.id===m[1]),act=m[2];
+      if(act==='rollback'){const rb=build('rollback',{change:m[1]});C[rb.id]=rb;return strip(rb)}
+      if(!ch)throw err(404,'not_found','No such change.');
+      if(act==='resend'){const fl=(ch.result||{}).flatten||{};if(ch.type!=='flatten'||ch.status!=='failed'||fl.outcome_class!=='unknown')throw err(409,'not_resendable','Only a Flatten now with an unknown outcome can be sent again.');
+        if(body.confirm_text!==ch.plan.confirm.expect)throw err(409,'confirm_text','Type '+ch.plan.confirm.expect+' exactly to confirm.');
+        await new Promise(r=>setTimeout(r,1500));ch.result.flatten={...fl,ok:true,outcome_class:'flat',detail:'Flat with nothing working; pause switch already_set (answer to an earlier call with this change id; nothing sent again).',reply:{...(fl.reply||{}),ok:true,net_position:0,still_working:[],cancelled:fl.reply&&fl.reply.cancelled||[],kill_switch:'already_set',duplicate:true,protective_stop_working:undefined,command_id:(fl.reply||{}).command_id||'cmd-mock'},kill_switch_after:{on:true,set_by:'admin',reason:'Flatten now (Bridge Advanced)',at:now()}};
+        ch.result.flatten_attempts=(ch.result.flatten_attempts||1)+1;ch.result.ok=true;ch.status='applied';ch.error=null;ch.updated_at=now();C[ch.id]=ch;return strip(ch)}
+      if(act==='cancel'){if(!['previewed','waiting_flat'].includes(ch.status))throw err(409,'bad_state','Only a preview or a waiting change can be cancelled.');ch.status='cancelled';ch.updated_at=now();return strip(ch)}
+      if(ch.status!=='previewed')throw err(409,'bad_state','This change is '+ch.status+'.');
+      if(body.preview_hash!==ch.preview_hash)throw err(409,'stale_preview','The config changed after the preview.');
+      if(ch.plan.blockers.length)throw err(409,'blocked',ch.plan.blockers[0]);
+      if(ch.plan.confirm.required&&body.confirm_text!==ch.plan.confirm.expect)throw err(400,'confirm_text','Confirmation text does not match.');
+      ch.updated_at=now();
+      if(ch._login)return loginApply(ch);
+      if(ch._final){ch.status=ch._final;if(ch._final==='planned')apply(ch);return strip(ch)}
+      if(inTrade(ch.plan.wait_on||[]).length&&ch.plan.requires_flat){ch.status='waiting_flat';return strip(ch)}
+      apply(ch);ch.status='applied';return strip(ch)}
+    throw err(404,'not_found','Mock has no route for '+path+'.');
+  }
+  return {call};
+})();
+/* ================= end MOCK ================= */
+boot();
+</script>
+</body>
+</html>

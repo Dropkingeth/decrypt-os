@@ -1,0 +1,390 @@
+{
+  "schema": "decrypt.system-scope.v1",
+  "revision": "beta4-guardian-recovery",
+  "scope": "customer_product_only",
+  "sources": [
+    "app/CONTRACT.md"
+  ],
+  "observations": "Implementation describes source capability only, not this device health or external commissioning. Customer OAuth and optional encrypted storage are implemented; current sign-in, storage and provider readiness require separate live evidence.",
+  "components": [
+    {
+      "id": "setup_api",
+      "label": "Local control API",
+      "owner": "customer_product",
+      "implementation": "implemented_local",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [],
+      "sources": [
+        "app/backend/server.py",
+        "app/backend/trading_service.py",
+        "app/CONTRACT.md"
+      ],
+      "purpose": "Loopback setup and explicitly enabled Guardian, execution and maintenance controls. Strict session/CSRF/Origin boundaries; source capability is separate from native/provider readiness.",
+      "diagnosticScope": "Read the sanitized local setup projection; this does not prove external connectivity.",
+      "repair": "not_available"
+    },
+    {
+      "id": "setup_ui",
+      "label": "Setup and account interface",
+      "owner": "customer_product",
+      "implementation": "implemented_local",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_api"
+      ],
+      "sources": [
+        "app/ui/src/App.tsx",
+        "app/ui/src/TradingRuntime.tsx",
+        "app/ui/src/SystemCare.tsx"
+      ],
+      "purpose": "Setup, Connections, engine drafts, actual runtime status and System care. Installation, provider proof and draft preferences remain separate.",
+      "diagnosticScope": "Explain the saved step and unavailable connections. Do not automate arbitrary browser tabs.",
+      "repair": "not_available"
+    },
+    {
+      "id": "credential_vault",
+      "label": "Local AI credential vault",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_api"
+      ],
+      "sources": [
+        "app/harness/vault_storage.py",
+        "app/harness/vault_control.py"
+      ],
+      "purpose": "Opt-in passphrase-unlocked encrypted storage for the customer Claude sign-in and assistant history. Native terminal entry only; no secret in wizard state or model context.",
+      "diagnosticScope": "Never read or return a key, passphrase, cookie, token or secret endpoint. Snapshot cannot verify vault unlock.",
+      "repair": "not_available"
+    },
+    {
+      "id": "openclaw_runtime",
+      "label": "Customer OpenClaw runtime",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_api"
+      ],
+      "sources": [
+        "app/harness/runtime.py",
+        "app/harness/bootstrap.py",
+        "app/harness/vault_control.py"
+      ],
+      "purpose": "Isolated opt-in customer OpenClaw runtime running Claude (Opus 5.5 with Sonnet 5 fallback) with a fresh identity. The product helper has no model tools. Supports session-only state or optional encrypted storage.",
+      "diagnosticScope": "Do not discover or reuse other agent accounts, directories, browser profiles or service configuration. Runtime installation is not unrestricted repair authority.",
+      "repair": "not_available"
+    },
+    {
+      "id": "claude_auth",
+      "label": "User-owned Claude sign-in",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "openclaw_runtime"
+      ],
+      "sources": [
+        "app/harness/bootstrap.py",
+        "app/harness/vault_storage.py",
+        "app/harness/vault_control.py"
+      ],
+      "purpose": "Customer connects their own Claude subscription (setup-token) or Anthropic API key in a native terminal, followed by a separate response check. No other AI provider is offered.",
+      "diagnosticScope": "Never collect tokens or keys in chat. Do not infer API credit from a subscription or claim support without a tested supported flow.",
+      "repair": "not_available"
+    },
+    {
+      "id": "ict_assistant",
+      "label": "Personal ICT assistant",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "openclaw_runtime",
+        "claude_auth"
+      ],
+      "sources": [
+        "app/ict-assistant/openclaw-agent.json",
+        "app/ict-assistant/workspace/AGENTS.md",
+        "app/ict-assistant/ict_clock.py"
+      ],
+      "purpose": "Packaged ICT mentor agent on the customer runtime. Teaches ICT concepts from an own-words knowledge pack and reasons about chart context the user supplies. Tools: session time and public web pages only.",
+      "diagnosticScope": "Education only. No trading, account, file, shell or broker access. Never presents output as financial advice or a signal.",
+      "repair": "not_available"
+    },
+    {
+      "id": "strategy_catalog",
+      "label": "Packaged strategy metadata",
+      "owner": "customer_product",
+      "implementation": "implemented_local",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_api"
+      ],
+      "sources": [
+        "app/strategy-catalog.json",
+        "app/CONTRACT.md"
+      ],
+      "purpose": "Five named strategies and paired-engine display labels, with explicit installed/commissioning limits. Catalog presence is not an installed or ready engine.",
+      "diagnosticScope": "Count inventory only. Catalog presence, inspected rows and saved selection do not indicate a ready bot.",
+      "repair": "not_available"
+    },
+    {
+      "id": "access_queue",
+      "label": "Strategy access request",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_api",
+        "strategy_catalog"
+      ],
+      "sources": [
+        "app/backend/strategy_access.py",
+        "app/backend/server.py",
+        "app/strategy-access.json",
+        "app/CONTRACT.md"
+      ],
+      "purpose": "Sends the TradingView username the user typed (and an optional contact) to Decrypt Labs, which grants invite-only strategies to that username. No machine or account data is sent. If the send fails, the app shows the username to send by hand.",
+      "diagnosticScope": "Report only the latest request status. Omit the username and contact.",
+      "repair": "not_available"
+    },
+    {
+      "id": "tradingview",
+      "label": "TradingView customer connection",
+      "owner": "customer_product",
+      "implementation": "not_implemented",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "access_queue"
+      ],
+      "sources": [
+        "installer/desktop_apps.py",
+        "app/CONTRACT.md"
+      ],
+      "purpose": "A customer-only TradingView web-app launcher is packaged for ARM. Actual login and script/chart/provider verification remain unqualified.",
+      "diagnosticScope": "No provider browser access or automated login exists in this diagnostic contract.",
+      "repair": "not_available"
+    },
+    {
+      "id": "guardian_login",
+      "label": "Guardian saved logins",
+      "dependsOn": [
+        "setup_api"
+      ],
+      "sources": [
+        "app/backend/guardian_auth.py",
+        "app/backend/guardian_browser.py",
+        "app/backend/guardian_service.py",
+        "installer/market_browser.py"
+      ],
+      "purpose": "Separate opt-in encrypted local Tradovate and TradingView logins, an owned customer browser, bounded session recovery and manual handling of two-factor authentication. Restart requires vault unlock. No order actions.",
+      "diagnosticScope": "Snapshot lists source capability only. Current sign-in and vault state must be checked in Connections; never return passwords, cookies or authentication tokens.",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "repair": "not_available"
+    },
+    {
+      "id": "broker_adapter",
+      "label": "Tradovate native broker confirmation",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_api"
+      ],
+      "sources": [
+        "app/backend/tradovate_service.py",
+        "app/trading-runtime/decrypt_trading/bridge_route.py"
+      ],
+      "purpose": "Soup's orders go to the Tradovate bridge module's loopback /order route. Before every send the bridge must report the bound account and contract; the first entry needs a fresh flat account. Broker events come from the bridge's adapter database. Unknown quantities and uncertain sends remain unresolved.",
+      "diagnosticScope": "Missing broker data never means flat. Do not change accounts, resend orders or infer broker acceptance/fills.",
+      "repair": "not_available"
+    },
+    {
+      "id": "market_data",
+      "label": "Dated market-data adapters",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "tradingview"
+      ],
+      "sources": [
+        "app/backend/trading_feed.py",
+        "app/backend/trading_browser.py",
+        "app/trading-runtime/decrypt_trading/native_market.py"
+      ],
+      "purpose": "Dedicated customer browser, exact dated chart and native post-start quotes/completed bars. Stale or lost callbacks invalidate market data and require explicit reconnect.",
+      "diagnosticScope": "Do not infer feed health from an open chart or a running process.",
+      "repair": "not_available"
+    },
+    {
+      "id": "signal_ingress",
+      "label": "Durable signal delivery",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "tradingview",
+        "strategy_catalog"
+      ],
+      "sources": [
+        "app/trading-runtime/decrypt_trading/ingress.py",
+        "app/trading-runtime/decrypt_trading/http_ingress.py"
+      ],
+      "purpose": "Instance-bound secret authentication, bounded input, durable deduplication and no replay after restart. Customer-owned public HTTPS proxy/delivery acceptance remains separate.",
+      "diagnosticScope": "Local API reachability is not public ingress proof. Do not expose admin endpoints or probe arbitrary URLs.",
+      "repair": "not_available"
+    },
+    {
+      "id": "calendar_reference",
+      "label": "Contract reference calendar",
+      "owner": "customer_product",
+      "implementation": "implemented_local",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_ui"
+      ],
+      "sources": [
+        "app/contract-calendar.json",
+        "app/backend/trading_calendar.py"
+      ],
+      "purpose": "Reviewed dated-contract and entry-only session gate through its bounded calendar horizon. Conservative holiday holds are operator policy, not a claim of full-day exchange closure; no automatic rollover.",
+      "diagnosticScope": "Inspect source capability only. Runtime calendar entry eligibility is separate from enabled controls, bridge account state and market freshness.",
+      "repair": "not_available"
+    },
+    {
+      "id": "rollover_coordinator",
+      "label": "Contract migration and market policy",
+      "owner": "customer_product",
+      "implementation": "not_implemented",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "calendar_reference",
+        "broker_adapter",
+        "market_data"
+      ],
+      "sources": [
+        "app/backend/trading_calendar.py",
+        "app/backend/trading_service.py"
+      ],
+      "purpose": "Wrong/current-contract and expired-calendar entry holds are implemented. Exposure-aware contract migration and ledger reconciliation remain unimplemented; never automatically rebind a used instance.",
+      "diagnosticScope": "Never switch ticker, rewrite historical receipts, bypass a pause or activate a new contract from calendar presence.",
+      "repair": "not_available"
+    },
+    {
+      "id": "execution_engine",
+      "label": "Customer deterministic execution lane",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "strategy_catalog",
+        "broker_adapter",
+        "market_data",
+        "signal_ingress",
+        "rollover_coordinator"
+      ],
+      "sources": [
+        "app/backend/trading_service.py",
+        "app/trading-runtime/decrypt_trading/runtime.py",
+        "app/trading-runtime/decrypt_trading/source.py"
+      ],
+      "purpose": "Hash-paired held Soup/FVG/Silver runtime adapters with independent ledgers, durable signals, native proof and explicit demo arming. Publication/provider commissioning remains unverified; draft-only modules are not operational protection.",
+      "diagnosticScope": "Assistant cannot send orders, edit engine databases, change risk or enable trading. Protective execution must not depend on AI availability.",
+      "repair": "not_available"
+    },
+    {
+      "id": "desktop_layout",
+      "label": "Customer desktop ownership",
+      "owner": "customer_product",
+      "implementation": "implemented_local",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_ui"
+      ],
+      "sources": [
+        "installer/desktop_apps.py"
+      ],
+      "purpose": "Dedicated app profiles and reviewed launcher ownership cases. Exact beta native repeated launch, graphics and cold boot require fresh acceptance.",
+      "diagnosticScope": "Do not move arbitrary windows, restart browsers or stop services. Known-tab repair needs its own scoped implementation and tests.",
+      "repair": "not_available"
+    },
+    {
+      "id": "recovery_notifications",
+      "label": "Bounded maintenance and notifications",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "setup_api"
+      ],
+      "sources": [
+        "app/backend/customer_health.py",
+        "app/backend/guardian_service.py"
+      ],
+      "purpose": "Bounded Guardian recovery and optional durable desktop health transitions/retry receipts. Notification acceptance is not user-read proof. No general model-driven repair or order replay.",
+      "diagnosticScope": "Read-only scope can explain limits, not repair every issue. Escalate unknown order state; never blindly retry an order.",
+      "repair": "not_available"
+    },
+    {
+      "id": "encrypted_backups",
+      "label": "Customer backup and restore",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "credential_vault"
+      ],
+      "sources": [
+        "app/backend/maintenance.py",
+        "installer/maintenance_cli.py",
+        "installer/MAINTENANCE.md"
+      ],
+      "purpose": "Encrypted known-state backup, optional credential inclusion and journaled held restore. Browser cookies excluded; independent storage and native recovery acceptance remain separate.",
+      "diagnosticScope": "Do not copy private developer backups or restore old order outboxes into active trading.",
+      "repair": "not_available"
+    },
+    {
+      "id": "signed_updates",
+      "label": "Signed installation and updates",
+      "owner": "customer_product",
+      "implementation": "implemented_opt_in",
+      "verification": "not_checked_by_snapshot",
+      "runtimeStatus": "unknown",
+      "dependsOn": [
+        "encrypted_backups"
+      ],
+      "sources": [
+        "app/backend/maintenance.py",
+        "installer/version_bootstrap.py",
+        "installer/release-trust.json"
+      ],
+      "purpose": "Exact signed payload inventory, increasing release sequence, explicit held activation and code rollback without ledger rewind. Native update/boot/rollback acceptance remains unverified.",
+      "diagnosticScope": "Source tests are not clean-install evidence. Do not install untrusted packages, perform disruptive updates or copy another machine's system image.",
+      "repair": "not_available"
+    }
+  ]
+}

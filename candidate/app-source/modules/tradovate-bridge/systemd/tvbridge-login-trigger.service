@@ -1,0 +1,28 @@
+# Decrypt OS Tradovate bridge, login A: asks the daemon's /health every 2 s and starts the login
+# guard when the page is logged out or not synced. It never clicks, restarts or trades.
+[Unit]
+Description=Tradovate bridge login trigger for login A (polls /health every 2 s)
+After=tvbridge-daemon.service
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge/config.json
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.local/share/decrypt-os/tvbridge/tvbridge.env
+Environment=TVBRIDGE_ROOT=%h/.local/share/decrypt-os/tvbridge
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 /usr/local/lib/decrypt-os/modules/tradovate-bridge/login-guard/trigger.py
+Restart=always
+RestartSec=5
+UMask=0077
+Nice=10
+NoNewPrivileges=true
+RestrictAddressFamilies=AF_INET AF_UNIX
+IPAddressAllow=localhost
+IPAddressDeny=any
+MemoryMax=128M
+TasksMax=8
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=default.target

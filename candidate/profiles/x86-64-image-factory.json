@@ -1,0 +1,66 @@
+{
+  "schema": "decrypt.target-profile.v1",
+  "id": "x86-64-image-factory",
+  "kind": "image-build",
+  "arch": "x86_64",
+  "hypervisors": [
+    "kvm",
+    "qemu"
+  ],
+  "vmName": "decrypt-image-build",
+  "hostname": "decrypt",
+  "user": "customer",
+  "disk": {
+    "device": "/dev/loop0",
+    "bytes": 42949672960
+  },
+  "partitionNaming": "p-suffix",
+  "liveRoot": {
+    "allowedFsTypes": [
+      "ext4",
+      "btrfs",
+      "tmpfs",
+      "ramfs",
+      "rootfs",
+      "overlay"
+    ],
+    "requireRamBacked": false
+  },
+  "kernelPackage": "linux",
+  "basePackages": [
+    "base",
+    "base-devel",
+    "linux",
+    "linux-firmware",
+    "intel-ucode",
+    "amd-ucode",
+    "archlinux-keyring",
+    "btrfs-progs",
+    "dosfstools",
+    "efibootmgr",
+    "git",
+    "networkmanager",
+    "sudo",
+    "python",
+    "nftables",
+    "ca-certificates",
+    "curl"
+  ],
+  "desktopPackageList": "installer/desktop-packages.txt",
+  "network": {
+    "phaseA": "offline",
+    "phaseB": "offline",
+    "policyId": "image-factory-offline-v1"
+  },
+  "logChannel": {
+    "kind": "log-disk",
+    "label": "DECRYPT_LOG",
+    "uuid": null
+  },
+  "graphics": {
+    "policy": "portable-wayland-v1",
+    "softwareRendering": false
+  },
+  "password": "first-boot",
+  "notice": "interactive"
+}

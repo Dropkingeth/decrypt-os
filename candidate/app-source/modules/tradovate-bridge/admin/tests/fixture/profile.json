@@ -1,0 +1,27 @@
+{
+  "mode": "sandbox",
+  "port": 8781,
+  "user": "trader",
+  "public_host": "webhooks.example.com",
+  "tvbridge_root": "/tvbridge-admin-fixture/tree/tvbridge",
+  "soup_state": "/tvbridge-admin-fixture/tree/soup-state",
+  "admin_state": "/tvbridge-admin-fixture/admin-state",
+  "tunnel_config": "/tvbridge-admin-fixture/tree/tunnel/config.yml",
+  "bridge_release": "/tvbridge-admin-fixture/bridge-release",
+  "status_url": "http://127.0.0.1:8779/api/status",
+  "status_ttl_s": 2.0,
+  "wait_poll_s": 5,
+  "restarter": "simulated",
+  "order_adapter": "dry-run",
+  "strategies": [
+    {
+      "id": "soup-pine-r4",
+      "name": "Soup Pine r4",
+      "build": "example",
+      "contract_ref": "soup-v3/engine/settings_contract.json",
+      "inputs_count": 10,
+      "stream_field": "stream_id",
+      "notes": "In TradingView, paste the stream ID into \"📡 Alert stream ID\" (group \"🔌 Soup v3 connection\")."
+    }
+  ]
+}

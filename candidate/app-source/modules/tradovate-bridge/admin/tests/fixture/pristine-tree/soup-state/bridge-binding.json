@@ -1,0 +1,11 @@
+{
+  "schema": "decrypt.soup-v3.bridge-binding.v1",
+  "account_id": "Account A",
+  "tradovate_account_id": 100001,
+  "tradovate_account_name": "DEMO-0001",
+  "contract": "MNQZ1",
+  "bridge_url": "http://127.0.0.1:8777",
+  "adapter_db": "/tvbridge-admin-fixture/tree/soup-state/events.sqlite",
+  "quantity_policy_sha256": "8f85bea46b6ced483e97fc4b8a03670c637337922be29f7fe19478ce7f4c9c13",
+  "verified_at": "fixture package build; verified at deploy"
+}

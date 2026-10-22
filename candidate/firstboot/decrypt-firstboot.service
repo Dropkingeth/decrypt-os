@@ -1,0 +1,25 @@
+[Unit]
+Description=Create the local Decrypt account on first start
+After=local-fs.target
+Before=display-manager.service systemd-user-sessions.service sshd.service
+Conflicts=getty@tty1.service
+ConditionPathExists=/etc/decrypt-firstboot/policy.json
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/decrypt-firstboot/firstboot.py setup
+RemainAfterExit=yes
+RuntimeDirectory=decrypt-firstboot
+RuntimeDirectoryMode=0755
+RuntimeDirectoryPreserve=yes
+StandardInput=tty-force
+StandardOutput=tty
+StandardError=tty
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TimeoutStartSec=infinity
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

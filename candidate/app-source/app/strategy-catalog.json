@@ -1,0 +1,238 @@
+{
+  "schema": "decrypt.strategy-catalog.v3",
+  "schemaNotes": "v3 adds bridge to every strategy: the bridge adapter that runs it (adapterId), its alert format, its contract root, the chart it runs on and its alert setup notes (alertSetup, shown in the app). runtimePairId is the adapter id. Every non-Soup strategy uses decrypt-bridge-v2. v2 added tradingviewUrl (empty string when no public page) and listed. ote-refined-small/ote-refined-large ids are unchanged on purpose: other code keys off them.",
+  "strategies": [
+    {
+      "id": "soup",
+      "name": "ICT - Turtle Soup Shift",
+      "version": "V1.1",
+      "label": "ICT - Turtle Soup Shift (V1.1)",
+      "technicalRevision": "r4",
+      "kind": "TradingView strategy",
+      "catalogStatus": "metadata_only",
+      "customerEngineStatus": "source_packaged",
+      "engineStatus": "live",
+      "accessRequestAvailable": true,
+      "listed": true,
+      "tradingviewUrl": "https://www.tradingview.com/script/ulGrC1sn-ICT-Turtle-Soup-Strategy/",
+      "publicationStatus": "invite_only_publishing",
+      "engineLabel": "ICT - Turtle Soup Shift engine",
+      "description": "The bridge engine is live. The strategy is in test status on TradingView and open to access requests: send your TradingView username to ask for it. The held Soup execution package is included; entries stay held until a demo account is qualified.",
+      "commissioningCandidate": false,
+      "runtimePairId": "soup-pine-authority-r4",
+      "bridge": {
+        "adapterId": "soup-pine-authority-r4",
+        "alertFormat": "decrypt-soup-entry-v3, decrypt-soup-entry-v4, decrypt-soup-management-v3",
+        "contractRoot": "MNQ",
+        "chart": "The dated MNQ contract (for example MNQZ2026).",
+        "alertSetup": [
+          "'Entry alert format': v3 is today's alert; v4 also sends the TP1 working-limit offset. This bridge accepts both.",
+          "Create the alert as shown in Trading → your engine → Private alert delivery."
+        ]
+      }
+    },
+    {
+      "id": "fvg-ifvg",
+      "name": "Determining Order Flow Engine [FVG+IFVG]",
+      "version": null,
+      "label": "Determining Order Flow Engine [FVG+IFVG]",
+      "technicalRevision": null,
+      "kind": "TradingView strategy",
+      "catalogStatus": "metadata_only",
+      "customerEngineStatus": "bridge_adapter_off_by_default",
+      "engineStatus": "hold",
+      "accessRequestAvailable": true,
+      "listed": true,
+      "tradingviewUrl": "https://www.tradingview.com/script/BhpDI6NS-Determining-Order-Flow-Engine-FVG-IFVG/",
+      "publicationStatus": "published_invite_only",
+      "publicationUrl": "https://www.tradingview.com/script/BhpDI6NS-Determining-Order-Flow-Engine-FVG-IFVG/",
+      "publicationId": "BhpDI6NS",
+      "publicationVersionStatus": "not_established",
+      "engineLabel": "FVG/IFVG customer execution engine",
+      "engineAvailability": "coming_soon",
+      "description": "Published invite-only TradingView strategy. Its bridge engine is on hold: it reads the strategy's decrypt-bridge-v2 alerts and ships off by default. The app installs Soup only in this release. You can still send your TradingView username to request access now.",
+      "commissioningCandidate": false,
+      "runtimePairId": "fvg-r5b-bridge-v2",
+      "bridge": {
+        "adapterId": "fvg-r5b-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "chart": "The dated MNQ contract (for example MNQZ2026), 1-minute. Not MNQ1!.",
+        "alertSetup": [
+          "Leave 'Bridge alert format' on 'decrypt-bridge-v2 (Decrypt OS)'. This bridge accepts no other FVG format.",
+          "Paste your bridge stream id into 'Stream id (Decrypt OS)'. Until then the chart shows BRIDGE ALERTS BLOCKED and sends nothing.",
+          "Create one alert on the strategy: condition 'Any alert() function call', once per bar close.",
+          "Webhook: on, set to this engine's private alert address."
+        ]
+      }
+    },
+    {
+      "id": "lumi-rth-gap",
+      "name": "Lumi RTH Gap",
+      "version": null,
+      "label": "Lumi RTH Gap",
+      "technicalRevision": null,
+      "kind": "TradingView strategy",
+      "catalogStatus": "metadata_only",
+      "customerEngineStatus": "bridge_adapter_off_by_default",
+      "engineStatus": "in_development",
+      "accessRequestAvailable": false,
+      "listed": true,
+      "tradingviewUrl": "",
+      "publicationStatus": "not_published",
+      "engineLabel": "Lumi RTH Gap engine",
+      "description": "The bridge engine is in development: it reads the strategy's decrypt-bridge-v2 alerts, ships off by default, and is not yet tested with live alerts. Requires the 1-second MES feed: the bridge's own live MES prices, every second. If that feed is not live and fresh, Lumi does not start and takes no entry. No TradingView page is public yet, so there is nothing to request.",
+      "commissioningCandidate": false,
+      "runtimePairId": "lumi-gap-bridge-v2",
+      "bridge": {
+        "adapterId": "lumi-gap-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MES",
+        "chart": "CME_MINI:MESZ2026 (the dated contract, not MES1!), chart time zone America/New_York.",
+        "alertSetup": [
+          "Set up the bridge for this account first: the dated MES contract, the Lumi engine and its stream id. Alerts sent before that are refused.",
+          "Requires the 1-second MES feed: the bridge reads live MES prices for the dated contract every second. Lumi does not start or enter unless that feed is live and fresh.",
+          "Set 'Bridge contract' to the chart's contract and paste your bridge stream id into 'Stream id'.",
+          "Create one alert on the strategy: condition 'alert() function calls only', once per bar close. Leave the Message box as it is.",
+          "Webhook: on, set to this engine's private alert address."
+        ]
+      }
+    },
+    {
+      "id": "ote-refined-large",
+      "name": "ICT - OTE Refined L",
+      "version": "V1.0",
+      "label": "ICT - OTE Refined L (V1.0)",
+      "technicalRevision": null,
+      "kind": "TradingView strategy",
+      "catalogStatus": "metadata_only",
+      "customerEngineStatus": "bridge_adapter_off_by_default",
+      "engineStatus": "in_development",
+      "accessRequestAvailable": true,
+      "listed": true,
+      "tradingviewUrl": "https://www.tradingview.com/script/tFnhM8a2-Optimal-Trade-Entry-Limit-Refined-L/",
+      "publicationStatus": "published_invite_only",
+      "publicationUrl": "https://www.tradingview.com/script/tFnhM8a2-Optimal-Trade-Entry-Limit-Refined-L/",
+      "publicationId": "tFnhM8a2",
+      "publicationVersionStatus": "not_established",
+      "engineLabel": "ICT - OTE Refined L engine",
+      "description": "Published invite-only TradingView strategy. Its bridge engine reads the Large script's decrypt-bridge-v2 alerts. It is in development and unverified: no live alerts have run through it yet. You can send your TradingView username to request access now.",
+      "commissioningCandidate": false,
+      "runtimePairId": "ote-refined-large-bridge-v2",
+      "bridge": {
+        "adapterId": "ote-refined-large-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "chart": "The dated MNQ contract (for example MNQZ2026).",
+        "alertSetup": [
+          "One account runs the Large script or the Small script, never both.",
+          "Set 'Broker ticker override' to the dated contract and 'Stream ID' to your bridge stream id. Leave 'Account profile' at its default.",
+          "Create one alert on the strategy: condition 'Any alert() function call'.",
+          "Webhook: on, set to this engine's private alert address."
+        ]
+      }
+    },
+    {
+      "id": "ote-refined-small",
+      "name": "ICT - OTE Refined S",
+      "version": "V1.0",
+      "label": "ICT - OTE Refined S (V1.0)",
+      "technicalRevision": null,
+      "kind": "TradingView strategy",
+      "catalogStatus": "metadata_only",
+      "customerEngineStatus": "bridge_adapter_off_by_default",
+      "engineStatus": "in_development",
+      "accessRequestAvailable": true,
+      "listed": true,
+      "tradingviewUrl": "https://www.tradingview.com/script/u4f1NySp-Optimal-Trade-Entry-Limit-Refined-S/",
+      "publicationStatus": "published_invite_only",
+      "publicationUrl": "https://www.tradingview.com/script/u4f1NySp-Optimal-Trade-Entry-Limit-Refined-S/",
+      "publicationId": "u4f1NySp",
+      "publicationVersionStatus": "not_established",
+      "engineLabel": "ICT - OTE Refined S engine",
+      "description": "Published invite-only TradingView strategy. Its bridge engine reads the Small script's decrypt-bridge-v2 alerts. It is in development and unverified: no live alerts have run through it yet. You can send your TradingView username to request access now.",
+      "commissioningCandidate": false,
+      "runtimePairId": "ote-refined-small-bridge-v2",
+      "bridge": {
+        "adapterId": "ote-refined-small-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "chart": "The dated MNQ contract (for example MNQZ2026).",
+        "alertSetup": [
+          "One account runs the Large script or the Small script, never both.",
+          "Set 'Broker ticker override' to the dated contract and 'Stream ID' to your bridge stream id. Leave 'Account profile' at its default.",
+          "Create one alert on the strategy: condition 'Any alert() function call'.",
+          "Webhook: on, set to this engine's private alert address."
+        ]
+      }
+    },
+    {
+      "id": "ote-silver-bullet",
+      "name": "ICT - Silver Bullet OTE",
+      "version": "V1.0",
+      "label": "ICT - Silver Bullet OTE (V1.0)",
+      "technicalRevision": null,
+      "kind": "TradingView strategy",
+      "catalogStatus": "metadata_only",
+      "customerEngineStatus": "bridge_adapter_off_by_default",
+      "engineStatus": "parked",
+      "accessRequestAvailable": true,
+      "listed": true,
+      "tradingviewUrl": "https://www.tradingview.com/script/szwjifCr-Optimal-Trade-Entry-Active-Silver-Bullet/",
+      "publicationStatus": "published_invite_only",
+      "publicationUrl": "https://www.tradingview.com/script/szwjifCr-Optimal-Trade-Entry-Active-Silver-Bullet/",
+      "publicationId": "szwjifCr",
+      "publicationVersionStatus": "not_established",
+      "engineLabel": "ICT - Silver Bullet OTE engine",
+      "engineAvailability": "coming_soon",
+      "description": "Published invite-only TradingView strategy. Parked: its bridge engine reads the strategy's decrypt-bridge-v2 alerts and ships off by default; use paper or demo accounts only. You can still send your TradingView username to request access.",
+      "commissioningCandidate": false,
+      "runtimePairId": "ote-active-bridge-v2",
+      "bridge": {
+        "adapterId": "ote-active-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "chart": "The dated MNQ contract (for example MNQZ2026), 30-second.",
+        "alertSetup": [
+          "Leave 'Alert format' on decrypt-bridge-v2. This bridge does not accept the older trade_plan format.",
+          "Set 'Stream ID' to your bridge stream id. Set 'Dated contract' unless the chart is already on the dated contract. Leave 'Account profile' at its default.",
+          "Create one alert on the strategy: condition 'Any alert() function call'.",
+          "Webhook: on, set to this engine's private alert address.",
+          "Parked: use paper or demo accounts only."
+        ]
+      }
+    },
+    {
+      "id": "order-blocks-decoded",
+      "name": "Order Blocks Decoded",
+      "version": null,
+      "label": "Order Blocks Decoded",
+      "technicalRevision": null,
+      "kind": "TradingView strategy",
+      "catalogStatus": "metadata_only",
+      "customerEngineStatus": "bridge_adapter_off_by_default",
+      "engineStatus": "in_development",
+      "accessRequestAvailable": false,
+      "listed": true,
+      "tradingviewUrl": "",
+      "publicationStatus": "not_published",
+      "engineLabel": "Order Blocks Decoded engine",
+      "description": "In development: a research build for paper accounts only. Its bridge engine reads the strategy's decrypt-bridge-v2 alerts and ships off by default. No TradingView page is public yet, so there is nothing to request.",
+      "commissioningCandidate": false,
+      "runtimePairId": "order-blocks-bridge-v2",
+      "bridge": {
+        "adapterId": "order-blocks-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "chart": "MNQ, 1-minute, added as a strategy.",
+        "alertSetup": [
+          "Set 'Bridge stream id' to your bridge stream id and 'Dated contract' to the current contract (for example MNQZ2026). Change it at every roll.",
+          "The alert sends the size and exits set in the strategy's own settings; the bridge follows them as sent.",
+          "Create one alert on the strategy: condition 'Any alert() function call', once per bar close, Message '{{strategy.order.alert_message}}'.",
+          "Webhook: on, set to this engine's private alert address.",
+          "Research build: paper accounts only."
+        ]
+      }
+    }
+  ]
+}

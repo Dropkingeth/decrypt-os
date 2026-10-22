@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "bytes": 49010,
+      "filename": "jeepney-0.9.0-py3-none-any.whl",
+      "requiresPython": ">=3.7",
+      "sha256": "97e5714520c16fc0a45695e5365a2e11b81ea79bba796e26f9f1d178cb182683",
+      "type": "bdist_wheel",
+      "url": "https://files.pythonhosted.org/packages/b2/a3/e137168c9c44d18eff0376253da9f1e9234d0239e0ee230d2fee6cea8e55/jeepney-0.9.0-py3-none-any.whl",
+      "yanked": false
+    },
+    {
+      "bytes": 106758,
+      "filename": "jeepney-0.9.0.tar.gz",
+      "requiresPython": ">=3.7",
+      "sha256": "cf0e9e845622b81e4a28df94c40345400256ec608d0e55bb8a3feaa9163f5732",
+      "type": "sdist",
+      "url": "https://files.pythonhosted.org/packages/7b/6f/357efd7602486741aa73ffc0617fb310a29b588ed0fd69c2399acbb85b0c/jeepney-0.9.0.tar.gz",
+      "yanked": false
+    }
+  ],
+  "name": "jeepney",
+  "version": "0.9.0"
+}

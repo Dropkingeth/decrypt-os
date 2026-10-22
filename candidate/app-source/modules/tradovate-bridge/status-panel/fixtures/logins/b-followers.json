@@ -1,0 +1,8 @@
+{"schema": "tvbridge.followers.v2", "login_id": "b", "observed_at": "@ms-0", "main": null,
+ "followers": [
+   {"key": "account-f", "login_id": "b", "account_id": 200006, "available": true, "synced": true, "healthy": true,
+    "logged_in": true, "problems": [], "net_position": 0, "orders": [], "unresolved_commands": 0,
+    "entries_disabled": false, "native_exits": true, "account_name_sha256": "ef"},
+   {"key": "account-g", "login_id": "b", "account_id": 200007, "available": true, "synced": true, "healthy": true,
+    "logged_in": true, "problems": [], "net_position": 0, "orders": [], "unresolved_commands": 0,
+    "entries_disabled": false, "native_exits": true, "account_name_sha256": "ab"}]}

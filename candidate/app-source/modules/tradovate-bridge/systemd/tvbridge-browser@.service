@@ -1,0 +1,21 @@
+# Decrypt OS Tradovate bridge: Chromium for an extra login (B, C, ...). Bridge Advanced > Add login
+# writes logins/%i/login.env (its DevTools port and profile). Window class tvbridge-login-%i.
+[Unit]
+Description=Tradovate bridge Chromium for login %i
+After=graphical-session.target
+PartOf=graphical-session.target
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge/logins/%i/login.env
+
+[Service]
+Type=simple
+Environment=TVBRIDGE_LOGIN_ID=%i
+Environment=TVBRIDGE_PASSWORD_STORE=gnome-libsecret
+# TVBRIDGE_DEVTOOLS_PORT and TVBRIDGE_PROFILE. Required: without it the browser would use login A's.
+EnvironmentFile=%h/.local/share/decrypt-os/tvbridge/logins/%i/login.env
+Environment=PATH=/usr/bin:/usr/local/bin:/bin
+ExecStart=/bin/sh /usr/local/lib/decrypt-os/modules/tradovate-bridge/bridge/scripts/launch-browser.sh
+Restart=no
+UMask=0077
+
+[Install]
+WantedBy=graphical-session.target

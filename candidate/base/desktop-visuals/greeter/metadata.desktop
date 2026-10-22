@@ -1,0 +1,7 @@
+[SddmGreeterTheme]
+Name=Decrypt
+Description=Decrypt OS local sign-in, based on Omarchy
+Author=Decrypt Labs
+Type=sddm-theme
+Version=0.1
+QtVersion=6

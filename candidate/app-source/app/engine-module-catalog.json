@@ -1,0 +1,467 @@
+{
+  "schema": "decrypt.engine-module-catalog.v1",
+  "setupOnly": true,
+  "executionEnabled": false,
+  "operationalModules": [],
+  "engines": [
+    {
+      "id": "soup",
+      "strategyId": "soup",
+      "label": "ICT - Turtle Soup Shift engine",
+      "version": "soup-r4-os-1",
+      "customerAvailability": "available",
+      "description": "Runs the Turtle Soup Shift strategy through the Tradovate bridge. Install it in Execution runtime once the bridge is set up and signed in.",
+      "sourcePairId": "soup-pine-authority-r4",
+      "pairingStatus": "source_verified",
+      "packageStatus": "source_packaged",
+      "runtimeSupported": true,
+      "configurationFields": [
+        {
+          "key": "intendedUse",
+          "label": "Planned use",
+          "type": "enum",
+          "required": true,
+          "options": [
+            {
+              "value": "research",
+              "label": "Research"
+            },
+            {
+              "value": "paper",
+              "label": "Paper testing"
+            }
+          ],
+          "help": "Saved planning preference only. No engine is started and no order is sent."
+        }
+      ],
+      "defaultConfiguration": {},
+      "publicationId": null,
+      "publicationPairingVerified": false
+    },
+    {
+      "id": "fvg-ifvg",
+      "strategyId": "fvg-ifvg",
+      "label": "FVG/IFVG customer execution engine",
+      "version": "decrypt-bridge-v2-1",
+      "customerAvailability": "coming_soon",
+      "description": "On hold. This engine reads the strategy's decrypt-bridge-v2 alerts and ships off by default. The app installs Soup only in this release, so it is not offered in Execution runtime yet. You can still request strategy access in TradingView.",
+      "sourcePairId": "fvg-r5b-bridge-v2",
+      "pairingStatus": "reference_only",
+      "packageStatus": "not_packaged",
+      "runtimeSupported": true,
+      "bridgeAdapter": {
+        "adapterId": "fvg-r5b-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "defaultEnabled": false,
+        "setup": "bridge setup.py init --adapter fvg-r5b-bridge-v2"
+      },
+      "configurationFields": [
+        {
+          "key": "intendedUse",
+          "label": "Planned use",
+          "type": "enum",
+          "required": true,
+          "options": [
+            {
+              "value": "research",
+              "label": "Research"
+            },
+            {
+              "value": "paper",
+              "label": "Paper testing"
+            }
+          ],
+          "help": "Saved planning preference only. No engine is started and no order is sent."
+        }
+      ],
+      "defaultConfiguration": {},
+      "publicationId": "BhpDI6NS",
+      "publicationPairingVerified": false
+    },
+    {
+      "id": "lumi-rth-gap",
+      "strategyId": "lumi-rth-gap",
+      "label": "Lumi RTH Gap engine",
+      "version": "decrypt-bridge-v2-1",
+      "customerAvailability": "coming_soon",
+      "description": "In development. This engine reads the strategy's decrypt-bridge-v2 alerts on the dated MES contract and ships off by default. It is not offered in Execution runtime yet and has not run with live alerts.",
+      "sourcePairId": "lumi-gap-bridge-v2",
+      "pairingStatus": "reference_only",
+      "packageStatus": "not_packaged",
+      "runtimeSupported": true,
+      "bridgeAdapter": {
+        "adapterId": "lumi-gap-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MES",
+        "defaultEnabled": false,
+        "setup": "bridge setup.py init --adapter lumi-gap-bridge-v2"
+      },
+      "configurationFields": [
+        {
+          "key": "intendedUse",
+          "label": "Planned use",
+          "type": "enum",
+          "required": true,
+          "options": [
+            {
+              "value": "research",
+              "label": "Research"
+            },
+            {
+              "value": "paper",
+              "label": "Paper testing"
+            }
+          ],
+          "help": "Saved planning preference only. No engine is started and no order is sent."
+        }
+      ],
+      "defaultConfiguration": {},
+      "publicationId": null,
+      "publicationPairingVerified": false
+    },
+    {
+      "id": "ote-refined-large",
+      "strategyId": "ote-refined-large",
+      "label": "ICT - OTE Refined L engine",
+      "version": "decrypt-bridge-v2-1",
+      "customerAvailability": "coming_soon",
+      "description": "In development, unverified: no live alerts have run through it yet. This engine reads the Large script's decrypt-bridge-v2 alerts and ships off by default; it is not offered in Execution runtime yet. One account runs Large or Small, never both. The alert sets the size; there is no contract cap.",
+      "sourcePairId": "ote-refined-large-bridge-v2",
+      "pairingStatus": "reference_only",
+      "packageStatus": "not_packaged",
+      "runtimeSupported": true,
+      "bridgeAdapter": {
+        "adapterId": "ote-refined-large-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "defaultEnabled": false,
+        "setup": "bridge setup.py init --adapter ote-refined-large-bridge-v2"
+      },
+      "configurationFields": [
+        {
+          "key": "intendedUse",
+          "label": "Planned use",
+          "type": "enum",
+          "required": true,
+          "options": [
+            {
+              "value": "research",
+              "label": "Research"
+            },
+            {
+              "value": "paper",
+              "label": "Paper testing"
+            }
+          ],
+          "help": "Saved planning preference only. No engine is started and no order is sent."
+        }
+      ],
+      "defaultConfiguration": {},
+      "publicationId": null,
+      "publicationPairingVerified": false
+    },
+    {
+      "id": "ote-refined-small",
+      "strategyId": "ote-refined-small",
+      "label": "ICT - OTE Refined S engine",
+      "version": "decrypt-bridge-v2-1",
+      "customerAvailability": "coming_soon",
+      "description": "In development, unverified: no live alerts have run through it yet. This engine reads the Small script's decrypt-bridge-v2 alerts and ships off by default; it is not offered in Execution runtime yet. One account runs Large or Small, never both. The alert sets the size; there is no contract cap.",
+      "sourcePairId": "ote-refined-small-bridge-v2",
+      "pairingStatus": "reference_only",
+      "packageStatus": "not_packaged",
+      "runtimeSupported": true,
+      "bridgeAdapter": {
+        "adapterId": "ote-refined-small-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "defaultEnabled": false,
+        "setup": "bridge setup.py init --adapter ote-refined-small-bridge-v2"
+      },
+      "configurationFields": [
+        {
+          "key": "intendedUse",
+          "label": "Planned use",
+          "type": "enum",
+          "required": true,
+          "options": [
+            {
+              "value": "research",
+              "label": "Research"
+            },
+            {
+              "value": "paper",
+              "label": "Paper testing"
+            }
+          ],
+          "help": "Saved planning preference only. No engine is started and no order is sent."
+        }
+      ],
+      "defaultConfiguration": {},
+      "publicationId": null,
+      "publicationPairingVerified": false
+    },
+    {
+      "id": "ote-silver-bullet",
+      "strategyId": "ote-silver-bullet",
+      "label": "ICT - Silver Bullet OTE engine",
+      "version": "decrypt-bridge-v2-1",
+      "customerAvailability": "coming_soon",
+      "description": "Parked. This engine reads the strategy's decrypt-bridge-v2 alerts and ships off by default; it is not offered in Execution runtime. Use paper or demo accounts only. You can still request strategy access in TradingView.",
+      "sourcePairId": "ote-active-bridge-v2",
+      "pairingStatus": "reference_only",
+      "packageStatus": "not_packaged",
+      "runtimeSupported": true,
+      "bridgeAdapter": {
+        "adapterId": "ote-active-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "defaultEnabled": false,
+        "setup": "bridge setup.py init --adapter ote-active-bridge-v2"
+      },
+      "configurationFields": [
+        {
+          "key": "intendedUse",
+          "label": "Planned use",
+          "type": "enum",
+          "required": true,
+          "options": [
+            {
+              "value": "research",
+              "label": "Research"
+            },
+            {
+              "value": "paper",
+              "label": "Paper testing"
+            }
+          ],
+          "help": "Saved planning preference only. No engine is started and no order is sent."
+        }
+      ],
+      "defaultConfiguration": {},
+      "publicationId": null,
+      "publicationPairingVerified": false
+    },
+    {
+      "id": "order-blocks-decoded",
+      "strategyId": "order-blocks-decoded",
+      "label": "Order Blocks Decoded engine",
+      "version": "decrypt-bridge-v2-1",
+      "customerAvailability": "coming_soon",
+      "description": "In development: a research build for paper accounts only. This engine reads the strategy's decrypt-bridge-v2 alerts and ships off by default; it is not offered in Execution runtime.",
+      "sourcePairId": "order-blocks-bridge-v2",
+      "pairingStatus": "reference_only",
+      "packageStatus": "not_packaged",
+      "runtimeSupported": true,
+      "bridgeAdapter": {
+        "adapterId": "order-blocks-bridge-v2",
+        "alertFormat": "decrypt-bridge-v2",
+        "contractRoot": "MNQ",
+        "defaultEnabled": false,
+        "setup": "bridge setup.py init --adapter order-blocks-bridge-v2"
+      },
+      "configurationFields": [
+        {
+          "key": "intendedUse",
+          "label": "Planned use",
+          "type": "enum",
+          "required": true,
+          "options": [
+            {
+              "value": "research",
+              "label": "Research"
+            },
+            {
+              "value": "paper",
+              "label": "Paper testing"
+            }
+          ],
+          "help": "Saved planning preference only. No engine is started and no order is sent."
+        }
+      ],
+      "defaultConfiguration": {},
+      "publicationId": null,
+      "publicationPairingVerified": false
+    }
+  ],
+  "modules": [
+    {
+      "id": "size-lock",
+      "label": "Size Lock",
+      "version": "1.0.0",
+      "scope": "engine",
+      "description": "Optional module for the Soup engine, off by default. Enabled: one contract, assigned to the original TP1 trigger, with the engine's original protective exits unchanged. Disabled (default): the existing original-allocation quantity policy, unchanged. There is no free-form or arbitrary fixed-N size; this module only switches between the engine's two reviewed quantity policies.",
+      "packageStatus": "not_packaged",
+      "runtimeSupported": true,
+      "defaultEnabled": false,
+      "sourceArtifacts": [
+        {
+          "role": "implementation",
+          "sha256": "97506b265ed49db3bcdd6f01802e3b612bd5a1a1053a684df57eed469e97a753",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/runtime.py"
+        }
+      ],
+      "compatibility": [
+        {
+          "sourcePairId": "soup-pine-authority-r4",
+          "status": "supported",
+          "reason": "Both quantity policies ('account-fixed-one-tp1-v1' and 'account-original-allocation-micro-cap-v1') are implemented in the paired Soup engine itself (vendor/soup_r4/core.py, validate_quantity_policy). This module only selects which one a held instance uses.",
+          "sourcePairPins": {
+            "engineSha256": "0a7803755e3e84c02f79252ef8938e093cc6a452715b49f7a2e29c1b86281d2a",
+            "strategySha256": "32d09c04e6edec49ccb9c5d5f107d9ed43669c3bd60b89efebdf9b08f89b730f"
+          }
+        }
+      ],
+      "configurationFields": [
+        {
+          "key": "enabled",
+          "label": "Enable Size Lock (one contract, original TP1)",
+          "type": "boolean",
+          "required": true,
+          "help": "Off by default. Turning this on changes a held, idle/closed instance to the fixed-one-contract TP1-only quantity policy. Turning it off restores the original-allocation policy. The engine refuses to change this while a trade is active."
+        }
+      ],
+      "defaultConfiguration": {
+        "enabled": false
+      }
+    }
+  ],
+  "sourcePairs": [
+    {
+      "id": "soup-pine-authority-r4",
+      "version": "soup-r4-os-1",
+      "osRevisionNote": "Decrypt OS build of the Soup r4 engine: it accepts the sizes the strategy alert sends (tranches add up to the quantity; no contract cap, no match with the settings snapshot's tranche sizes, no per-tranche maximum) and also accepts the v4 entry alert (decrypt-soup-entry-v4 = the v3 entry plus tp1_limit_offset_handles, the strategy's own TP1 working-limit offset; v3 alerts keep the paired offset).",
+      "label": "Soup — exact reviewed r4",
+      "engineId": "soup",
+      "publicationVerified": false,
+      "artifacts": [
+        {
+          "role": "engine",
+          "sha256": "0a7803755e3e84c02f79252ef8938e093cc6a452715b49f7a2e29c1b86281d2a",
+          "evidenceRef": "app/trading-runtime/MANIFEST.json"
+        },
+        {
+          "role": "strategy",
+          "sha256": "32d09c04e6edec49ccb9c5d5f107d9ed43669c3bd60b89efebdf9b08f89b730f",
+          "evidenceRef": "app/trading-runtime/MANIFEST.json"
+        }
+      ]
+    },
+    {
+      "id": "fvg-r5b-bridge-v2",
+      "engineId": "fvg-ifvg",
+      "version": "decrypt-bridge-v2-1",
+      "label": "FVG/IFVG customer execution engine / decrypt-bridge-v2",
+      "publicationVerified": false,
+      "artifacts": [
+        {
+          "role": "engine",
+          "sha256": "00c525051a77186c71df2274f6fc254f6904546037d72e6fc15be46b5a1bda54",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        },
+        {
+          "role": "strategy",
+          "sha256": "9a3c0f238e67786d934afc53ae02e124d038c9aa67c898d4a480f2fe88a91b9b",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        }
+      ]
+    },
+    {
+      "id": "lumi-gap-bridge-v2",
+      "engineId": "lumi-rth-gap",
+      "version": "decrypt-bridge-v2-1",
+      "label": "Lumi RTH Gap engine / decrypt-bridge-v2",
+      "publicationVerified": false,
+      "artifacts": [
+        {
+          "role": "engine",
+          "sha256": "273ecaaf873b5240ad5218200e74316db49186a7157f868dff327b35ab5722cf",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        },
+        {
+          "role": "strategy",
+          "sha256": "86e48d9e61198d85e6dc82c45b346545d5cecd17ce0e1d218f73d408e77c9e6d",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        }
+      ]
+    },
+    {
+      "id": "ote-refined-large-bridge-v2",
+      "engineId": "ote-refined-large",
+      "version": "decrypt-bridge-v2-1",
+      "label": "ICT - OTE Refined L engine / decrypt-bridge-v2",
+      "publicationVerified": false,
+      "artifacts": [
+        {
+          "role": "engine",
+          "sha256": "7b575f2adc5b25f156f0977092f140d63fc29d81a837aa1a0945f8fe8712f320",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        },
+        {
+          "role": "strategy",
+          "sha256": "a3415b8c4fda114e1cb7ae7c8da9e3ea9e5f170d78227877b91e4c0f65d948be",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        }
+      ]
+    },
+    {
+      "id": "ote-refined-small-bridge-v2",
+      "engineId": "ote-refined-small",
+      "version": "decrypt-bridge-v2-1",
+      "label": "ICT - OTE Refined S engine / decrypt-bridge-v2",
+      "publicationVerified": false,
+      "artifacts": [
+        {
+          "role": "engine",
+          "sha256": "e924a367469ad81faf1eae662cc249a636c7ae2e6f46db63197f41efdad3fa09",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        },
+        {
+          "role": "strategy",
+          "sha256": "d7ea2d55a3a61bd75980bc7dc7b241ffb6ea6efd85c8c9a6b7bd6a576cb9bfc1",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        }
+      ]
+    },
+    {
+      "id": "ote-active-bridge-v2",
+      "engineId": "ote-silver-bullet",
+      "version": "decrypt-bridge-v2-1",
+      "label": "ICT - Silver Bullet OTE engine / decrypt-bridge-v2",
+      "publicationVerified": false,
+      "artifacts": [
+        {
+          "role": "engine",
+          "sha256": "7024392356f90e0ce46ea8225d26a23e36c4f0b197b44239de6c8605650d23d0",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        },
+        {
+          "role": "strategy",
+          "sha256": "b85a70d04da0e66651d77457a78a2f55816b407e7fd389afa0dc4f407467e519",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        }
+      ]
+    },
+    {
+      "id": "order-blocks-bridge-v2",
+      "engineId": "order-blocks-decoded",
+      "version": "decrypt-bridge-v2-1",
+      "label": "Order Blocks Decoded engine / decrypt-bridge-v2",
+      "publicationVerified": false,
+      "artifacts": [
+        {
+          "role": "engine",
+          "sha256": "2b7e0493e5c27eb3508529c133f9dad4b62731cf51c75c33d0fe07cf910228fa",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        },
+        {
+          "role": "strategy",
+          "sha256": "c198f9068fe549bac176159839565e232e817694161bdec25c3ee988aab8df7c",
+          "evidenceRef": "app/trading-runtime/decrypt_trading/bridge_v2_registry.py"
+        }
+      ]
+    }
+  ],
+  "systemScopeNote": "The trading-system target is reserved for reviewed system-wide modules. No system-wide adapter is included yet."
+}

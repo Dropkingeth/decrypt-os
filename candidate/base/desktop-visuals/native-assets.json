@@ -1,0 +1,25 @@
+{
+  "schema": "decrypt.desktop-visual-assets.v1",
+  "commit": "077ac1da939de00d061c1035e1a1d00587a119b8",
+  "files": {
+    "theme/backgrounds/decrypt-horizon.png": "a18add8a6fca916c7ccdab18ab429b7e6d45108b595d3a5c8a432f6d049de6b3",
+    "theme/colors.toml": "0759022af38ae9802fef34b31c8fc4a4c4da17985e91170dcb8ed798379e9fac",
+    "theme/shell.bar.toml": "b541c04f227b4574479215b3ab51e3133ed48f903e9206d51fc20e2efd3a27b1",
+    "theme/shell.controls.toml": "00f1148cd3b22e795bd88902c791cc50087766fd49e910c194433413633c56cc",
+    "theme/shell.font.toml": "47aed15a59e55df185af61dfee5caf9f0d26a37eb8bea82d77373a2ecbb4f767",
+    "theme/shell.lock.toml": "49b3df114a652c7b5c3b25f3c23bb1465fc0917aece00698012cd5cbce9d1457",
+    "greeter/LICENSE": "717ba1949502290f8e47688ae2e323acd06c8ca47aec9f7596b15f678c1af4a2",
+    "greeter/Main.qml": "9553b215df823cf255f222c0aedb8fd49f6ba8d1d0c32e96f6742f4a11b90e2d",
+    "greeter/background.png": "ef7afe7f9166ff6914245a6057997903a2c39677990e095f66d42deee3c51fb1",
+    "greeter/decrypt-labs.svg": "604425b44a37f99c3dd1a0588a40125bc3b34315478f56652b9fd056ef67a0f4",
+    "greeter/metadata.desktop": "0c07c1590f39046b9e35116bf850eec494df7a4f94ba20243c5aa77f9c54ba3f"
+  },
+  "upstreamContracts": {
+    "bin/omarchy-theme-set": "f4f833d88f98793d3a8317bacd58492f9bbcf20951a13b2326ee7e3e88e59b18",
+    "bin/omarchy-theme-set-templates": "68977e7f0ac1f7efa32edc359c465a2ac51b836b1aa2876cbb5d84514650d651",
+    "default/themed/shell.toml.tpl": "38461c50c432b7332a3f59673536e8a784745bf678c58dfa3dcae7e4a91196b3",
+    "shell/Commons/Style.qml": "f84c801f2457a93130c99cb284de2615baafea6bd15de47cf190f0b11e5598a0",
+    "shell/Commons/Color.qml": "08af401286831759b63279cf6d6732d666256c751864a03bd5594ea29a29f0e5",
+    "default/sddm/omarchy/Main.qml": "aa578ec8a6269079e2141842073821fa24940fa4495a13815fa0754652e6027f"
+  }
+}

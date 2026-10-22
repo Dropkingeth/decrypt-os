@@ -1,0 +1,75 @@
+{
+  "account_name": "DEMO-0001",
+  "account_id": 100001,
+  "soup_account_id": "Account A",
+  "ticker": "MNQZ2021",
+  "tick_size": 0.25,
+  "max_contracts": 10,
+  "hedge_guard": true,
+  "hedge_groups": [
+    [
+      "ES",
+      "MES",
+      "NQ",
+      "MNQ",
+      "YM",
+      "MYM",
+      "RTY",
+      "M2K"
+    ]
+  ],
+  "time_in_force": "Day",
+  "order_timeout_s": 5,
+  "max_silence_ms": 10000,
+  "kill_switch_file": "/tvbridge-admin-fixture/tree/tvbridge/ENTRIES-DISABLED",
+  "journal_dir": "/tvbridge-admin-fixture/tree/tvbridge/journal",
+  "devtools_port": 9555,
+  "page_url_contains": "trader.tradovate.com",
+  "trade_url_pattern": "^wss://(demo|live)\\.tradovateapi\\.com/v1/websocket",
+  "listen_port": 8777,
+  "publish_mode": "adapter-db",
+  "account_view_enabled": true,
+  "soup_adapter_db": "/tvbridge-admin-fixture/tree/soup-state/events.sqlite",
+  "soup_context_path": "/tvbridge-admin-fixture/tree/soup-state/broker-context.json",
+  "bracket_orders_enabled": true,
+  "flatten_all_enabled": true,
+  "followers": [
+    {
+      "key": "account-b",
+      "label": "Account B",
+      "account_name": "DEMO-0002",
+      "account_id": 100002,
+      "journal_dir": "/tvbridge-admin-fixture/tree/tvbridge/journal-account-b",
+      "kill_switch_file": "/tvbridge-admin-fixture/tree/tvbridge/ENTRIES-DISABLED-account-b",
+      "max_contracts": 10,
+      "enabled": true,
+      "prop_profile": "unrestricted",
+      "native_exits_enabled": true
+    },
+    {
+      "key": "account-c",
+      "label": "Account C",
+      "account_name": "DEMO-0003",
+      "account_id": 100003,
+      "journal_dir": "/tvbridge-admin-fixture/tree/tvbridge/journal-account-c",
+      "kill_switch_file": "/tvbridge-admin-fixture/tree/tvbridge/ENTRIES-DISABLED-account-c",
+      "max_contracts": 10,
+      "enabled": true,
+      "prop_profile": "unrestricted",
+      "native_exits_enabled": true
+    },
+    {
+      "key": "account-h",
+      "label": "Account H",
+      "account_name": "DEMO-0008",
+      "account_id": 100008,
+      "journal_dir": "/tvbridge-admin-fixture/tree/tvbridge/journal-account-h",
+      "kill_switch_file": "/tvbridge-admin-fixture/tree/tvbridge/ENTRIES-DISABLED-account-h",
+      "max_contracts": 10,
+      "enabled": true,
+      "prop_profile": "unrestricted",
+      "native_exits_enabled": true
+    }
+  ],
+  "read_token_env": "TVBRIDGE_READ_TOKEN_A"
+}

@@ -1,0 +1,3 @@
+{"schema": "decrypt.tvbridge-login.v1", "login_id": "b", "label": "Login B", "mode": "followers_only",
+ "page": {"state": "login", "synced": false, "logged_in": false, "problems": ["page_state:login"]},
+ "observed_at": "@ms-0", "accounts": []}

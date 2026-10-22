@@ -1,0 +1,14 @@
+{
+  "omarchy": {
+    "repository": "https://github.com/omacom/omarchy",
+    "commit": "077ac1da939de00d061c1035e1a1d00587a119b8",
+    "archiveSha256": "b6f3c9a9ae06d568f056b4588891e3b92bccf60ccfc52913feaffa7fc5fe4e2a"
+  },
+  "alarm": {
+    "source": "https://archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz",
+    "rootfsSha256": "42a4eeaa038994ffd31fa173256ef2f0ef511358eeb41b9ea1f8626391b9b319",
+    "signatureSha256": "0157d8cd6261c85205931c766b754d6d56112b28800666fb64add1de192ebe11",
+    "keyringSha256": "4e4202772328674af68f90f675e077d192337fc8ced15cddcd35875a9de5b5f9",
+    "signingKeyFingerprint": "68B3537F39A313B3E574D06777193F152BDBE6A6"
+  }
+}

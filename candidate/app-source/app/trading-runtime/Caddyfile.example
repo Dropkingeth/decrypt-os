@@ -1,0 +1,30 @@
+# Replace ingress.example.invalid with a customer-owned domain before use.
+# No owner domain, tunnel, webhook, credential or certificate is included.
+# Do not add an access log: the last path segment is the customer's secret.
+{
+    # Standalone dedicated receiver proxy: even an upstream error may otherwise
+    # include the secret request URI in Caddy's default error log.
+    log {
+        output discard
+    }
+}
+
+ingress.example.invalid {
+    @signal {
+        method POST
+        path /signal/*
+    }
+    handle @signal {
+        request_body {
+            max_size 40KB
+        }
+        reverse_proxy 127.0.0.1:8812 {
+            header_up Host ingress.example.invalid
+            header_up X-Forwarded-Host ingress.example.invalid
+            header_up X-Forwarded-Proto https
+        }
+    }
+    handle {
+        respond "Not found" 404
+    }
+}

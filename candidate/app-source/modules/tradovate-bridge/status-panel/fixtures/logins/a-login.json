@@ -1,0 +1,9 @@
+{"schema": "decrypt.tvbridge-login.v1", "login_id": "a", "label": "Login A", "mode": "main",
+ "page": {"state": "authorized", "synced": true, "logged_in": true, "problems": []},
+ "observed_at": "@ms-0",
+ "accounts": [
+   {"name": "DEMO-0001", "id": 100001, "configured": true, "role": "main", "positions": [], "working": []},
+   {"name": "DEMO-0002", "id": 100002, "configured": true, "role": "follower", "key": "account-b", "positions": [], "working": []},
+   {"name": "DEMO-0003", "id": 100003, "configured": true, "role": "follower", "key": "account-c", "positions": [], "working": []},
+   {"name": "DEMO-0004", "id": 100004, "configured": false, "role": null, "positions": [], "working": []},
+   {"name": "DEMO-0005", "id": 100005, "configured": false, "role": null, "positions": [], "working": []}]}

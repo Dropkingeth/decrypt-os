@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Bridge Advanced
+Comment=Pause, restart, Flatten now and logins for the Tradovate bridge (workspace 5)
+Exec=/usr/local/lib/decrypt-os/modules/tradovate-bridge/bin/decrypt-bridge-advanced %u
+Icon=preferences-system
+Terminal=false
+Categories=Office;Finance;
+MimeType=x-scheme-handler/decrypt-advanced;

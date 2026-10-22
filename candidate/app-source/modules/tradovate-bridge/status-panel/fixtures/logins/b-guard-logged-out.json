@@ -1,0 +1,2 @@
+{"schema": 1, "state": "logged_out_waiting", "reason": "login_interval_not_elapsed", "checked_at": "@iso-11",
+ "logged_out_since": "@iso-140", "logins_last_hour": 1, "last_login_attempt_at": "@iso-50"}

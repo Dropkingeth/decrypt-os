@@ -1,0 +1,20 @@
+{
+  "schema": "decrypt.trading-runtime.manifest.v1",
+  "packageVersion": "0.2.0",
+  "mode": "customer_demo_only",
+  "supportedPairId": "soup-pine-authority-r4",
+  "sourceRevision": "soup-r4-os-1",
+  "osRevisionNote": "Decrypt OS build of the Soup r4 engine: it accepts the sizes the strategy alert sends (tranches add up to the quantity; no contract cap, no match with the settings snapshot's tranche sizes, no per-tranche maximum) and also accepts the v4 entry alert (decrypt-soup-entry-v4 = the v3 entry plus tp1_limit_offset_handles, the strategy's own TP1 working-limit offset; v3 alerts keep the paired offset).",
+  "sourcePins": {
+    "engine": "0a7803755e3e84c02f79252ef8938e093cc6a452715b49f7a2e29c1b86281d2a",
+    "strategy": "32d09c04e6edec49ccb9c5d5f107d9ed43669c3bd60b89efebdf9b08f89b730f"
+  },
+  "vendorFiles": {
+    "core.py": "0a7803755e3e84c02f79252ef8938e093cc6a452715b49f7a2e29c1b86281d2a",
+    "storage.py": "e281d9315a494556c03ec5fcffa9bb53ab5e538898423db0d0e32313ca6c2075",
+    "transport.py": "84164390049c65c9b52b5f4e61f772fc20f311712f0fbe5e744ea38b9f08b744",
+    "settings_contract.json": "73299fd428eaa33887b96ec1d23ab6daec0cb920c5165a13fc82b3e835b61aa5"
+  },
+  "publicationVerified": false,
+  "providerCommissioned": false
+}

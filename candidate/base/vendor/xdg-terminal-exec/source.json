@@ -1,0 +1,29 @@
+{
+  "repository": "https://github.com/Vladimir-csp/xdg-terminal-exec",
+  "tag": "v0.14.3",
+  "commit": "065925df9f419008159258ae169018bfd23df71b",
+  "files": [
+    {
+      "file": "xdg-terminal-exec",
+      "sha256": "89f2be9a65deb8df93633a9a09b4953a921c83d591ab987f7569280ecd3127ac",
+      "bytes": 44020,
+      "source_url": "https://raw.githubusercontent.com/Vladimir-csp/xdg-terminal-exec/065925df9f419008159258ae169018bfd23df71b/xdg-terminal-exec"
+    },
+    {
+      "file": "README.md",
+      "sha256": "c7a1a8bb711e44e4a19ca0a3c943f13a8e53d5fbb6c752e08cb186d5995a9d40",
+      "bytes": 14762,
+      "source_url": "https://raw.githubusercontent.com/Vladimir-csp/xdg-terminal-exec/065925df9f419008159258ae169018bfd23df71b/README.md"
+    },
+    {
+      "file": "LICENSE",
+      "sha256": "589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2",
+      "bytes": 35141,
+      "source_url": "https://raw.githubusercontent.com/Vladimir-csp/xdg-terminal-exec/065925df9f419008159258ae169018bfd23df71b/LICENSE"
+    },
+    {
+      "file": "COPYING",
+      "http_status": 404
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Decrypt OS · Setup</title><link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script></head>
+<body>
+<a href="#main" class="skip">Skip to setup status</a>
+<header class="site-head">
+<a class="brand" href="/" aria-label="Decrypt OS guided setup"><img src="/assets/logo.svg" width="30" height="38" alt=""><span class="brand-text"><span class="brand-name">DECRYPT OS</span><span class="brand-sub">Guided setup</span></span></a>
+<span class="build-tag">Runtime and app installation</span>
+</header>
+<aside class="preview-banner" id="preview-banner" hidden><span class="eyebrow amber">Design preview</span><span class="preview-text">Sample states only. Nothing is being installed.</span><label for="preview-state">View a state</label><select id="preview-state"><option value="not_started">Not started</option><option value="preparing">Preparing</option><option value="ready_for_review">Review needed</option><option value="installing">Installing</option><option value="installed">Files verified</option><option value="build_failed">Preparation stopped</option><option value="build_interrupted">Preparation interrupted</option><option value="interrupted">Check required</option><option value="installation_unverified">Recovery required</option><option value="unavailable">Status unavailable</option></select></aside>
+<main id="main" tabindex="-1" class="setup-layout">
+<aside class="journey">
+<p class="eyebrow">Decrypt OS setup</p>
+<h1>Your workspace, step&nbsp;by&nbsp;step.</h1>
+<p class="journey-intro">The setup terminal does the work. This page shows its progress and what to do next.</p>
+<div class="journey-track">
+<p class="bookend"><span class="bookend-mark" aria-hidden="true"></span><span class="bookend-text"><span class="bookend-when">Before this</span>Base install and desktop sign-in</span></p>
+<ol id="steps" aria-label="Runtime and app installation">
+<li data-step="0"><span class="step-number">1</span><div class="step-body"><span class="step-title">Prepare<svg class="step-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h7l4 4v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M15 3v4h4"/><path d="M4 7v12a2 2 0 0 0 2 2h10"/></svg></span><small>Check the installation files, then build the runtime and app under your account.</small></div></li>
+<li data-step="1"><span class="step-number">2</span><div class="step-body"><span class="step-title">Review<svg class="step-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h11M4 10h8M4 14h6"/><circle cx="16" cy="15" r="3.5"/><path d="m18.6 17.6 2.4 2.4"/></svg></span><small>Confirm the account, target and changes in the terminal before anything is installed.</small></div></li>
+<li data-step="2"><span class="step-number">3</span><div class="step-body"><span class="step-title">Install<svg class="step-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="m7 9.5 3 3-3 3M12.5 15.5H17"/></svg></span><small>Enter your local password in the terminal only. This page never asks for it.</small></div></li>
+<li data-step="3"><span class="step-number">4</span><div class="step-body"><span class="step-title">Check<svg class="step-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.4 2.9 7.8 7 9.5 4.1-1.7 7-5.1 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></svg></span><small>Verify the installed files and their permissions.</small></div></li>
+</ol>
+<p class="bookend"><span class="bookend-mark" aria-hidden="true"></span><span class="bookend-text"><span class="bookend-when">After this</span>Open Decrypt OS on workspace 1 and connect your Claude account</span></p>
+</div>
+<p class="scope-note">This stage runs after you sign in to the desktop. It does not format a disk or connect an account, and this page never asks for a password.</p>
+</aside>
+<section class="workspace-panel" aria-labelledby="status-title">
+<div class="panel-top"><span class="phase-label" id="phase-label">SETUP STATUS</span><span class="state-wrap"><span class="dot" aria-hidden="true"></span><span class="state-label" id="state-label">Checking</span></span></div>
+<div class="status-body">
+<div class="status-symbol" id="status-symbol" data-art="idle" aria-hidden="true">
+<svg class="art art-idle" viewBox="0 0 72 72" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"><circle cx="36" cy="36" r="33" stroke-opacity=".3"/><path d="M36 13 59 36 36 59 13 36z" fill="currentColor" fill-opacity=".06"/><path d="M36 25 47 36 36 47 25 36z" stroke-opacity=".6"/><circle cx="36" cy="36" r="2.5" fill="currentColor" stroke="none"/></svg>
+<svg class="art art-working" viewBox="0 0 72 72" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"><circle cx="36" cy="36" r="33" stroke-opacity=".3"/><circle cx="36" cy="36" r="30" stroke-dasharray="104 85" transform="rotate(-90 36 36)"/><circle cx="36" cy="36" r="22" stroke-dasharray="52 87" stroke-opacity=".7" transform="rotate(-90 36 36)"/><circle cx="36" cy="36" r="14" stroke-dasharray="26 62" stroke-opacity=".45" transform="rotate(-90 36 36)"/><circle cx="36" cy="36" r="2.5" fill="currentColor" stroke="none"/></svg>
+<svg class="art art-review" viewBox="0 0 72 72" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="36" r="33" stroke-opacity=".3"/><rect x="18" y="14" width="28" height="38" rx="3" fill="currentColor" fill-opacity=".06"/><path d="M25 24h14M25 31h14M25 38h8" stroke-opacity=".7"/><circle cx="46" cy="46" r="9" fill="currentColor" fill-opacity=".12"/><path d="m52.5 52.5 6.5 6.5"/></svg>
+<svg class="art art-install" viewBox="0 0 72 72" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="36" r="33" stroke-opacity=".3"/><path d="M36 15v27"/><path d="m26 32 10 10 10-10"/><path d="M17 47v6a4 4 0 0 0 4 4h30a4 4 0 0 0 4-4v-6" fill="currentColor" fill-opacity=".06"/></svg>
+<svg class="art art-done" viewBox="0 0 72 72" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="36" r="33" stroke-opacity=".3"/><circle cx="36" cy="36" r="24" fill="currentColor" fill-opacity=".08"/><path d="m25 37 8 8 15-17"/></svg>
+<svg class="art art-attention" viewBox="0 0 72 72" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="36" r="33" stroke-opacity=".3"/><path d="M36 11 58 24v24L36 61 14 48V24z" fill="currentColor" fill-opacity=".07"/><path d="M36 25v15"/><circle cx="36" cy="47" r="1.75" fill="currentColor" stroke="none"/></svg>
+<svg class="art art-unknown" viewBox="0 0 72 72" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="36" r="33" stroke-opacity=".3"/><circle cx="36" cy="36" r="24" stroke-dasharray="5 5" stroke-opacity=".7"/><path d="M29.5 30.5a6.5 6.5 0 1 1 9.5 5.8c-2.2 1.1-3 2.4-3 5"/><circle cx="36" cy="47.5" r="1.75" fill="currentColor" stroke="none"/></svg>
+</div>
+<h2 id="status-title">Reading setup status…</h2>
+<p id="status-description" class="lead">Checking the local installation record.</p>
+<div class="next-action"><span class="eyebrow">Next action</span><p id="next-action">Keep the installation terminal open.</p></div>
+<button class="primary" id="refresh" type="button"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9"/><path d="M13.5 2.5v3h-3"/></svg>Refresh status</button>
+<p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+<details class="setup-details"><summary>What this stage changes</summary><div><p>Setup prepares the runtime and the Decrypt app under your local account. It shows you the plan before it asks for administrator access.</p><p>The password prompt stays in the terminal. This page never asks for or records a password.</p><p>Closing this page does not stop installation. Keep the setup terminal open. When setup finishes, press Return there to close it.</p><p>First launch, assistant sign-in and the trading setup come afterwards, in the Decrypt app.</p></div></details>
+<details class="setup-details"><summary>Installation notice</summary><div><p>Decrypt provides software and research tools, not investment advice. Trading can cause substantial losses, and results are not guaranteed. You control your accounts and orders. Third-party services have separate terms, fees and approvals. Back up your files before installing an OS.</p><p>Read and accept the full versioned notice in the local installation terminal. Accepting it does not connect an account or authorize a trade.</p></div></details>
+<details class="setup-details"><summary>If setup stops</summary><div><p>Keep the setup folder and the terminal open. They hold the record of what happened.</p><p>Cancelled before installing? Run setup again; it reviews the prepared files first. Installation already started? Run the verify step before retrying. Do not reinstall over a partial installation.</p></div></details>
+</div>
+<div class="panel-foot"><span id="source-label">Read-only local status</span><span id="checked-at">Not checked yet</span></div>
+</section>
+</main>
+<footer><span>Decrypt OS · Built on Omarchy</span><span>No accounts are connected by this stage.</span></footer>
+</body></html>

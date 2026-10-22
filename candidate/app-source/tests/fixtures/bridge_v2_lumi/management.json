@@ -1,0 +1,48 @@
+{
+  "cancel_entry": {
+    "protocol": "decrypt-bridge-v2",
+    "strategy": "lumi-gap",
+    "build": "synthetic-r3",
+    "event": "cancel_entry",
+    "alert_id": "cancel_entry+1617718540700@q001:long",
+    "trade_id": "q001:long",
+    "stream_id": "synth-gap-7",
+    "symbol": "MESM2021",
+    "side": "long",
+    "ts": 1617718540700,
+    "reason": "test_cancel",
+    "extras": {}
+  },
+  "flatten": {
+    "protocol": "decrypt-bridge-v2",
+    "strategy": "lumi-gap",
+    "build": "synthetic-r3",
+    "event": "flatten",
+    "alert_id": "flatten+1617718540700@q001:short",
+    "trade_id": "q001:short",
+    "stream_id": "synth-gap-7",
+    "symbol": "MESM2021",
+    "side": "short",
+    "ts": 1617718540700,
+    "reason": "test_flatten",
+    "extras": {}
+  },
+  "modify_stop": {
+    "protocol": "decrypt-bridge-v2",
+    "strategy": "lumi-gap",
+    "build": "synthetic-r3",
+    "event": "modify_stop",
+    "alert_id": "modify_stop+1617718540700@q001:long",
+    "trade_id": "q001:long",
+    "stream_id": "synth-gap-7",
+    "symbol": "MESM2021",
+    "side": "long",
+    "ts": 1617718540700,
+    "reason": "test_move_stop",
+    "extras": {},
+    "stop": {
+      "price": 4993.0,
+      "safety_price": 0
+    }
+  }
+}

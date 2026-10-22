@@ -1,0 +1,21 @@
+# Decrypt OS Tradovate bridge, login A: its own Chromium window (loopback DevTools 9555).
+# Saved logins live in this profile, encrypted by the desktop keyring (gnome-libsecret).
+[Unit]
+Description=Tradovate bridge Chromium for login A (loopback DevTools 9555)
+After=graphical-session.target
+PartOf=graphical-session.target
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge/config.json
+
+[Service]
+Type=simple
+Environment=TVBRIDGE_LOGIN_ID=a
+Environment=TVBRIDGE_DEVTOOLS_PORT=9555
+Environment=TVBRIDGE_PROFILE=%h/.local/share/decrypt-os/tvbridge-browser/profile
+Environment=TVBRIDGE_PASSWORD_STORE=gnome-libsecret
+Environment=PATH=/usr/bin:/usr/local/bin:/bin
+ExecStart=/bin/sh /usr/local/lib/decrypt-os/modules/tradovate-bridge/bridge/scripts/launch-browser.sh
+Restart=no
+UMask=0077
+
+[Install]
+WantedBy=graphical-session.target

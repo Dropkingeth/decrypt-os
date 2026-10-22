@@ -1,0 +1,24 @@
+# Decrypt OS Tradovate bridge: one login-guard pass for an extra login. Never types or trades.
+[Unit]
+Description=Tradovate bridge login guard for login %i (saved-login click; never types or trades)
+After=tvbridge-browser@%i.service
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge/logins/%i/config.json
+
+[Service]
+Type=oneshot
+EnvironmentFile=-%h/.local/share/decrypt-os/tvbridge/logins/%i/tvbridge.env
+Environment=TVBRIDGE_LOGIN_ID=%i
+Environment=TVBRIDGE_ROOT=%h/.local/share/decrypt-os/tvbridge
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 /usr/local/lib/decrypt-os/modules/tradovate-bridge/login-guard/guard.py --run --login %i
+UMask=0077
+Nice=10
+NoNewPrivileges=true
+RestrictAddressFamilies=AF_INET AF_UNIX
+IPAddressAllow=localhost
+IPAddressDeny=any
+MemoryMax=96M
+TasksMax=16
+TimeoutStartSec=90
+StandardOutput=null
+StandardError=journal

@@ -1,0 +1,20 @@
+{
+  "schema": "decrypt.tvbridge-logins.v1",
+  "logins": [
+    {
+      "id": "a",
+      "label": "Login A",
+      "primary": true,
+      "config": "/tvbridge-admin-fixture/tree/tvbridge/config.json",
+      "bridge_url": "http://127.0.0.1:8777",
+      "token_env": "TVBRIDGE_TOKEN",
+      "read_token_env": "TVBRIDGE_READ_TOKEN_A",
+      "devtools_port": 9555,
+      "browser_unit": "tvbridge-browser.service",
+      "daemon_unit": "tvbridge-daemon.service",
+      "guard_unit": "tvbridge-login-guard.service",
+      "trigger_unit": "tvbridge-login-trigger.service",
+      "guard_state_dir": "~/.local/share/decrypt-os/tvbridge-state/login-guard"
+    }
+  ]
+}

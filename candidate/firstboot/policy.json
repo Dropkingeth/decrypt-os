@@ -1,0 +1,29 @@
+{
+  "schema": "decrypt.firstboot-policy.v1",
+  "id": "decrypt-customer-firstboot",
+  "version": 1,
+  "account": {
+    "creation": "interactive-first-boot",
+    "rootLocked": true,
+    "sudo": "password-required"
+  },
+  "identity": {
+    "machineId": "generate-once",
+    "sshHostKeys": "generate-once"
+  },
+  "notice": {
+    "mode": "interactive",
+    "documentSha256": "2a1903232950f56deba4a8cdd76e79e7b1022366fd6e56510c8c4bbf28ab8055"
+  },
+  "service": {
+    "path": "/usr/local/lib/decrypt-firstboot/firstboot.py",
+    "sha256": "ccdda2e73aa8b6f518c7746121aa4dd12b6a1534a6c76bb8c72c1f639f666e2f"
+  },
+  "completionRequires": [
+    "account-setup",
+    "unique-identity",
+    "interactive-consent",
+    "root-locked",
+    "no-passwordless-rule"
+  ]
+}

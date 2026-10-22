@@ -1,0 +1,14 @@
+[Unit]
+Description=Create this machine's own pacman keyring
+Documentation=https://wiki.archlinux.org/title/Pacman/Package_signing
+ConditionPathExists=!/etc/pacman.d/gnupg/trustdb.gpg
+After=systemd-random-seed.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/pacman-key --init
+ExecStart=/usr/bin/pacman-key --populate
+
+[Install]
+WantedBy=multi-user.target

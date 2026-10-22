@@ -1,0 +1,28 @@
+# Decrypt OS Tradovate bridge: /health poll for an extra login; starts its login guard when needed.
+[Unit]
+Description=Tradovate bridge login trigger for login %i (polls /health every 2 s)
+After=tvbridge-daemon@%i.service
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge/logins/%i/config.json
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.local/share/decrypt-os/tvbridge/logins/%i/tvbridge.env
+Environment=TVBRIDGE_LOGIN_ID=%i
+Environment=TVBRIDGE_ROOT=%h/.local/share/decrypt-os/tvbridge
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 /usr/local/lib/decrypt-os/modules/tradovate-bridge/login-guard/trigger.py --login %i
+Restart=always
+RestartSec=5
+UMask=0077
+Nice=10
+NoNewPrivileges=true
+RestrictAddressFamilies=AF_INET AF_UNIX
+IPAddressAllow=localhost
+IPAddressDeny=any
+MemoryMax=128M
+TasksMax=8
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=default.target

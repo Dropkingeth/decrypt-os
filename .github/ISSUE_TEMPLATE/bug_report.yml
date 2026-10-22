@@ -1,0 +1,81 @@
+name: Bug report
+description: Something in Decrypt OS is broken or not working as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please use synthetic/
+        placeholder values, never real account numbers, broker credentials,
+        tokens, personal paths or personal data. See `SECURITY.md` instead
+        of filing an issue if this looks like a security vulnerability.
+
+  - type: input
+    id: version
+    attributes:
+      label: Decrypt OS version
+      description: >-
+        The image version/tag you installed (shown on first start, and in
+        `MANIFEST.json` next to the image you downloaded).
+      placeholder: e.g. beta4
+    validations:
+      required: true
+
+  - type: dropdown
+    id: host
+    attributes:
+      label: Host
+      description: What are you running the Decrypt OS VM in?
+      options:
+        - UTM
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: input
+    id: host-other
+    attributes:
+      label: Host details (if "Other")
+      description: Hypervisor/VM software and host OS/CPU, if not UTM.
+      placeholder: e.g. QEMU on Linux x86_64
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The exact steps that trigger the problem.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the exact error text/message shown, if any.
+    validations:
+      required: true
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics bundle
+      description: >-
+        From a terminal on the Decrypt OS desktop, run
+        `python3 /usr/local/lib/decrypt-os/tools/diagnostics.py --bundle ~/decrypt-diagnostics.tar.gz`
+        and attach the resulting file to this issue (drag and drop it into
+        this box). It collects component versions, unit states and recent
+        service errors, with secrets, account IDs, usernames and local
+        paths already redacted -- it's still worth opening the file
+        yourself first to confirm you're comfortable attaching it.
+      placeholder: Attach the diagnostics tar.gz here, or explain why not.

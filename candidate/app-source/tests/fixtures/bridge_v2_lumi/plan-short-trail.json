@@ -1,0 +1,87 @@
+{
+  "protocol": "decrypt-bridge-v2",
+  "strategy": "lumi-gap",
+  "build": "synthetic-r3",
+  "event": "entry",
+  "alert_id": "entry+1617718531700@q001:short",
+  "trade_id": "q001:short",
+  "stream_id": "synth-gap-7",
+  "symbol": "MESM2021",
+  "side": "short",
+  "ts": 1617718531700,
+  "entry": {
+    "type": "market",
+    "qty": 6,
+    "price": 5004.0,
+    "max_age_ms": 30000
+  },
+  "touch": {
+    "enabled": false,
+    "price": 0,
+    "valid_until": 0,
+    "cancel_if_stop_touched": false
+  },
+  "stop": {
+    "type": "resting",
+    "price": 5012.0,
+    "timeframe_s": 0,
+    "safety_price": 0
+  },
+  "targets": [
+    {
+      "price": 5000.0,
+      "qty": 1,
+      "type": "limit"
+    },
+    {
+      "price": 4992.0,
+      "qty": 2,
+      "type": "limit"
+    }
+  ],
+  "runner": {
+    "qty": 3,
+    "mode": "trail",
+    "price": 0,
+    "trail_activation_ticks": 44,
+    "trail_distance_ticks": 10
+  },
+  "break_even": {
+    "enabled": true,
+    "trigger_price": 0,
+    "trigger_target": 1,
+    "trigger_mode": "any",
+    "confirm": "bar_close",
+    "confirm_timeframe_s": 30,
+    "stop_price": 0,
+    "offset_ticks": 8,
+    "stop_type": "resting",
+    "stop_timeframe_s": 0,
+    "if_beyond": "flatten"
+  },
+  "eod": {
+    "enabled": false,
+    "time": "15:45",
+    "tz": "America/New_York"
+  },
+  "daily_loss": {
+    "enabled": false,
+    "limit_usd": 110.0,
+    "fee_per_contract_usd": 0.4,
+    "tz": "America/New_York",
+    "day_start": "00:00",
+    "include_open": false,
+    "flatten": false
+  },
+  "bias_flip": {
+    "enabled": false
+  },
+  "extras": {
+    "setup": "T",
+    "chart_symbol": "MESM2021",
+    "bar_seconds": 30,
+    "decision_time": 1617718530000,
+    "account_profile": "synthetic profile",
+    "risk_usd": 240.0
+  }
+}

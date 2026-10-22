@@ -1,0 +1,7 @@
+{"schema": "decrypt.tvbridge-login.v1", "login_id": "b", "label": "Login B", "mode": "followers_only",
+ "page": {"state": "authorized", "synced": true, "logged_in": true, "problems": []},
+ "observed_at": "@ms-0",
+ "accounts": [
+   {"name": "DEMOB0006", "id": 200006, "configured": false, "role": null, "positions": [], "working": []},
+   {"name": "DEMOB0007", "id": 200007, "configured": false, "role": null, "positions": [], "working": []},
+   {"name": "DEMOB0008", "id": 200008, "configured": false, "role": null, "positions": [], "working": []}]}

@@ -1,0 +1,27 @@
+# Decrypt OS Tradovate bridge: daemon for an extra login (followers only; config logins/%i/config.json).
+[Unit]
+Description=Tradovate bridge daemon for login %i
+After=tvbridge-browser@%i.service
+Wants=tvbridge-browser@%i.service
+StartLimitIntervalSec=600
+StartLimitBurst=3
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge/logins/%i/config.json
+
+[Service]
+Type=simple
+WorkingDirectory=/usr/local/lib/decrypt-os/modules/tradovate-bridge/bridge
+# Read-only tokens of the other logins (peer hedge check), then this login's own order token (wins).
+EnvironmentFile=-%h/.local/share/decrypt-os/tvbridge/logins/peers.env
+EnvironmentFile=%h/.local/share/decrypt-os/tvbridge/logins/%i/tvbridge.env
+Environment=TVBRIDGE_ROOT=%h/.local/share/decrypt-os/tvbridge
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+TimeoutStartSec=150
+ExecStart=/usr/bin/python3 /usr/local/lib/decrypt-os/modules/tradovate-bridge/bridge/scripts/start_daemon.py --config %h/.local/share/decrypt-os/tvbridge/logins/%i/config.json
+Restart=on-failure
+RestartSec=30
+UMask=0077
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target

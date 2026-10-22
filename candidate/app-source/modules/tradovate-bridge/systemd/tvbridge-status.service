@@ -1,0 +1,23 @@
+# Decrypt OS Tradovate bridge: the read-only Bridge window (http://127.0.0.1:8779/bridge).
+[Unit]
+Description=Tradovate bridge status panel (read-only, loopback 8779)
+After=tvbridge-daemon.service
+
+[Service]
+Type=simple
+EnvironmentFile=-%h/.local/share/decrypt-os/tvbridge/tvbridge.env
+EnvironmentFile=-%h/.local/share/decrypt-os/tvbridge/logins/peers.env
+Environment=TVBRIDGE_ROOT=%h/.local/share/decrypt-os/tvbridge
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 /usr/local/lib/decrypt-os/modules/tradovate-bridge/status-panel/server.py
+Restart=always
+RestartSec=10
+UMask=0077
+NoNewPrivileges=yes
+RestrictAddressFamilies=AF_INET AF_UNIX
+IPAddressAllow=localhost
+IPAddressDeny=any
+MemoryMax=160M
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,88 @@
+{
+  "soup_db": "/home/trader/.local/share/decrypt-os/soup/current/engine.sqlite",
+  "soup_engine_dir": "/usr/local/lib/decrypt-os/app/trading-runtime/decrypt_trading/vendor/soup_r4",
+  "soup_quantity_policy": "/home/trader/.local/share/decrypt-os/soup/quantity-policy.json",
+  "soup_pairing": "/home/trader/.local/share/decrypt-os/soup/pairing.json",
+  "ticker": "MNQZ2021",
+  "logins_file": "/home/trader/.local/share/decrypt-os/tvbridge/logins.json",
+  "bridge_url": "http://127.0.0.1:8777",
+  "firing_dir": "/home/trader/.local/share/decrypt-os/tvbridge/firing",
+  "firing_mode": "parallel",
+  "firing_order": [
+    "account-a",
+    "account-b",
+    "account-c",
+    "login-b-1"
+  ],
+  "entry_gate": "main_accepted",
+  "main_gate_timeout_ms": 5000,
+  "align_wait_ms": 4000,
+  "grid_settle_ms": 2000,
+  "grid_attention_ms": 30000,
+  "cross_login_hedge_guard": true,
+  "peer_hedge_scope": "configured",
+  "hedge_groups": [
+    [
+      "ES",
+      "MES",
+      "NQ",
+      "MNQ",
+      "YM",
+      "MYM",
+      "RTY",
+      "M2K"
+    ]
+  ],
+  "follower_exits": "native",
+  "follower_native": {
+    "stop_confirm_ms": 5000,
+    "modify_confirm_ms": 2500,
+    "cancel_confirm_ms": 5000,
+    "backstop_ms": 2000,
+    "exit_verify_ms": 5000,
+    "reduce_confirm_ms": 5000,
+    "max_exit_attempts": 3
+  },
+  "accounts": {
+    "account-a": {
+      "role": "main",
+      "label": "Account A",
+      "prop_profile": "unrestricted",
+      "login": "a"
+    },
+    "account-b": {
+      "role": "follower",
+      "label": "Account B",
+      "enabled": false,
+      "prop_profile": "unrestricted",
+      "size_policy": "payload",
+      "login": "a"
+    },
+    "account-c": {
+      "role": "follower",
+      "label": "Account C",
+      "enabled": false,
+      "prop_profile": "unrestricted",
+      "size_policy": "payload",
+      "login": "a"
+    },
+    "login-b-1": {
+      "role": "follower",
+      "label": "Login B account (assign later)",
+      "login": "b",
+      "enabled": false,
+      "prop_profile": "unrestricted",
+      "size_policy": "payload"
+    }
+  },
+  "poll_interval_ms": 100,
+  "max_age_ms": 5000,
+  "max_send_delay_ms": 10000,
+  "reconcile_grace_ms": 15000,
+  "reconcile_mode": "two_step",
+  "reconcile_settle_ms": 2000,
+  "reconcile_deadline_ms": 60000,
+  "reconcile_step_wait_ms": 5000,
+  "exit_barrier_wait_ms": 2000,
+  "send_timeout_s": 25
+}

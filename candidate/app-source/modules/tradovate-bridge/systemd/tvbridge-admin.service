@@ -1,0 +1,22 @@
+# Decrypt OS Tradovate bridge: Bridge Advanced (http://127.0.0.1:8781/advanced), loopback only.
+# Reads only read-only and Flatten-now tokens; never an order token.
+[Unit]
+Description=Bridge Advanced (pause, restart, Flatten now, Add login; loopback 8781)
+After=tvbridge-status.service
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge-admin/profile.json
+
+[Service]
+Type=simple
+EnvironmentFile=-%h/.local/share/decrypt-os/tvbridge/logins/peers.env
+EnvironmentFile=-%h/.local/share/decrypt-os/tvbridge/logins/manual-a.env
+Environment=TVBRIDGE_ROOT=%h/.local/share/decrypt-os/tvbridge
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 /usr/local/lib/decrypt-os/modules/tradovate-bridge/admin/app/server.py --profile %h/.local/share/decrypt-os/tvbridge-admin/profile.json
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+LimitCORE=0
+
+[Install]
+WantedBy=default.target

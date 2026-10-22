@@ -1,0 +1,5 @@
+{
+  "requestUrl": "https://access.decryptlabs.io/v1/strategy-access",
+  "publicSite": "https://decryptlabs.io",
+  "strategyFieldSupported": false
+}

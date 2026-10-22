@@ -1,0 +1,369 @@
+{
+  "mode": "sandbox",
+  "generated_at": 1609462800.0,
+  "market": {
+    "state": "closed",
+    "reason": "weekend",
+    "weekend_hold": true,
+    "weekend_hold_text": "Weekend pause: automatic login is off until the Sunday 6:00 PM ET open."
+  },
+  "status_source": {
+    "ok": true,
+    "age_s": 1.0,
+    "error": null
+  },
+  "webhooks": [
+    {
+      "id": "main",
+      "name": "Main",
+      "path": "/webhook/soup",
+      "url": "https://webhooks.example.com/webhook/soup",
+      "state": "live",
+      "strategy": {
+        "id": "soup-pine-r4",
+        "name": "Soup Pine r4"
+      },
+      "stream_id": "fx-demo-stream",
+      "stream_id_strength": "weak",
+      "ticker": "MNQZ2021",
+      "leader": "account-a",
+      "followers": [
+        "account-b",
+        "account-c"
+      ],
+      "paused": false,
+      "pause": null,
+      "soup": {
+        "unit": null,
+        "port": null,
+        "enabled": true,
+        "locked": false
+      },
+      "notes": [
+        "Stream ID fx-demo-stream is easy to guess. Rotate it to a random ID when the accounts are flat."
+      ]
+    },
+    {
+      "id": "second",
+      "name": "Second",
+      "path": "/webhook/second",
+      "url": "https://webhooks.example.com/webhook/second",
+      "state": "planned",
+      "strategy": {
+        "id": "soup-pine-r4",
+        "name": "Soup Pine r4"
+      },
+      "stream_id": "example-stream",
+      "stream_id_strength": "strong",
+      "ticker": "MNQZ2021",
+      "leader": "account-d",
+      "followers": [],
+      "paused": true,
+      "pause": {
+        "on": true,
+        "set_by": "admin",
+        "reason": "New webhook, not activated",
+        "at": 1609462200.0
+      },
+      "soup": {
+        "unit": null,
+        "port": null,
+        "enabled": null,
+        "locked": null
+      },
+      "notes": [
+        "Planned: this webhook starts working after it is published."
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "key": "account-a",
+      "label": "Account A",
+      "login": "a",
+      "login_label": "Login A",
+      "role": "leader",
+      "webhook": "main",
+      "order": 0,
+      "enabled": true,
+      "prop_profile": "unrestricted",
+      "account_name_masked": "…0001",
+      "account_id": 1000001,
+      "native_exits": true,
+      "pause": {
+        "on": false,
+        "set_by": null,
+        "reason": null,
+        "at": null
+      },
+      "position": {
+        "net": 0,
+        "flat": true,
+        "orders_text": "none",
+        "text": "Flat"
+      },
+      "status": {
+        "label": "Not ready",
+        "tone": "amber"
+      }
+    },
+    {
+      "key": "account-b",
+      "label": "Account B",
+      "login": "a",
+      "login_label": "Login A",
+      "role": "follower",
+      "webhook": "main",
+      "order": 1,
+      "enabled": true,
+      "prop_profile": "unrestricted",
+      "account_name_masked": "…0002",
+      "account_id": 1000002,
+      "native_exits": true,
+      "pause": {
+        "on": false,
+        "set_by": null,
+        "reason": null,
+        "at": null
+      },
+      "position": {
+        "net": 2,
+        "flat": false,
+        "orders_text": "stop 9,980.00 · TP1 10,020.00",
+        "text": "Long 2"
+      },
+      "status": {
+        "label": "In a trade",
+        "tone": "green"
+      }
+    },
+    {
+      "key": "account-c",
+      "label": "Account C",
+      "login": "b",
+      "login_label": "Login B",
+      "role": "follower",
+      "webhook": "main",
+      "order": 2,
+      "enabled": true,
+      "prop_profile": "unrestricted",
+      "account_name_masked": "…0003",
+      "account_id": 1000003,
+      "native_exits": true,
+      "pause": {
+        "on": true,
+        "set_by": "admin",
+        "reason": "Paused for review",
+        "at": 1609461000.0
+      },
+      "position": {
+        "net": 0,
+        "flat": true,
+        "orders_text": "none",
+        "text": "Flat"
+      },
+      "status": {
+        "label": "Paused",
+        "tone": "amber"
+      }
+    },
+    {
+      "key": "account-d",
+      "label": "Account D",
+      "login": "a",
+      "login_label": "Login A",
+      "role": "leader",
+      "webhook": "second",
+      "order": 0,
+      "enabled": true,
+      "prop_profile": "unrestricted",
+      "account_name_masked": "…0004",
+      "account_id": 1000004,
+      "native_exits": true,
+      "pause": {
+        "on": true,
+        "set_by": "admin",
+        "reason": "New account starts paused",
+        "at": 1609462200.0
+      },
+      "position": {
+        "net": 0,
+        "flat": true,
+        "orders_text": "none",
+        "text": "Flat"
+      },
+      "status": {
+        "label": "Paused",
+        "tone": "amber"
+      }
+    }
+  ],
+  "logins": [
+    {
+      "id": "a",
+      "label": "Login A",
+      "primary": true,
+      "mode": "main",
+      "state_label": "Logged out",
+      "tone": "amber",
+      "accounts": [
+        "account-a",
+        "account-b",
+        "account-d"
+      ]
+    },
+    {
+      "id": "b",
+      "label": "Login B",
+      "primary": false,
+      "mode": "followers_only",
+      "state_label": "Logged out",
+      "tone": "amber",
+      "accounts": [
+        "account-c"
+      ]
+    }
+  ],
+  "strategies": [
+    {
+      "id": "soup-pine-r4",
+      "name": "Soup Pine r4",
+      "build": "fixture-build",
+      "contract_ref": "engine/settings_contract.json",
+      "inputs_count": 10,
+      "stream_field": "stream_id",
+      "notes": "In TradingView, paste the stream ID into \"📡 Alert stream ID\" (Soup v3 connection group)."
+    }
+  ],
+  "pending": [
+    {
+      "id": "c-20210101-005000-0001",
+      "type": "set_enabled",
+      "params": {
+        "account": "account-b",
+        "enabled": false
+      },
+      "status": "waiting_flat",
+      "created_at": 1609462200.0,
+      "updated_at": 1609462500.0,
+      "summary": "Account B: lane off in Main",
+      "plan": {
+        "immediate": false,
+        "requires_flat": true,
+        "affected": [
+          "account-b"
+        ],
+        "files": [
+          {
+            "path": "tvbridge/firing.json",
+            "action": "modify",
+            "diff": "-      \"enabled\": true,\n+      \"enabled\": false,"
+          }
+        ],
+        "restarts": [
+          {
+            "unit": "tvbridge-firing.service",
+            "why": "reads the firing order at start",
+            "seconds": 5
+          },
+          {
+            "unit": "tvbridge-status.service",
+            "why": "refreshes the Bridge window's account list",
+            "seconds": 3
+          }
+        ],
+        "warnings": [],
+        "blockers": [],
+        "manual_steps": [],
+        "confirm": {
+          "required": false,
+          "expect": null,
+          "prompt": null
+        },
+        "generated": {}
+      },
+      "preview_hash": "0001…",
+      "eta": {
+        "kind": "after_flat",
+        "seconds": null,
+        "text": "When Account B's trade closes (its stops and exits stay on), then about 10 s.",
+        "waiting_on": [
+          "account-b"
+        ]
+      },
+      "result": null,
+      "error": null
+    }
+  ],
+  "recent": [
+    {
+      "id": "c-20210101-003000-0002",
+      "type": "pause",
+      "params": {
+        "account": "account-c",
+        "reason": "Paused for review"
+      },
+      "status": "applied",
+      "created_at": 1609461000.0,
+      "updated_at": 1609461002.0,
+      "summary": "Pause Account C: Paused for review",
+      "plan": {
+        "immediate": true,
+        "requires_flat": false,
+        "affected": [
+          "account-c"
+        ],
+        "files": [
+          {
+            "path": "tvbridge/logins/b/ENTRIES-DISABLED-account-c",
+            "action": "create",
+            "diff": ""
+          }
+        ],
+        "restarts": [],
+        "warnings": [],
+        "blockers": [],
+        "manual_steps": [],
+        "confirm": {
+          "required": false,
+          "expect": null,
+          "prompt": null
+        },
+        "generated": {}
+      },
+      "preview_hash": "0002…",
+      "eta": {
+        "kind": "now",
+        "seconds": 2,
+        "text": "Right away.",
+        "waiting_on": []
+      },
+      "result": {
+        "ok": true,
+        "rolled_back": false,
+        "steps": [
+          {
+            "name": "backup",
+            "ok": true,
+            "detail": "1 file",
+            "at": 1609461001.0
+          },
+          {
+            "name": "write",
+            "ok": true,
+            "detail": "kill switch created",
+            "at": 1609461002.0
+          },
+          {
+            "name": "verify",
+            "ok": true,
+            "detail": "switch present",
+            "at": 1609461003.0
+          }
+        ]
+      },
+      "error": null
+    }
+  ],
+  "drift": []
+}

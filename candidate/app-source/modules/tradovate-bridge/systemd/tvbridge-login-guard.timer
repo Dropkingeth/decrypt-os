@@ -1,0 +1,11 @@
+[Unit]
+Description=Check the Tradovate bridge login A every 30 seconds
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge/config.json
+
+[Timer]
+OnBootSec=90
+OnUnitInactiveSec=30
+AccuracySec=5
+
+[Install]
+WantedBy=timers.target

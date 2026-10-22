@@ -1,0 +1,3 @@
+{"at": "@iso-2700", "kind": "observation", "state": "logged_out_waiting", "reason": "login_form_visible"}
+{"at": "@iso-2690", "kind": "observation", "state": "logged_in_now", "reason": "saved_login_accepted"}
+{"at": "@iso-9", "kind": "observation", "state": "ok", "reason": "logged_in_daemon_active"}

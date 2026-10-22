@@ -1,0 +1,32 @@
+{
+  "_comment": "Login B (1.1.0 multi-login): a followers_only daemon for a second Tradovate login. No main account and no Soup publisher; Soup routes answer 409. Empty followers = connected and ready, no account assigned. master_kill_switch_file is login A's main ENTRIES-DISABLED (read only). The daemon reads its own order token from token_env (logins/b/tvbridge.env) and accepts its read-only token from read_token_env for GET /login and /health only. Each peer is read with that peer's READ token (logins/peers.env holds only TVBRIDGE_READ_TOKEN_<ID>). peer_hedge_scope \"configured\" (default): only peer accounts assigned as main or follower on their login count; \"all\": every visible account. Keys starting with _ are ignored.",
+  "login_id": "b",
+  "login_label": "Login B",
+  "mode": "followers_only",
+  "token_env": "TVBRIDGE_TOKEN_B",
+  "read_token_env": "TVBRIDGE_READ_TOKEN_B",
+  "master_kill_switch_file": "/home/trader/.local/share/decrypt-os/tvbridge/ENTRIES-DISABLED",
+  "peer_logins": [
+    {"id": "a", "url": "http://127.0.0.1:8777", "token_env": "TVBRIDGE_READ_TOKEN_A"}
+  ],
+  "peer_hedge_scope": "configured",
+  "ticker": "MNQZ2021",
+  "tick_size": 0.25,
+  "hedge_groups": [["ES", "MES", "NQ", "MNQ", "YM", "MYM", "RTY", "M2K"]],
+  "time_in_force": "Day",
+  "order_timeout_s": 5,
+  "max_silence_ms": 10000,
+  "kill_switch_file": "/home/trader/.local/share/decrypt-os/tvbridge/logins/b/ENTRIES-DISABLED",
+  "devtools_port": 9557,
+  "page_url_contains": "trader.tradovate.com",
+  "trade_url_pattern": "^wss://demo\\.tradovateapi\\.com/v1/websocket",
+  "listen_port": 8778,
+  "account_view_enabled": true,
+  "followers": [],
+  "_followers_example": [
+    {"key": "login-b-1", "label": "Login B account 1", "account_name": "ACCOUNT-NAME-FROM-RECON",
+     "account_id": null, "journal_dir": "/home/trader/.local/share/decrypt-os/tvbridge/logins/b/journal-login-b-1",
+     "kill_switch_file": "/home/trader/.local/share/decrypt-os/tvbridge/logins/b/ENTRIES-DISABLED-login-b-1",
+     "enabled": true, "prop_profile": "unrestricted", "native_exits_enabled": true}
+  ]
+}

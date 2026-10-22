@@ -1,0 +1,70 @@
+{
+ "soup_db": "/tvbridge-admin-fixture/tree/soup-state/current/engine.sqlite",
+ "soup_engine_dir": "/tvbridge-admin-fixture/soup-engine",
+ "soup_quantity_policy": "/tvbridge-admin-fixture/tree/soup-state/quantity-policy.json",
+ "soup_pairing": "/tvbridge-admin-fixture/tree/soup-state/pairing.json",
+ "ticker": "MNQZ2021",
+ "bridge_url": "http://127.0.0.1:8777",
+ "firing_dir": "/tvbridge-admin-fixture/tree/tvbridge/firing",
+ "firing_mode": "parallel",
+ "firing_order": [
+  "account-a",
+  "account-b",
+  "account-c",
+  "account-h"
+ ],
+ "entry_gate": "main_accepted",
+ "main_gate_timeout_ms": 5000,
+ "align_wait_ms": 4000,
+ "grid_settle_ms": 2000,
+ "grid_attention_ms": 30000,
+ "follower_exits": "native",
+ "follower_native": {
+  "stop_confirm_ms": 5000,
+  "modify_confirm_ms": 2500,
+  "cancel_confirm_ms": 5000,
+  "backstop_ms": 2000,
+  "exit_verify_ms": 5000,
+  "reduce_confirm_ms": 5000,
+  "max_exit_attempts": 3
+ },
+ "accounts": {
+  "account-a": {
+   "role": "main",
+   "label": "Account A",
+   "prop_profile": "unrestricted"
+  },
+  "account-b": {
+   "role": "follower",
+   "label": "Account B",
+   "enabled": true,
+   "prop_profile": "unrestricted",
+   "size_policy": "payload"
+  },
+  "account-c": {
+   "role": "follower",
+   "label": "Account C",
+   "enabled": true,
+   "prop_profile": "unrestricted",
+   "size_policy": "payload"
+  },
+  "account-h": {
+   "role": "follower",
+   "label": "Account H",
+   "enabled": true,
+   "prop_profile": "unrestricted",
+   "size_policy": "payload"
+  }
+ },
+ "poll_interval_ms": 100,
+ "max_age_ms": 5000,
+ "max_send_delay_ms": 10000,
+ "reconcile_grace_ms": 15000,
+ "reconcile_mode": "two_step",
+ "reconcile_settle_ms": 2000,
+ "reconcile_deadline_ms": 60000,
+ "reconcile_step_wait_ms": 5000,
+ "exit_barrier_wait_ms": 2000,
+ "send_timeout_s": 25,
+ "logins_file": "/tvbridge-admin-fixture/tree/tvbridge/logins.json"
+}

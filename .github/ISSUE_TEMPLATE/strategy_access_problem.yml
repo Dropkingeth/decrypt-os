@@ -1,0 +1,78 @@
+name: Strategy access problem
+description: Your TradingView invite-only strategy access isn't showing up or isn't working.
+labels: [strategy-access]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this if you sent a strategy access request from the Decrypt OS
+        app (or by hand via decryptlabs.io) and the invite-only script is
+        missing, delayed or behaving unexpectedly in TradingView. Access is
+        added by hand, so allow some time before filing this.
+
+        Please use synthetic/placeholder values, never real account
+        numbers, broker credentials, tokens, passwords or your private
+        alert address. Your TradingView username alone is fine to share
+        here. See `PRIVACY.md` for what a strategy access request stores.
+        See `SECURITY.md` instead of filing an issue if this looks like a
+        security vulnerability.
+
+  - type: input
+    id: tradingview-username
+    attributes:
+      label: TradingView username
+      description: The exact username you entered in the app's Strategy access page.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: strategy
+    attributes:
+      label: Which strategy?
+      description: Pick the engine/strategy this is about.
+      options:
+        - ICT - Turtle Soup Shift
+        - Determining Order Flow Engine [FVG+IFVG]
+        - ICT - OTE Refined L
+        - ICT - OTE Refined S
+        - ICT - Silver Bullet OTE
+        - Lumi RTH Gap (no public TradingView page yet)
+        - Order Blocks Decoded (no public TradingView page yet)
+        - Not sure / other
+    validations:
+      required: true
+
+  - type: input
+    id: sent-when
+    attributes:
+      label: When did you send the request?
+      description: Approximate date/time, and whether you sent it from the app or by hand via decryptlabs.io.
+    validations:
+      required: true
+
+  - type: textarea
+    id: app-status
+    attributes:
+      label: What does the app show?
+      description: >-
+        What the Decrypt OS app's Strategy access page shows for this
+        request (sent, not sent, pending, a reason code, etc.).
+    validations:
+      required: true
+
+  - type: textarea
+    id: tradingview-status
+    attributes:
+      label: What does TradingView show?
+      description: >-
+        What you see under TradingView's Indicators -> Invite-only scripts
+        for this strategy's script page.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true

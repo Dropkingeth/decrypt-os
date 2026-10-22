@@ -1,0 +1,12 @@
+{
+  "id": "account-original-allocation-micro-cap-v1",
+  "account_id": "Account A",
+  "max_contracts": 10,
+  "exit_allocation": "original",
+  "native_binding": {
+    "broker_id": "tradovate",
+    "account_value": "100001",
+    "account_label": "Account A - DEMO-0001 (100001)",
+    "account_url_sha256": "3a18fb354ea63401436e4362d3ce8a1caa61df93abed01f78f131ed1c038fcf9"
+  }
+}

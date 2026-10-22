@@ -1,0 +1,77 @@
+{
+  "revision": "brand-v1",
+  "fonts": "Space Grotesk UI, JetBrains Mono technical labels; Google Fonts SIL OFL1.1.",
+  "assets": [
+    {
+      "path": "src/assets/brand/jetbrains-mono-0.woff2",
+      "source": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPx3cwhsk.woff2",
+      "sha256": "62213be8a78b42f1e29d1452d91e2f8b3e745572a9dd98d3941e39fa00b37d76"
+    },
+    {
+      "path": "src/assets/brand/jetbrains-mono-1.woff2",
+      "source": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxTcwhsk.woff2",
+      "sha256": "e17cfd15fb96909d64095015f958207063a0c07191da3512df7d560a781aebdf"
+    },
+    {
+      "path": "src/assets/brand/jetbrains-mono-2.woff2",
+      "source": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxPcwhsk.woff2",
+      "sha256": "0a557721b1f8b36d3f3f84442689a71ca4a744300abcb46a1953f51bfc663b66"
+    },
+    {
+      "path": "src/assets/brand/jetbrains-mono-3.woff2",
+      "source": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPx_cwhsk.woff2",
+      "sha256": "c89b9cc0bc6262bd4f8d8494b6961601f3aefa829d08c2e3635f4d501d3a47c2"
+    },
+    {
+      "path": "src/assets/brand/jetbrains-mono-4.woff2",
+      "source": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPx7cwhsk.woff2",
+      "sha256": "db5ff4db83e580426280e9337a58dc57d3a83784a1b03ad80914651594441d52"
+    },
+    {
+      "path": "src/assets/brand/jetbrains-mono-5.woff2",
+      "source": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "sha256": "83c005d49d8a6a50474c73a5a36ac0468076e9c4a29da7bdb14995d80560a5be"
+    },
+    {
+      "path": "src/assets/brand/space-grotesk-6.woff2",
+      "source": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb54C-s0.woff2",
+      "sha256": "8895e3d49825128bfa5238e4c96e9b432d7a3dadbe5c17c6081267398305dc71"
+    },
+    {
+      "path": "src/assets/brand/space-grotesk-7.woff2",
+      "source": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb94C-s0.woff2",
+      "sha256": "952dddb45d2f96f71cbf3b7f510b24379afc3c89ea02fcf89d377b45d62c0166"
+    },
+    {
+      "path": "src/assets/brand/space-grotesk-8.woff2",
+      "source": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2",
+      "sha256": "0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d"
+    },
+    {
+      "path": "licenses/spacegrotesk-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/spacegrotesk/OFL.txt",
+      "sha256": "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72"
+    },
+    {
+      "path": "licenses/jetbrainsmono-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/jetbrainsmono/OFL.txt",
+      "sha256": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d"
+    },
+    {
+      "path": "src/assets/brand/decrypt-labs.svg",
+      "source": "Decrypt Labs logo (decryptlabs.io)",
+      "sha256": "604425b44a37f99c3dd1a0588a40125bc3b34315478f56652b9fd056ef67a0f4",
+      "note": "Exact flask paths and viewBox; explicit SVG styling for image use."
+    },
+    {
+      "path": "src/assets/brand/decrypt-city.jpg",
+      "source": "https://decryptlabs.io \u2014 actual rendered city canvas, captured from the site; website overlays hidden, not an AI-generated substitute",
+      "sha256": "af7c464665db711ba2ff7973897cadd25b9c0e9cea95ff0f05183a4a03ccae55"
+    }
+  ],
+  "revamp_v2": {
+    "direction": "Visual system 02: decryptlabs.io palette (near-black navy, teal actions, violet assistant, amber attention). Tokens are defined in the accompanying UI styles.",
+    "code_native_art": "src/Art.tsx holds all new icons, step illustrations and strategy glyphs as inline SVG components (currentColor strokes). No new raster or third-party imagery was added.",
+    "unchanged_assets": "Fonts, licenses, decrypt-labs.svg and decrypt-city.jpg are unchanged from the entries above."
+  }
+}

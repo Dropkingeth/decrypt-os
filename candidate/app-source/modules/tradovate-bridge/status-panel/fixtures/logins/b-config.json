@@ -1,0 +1,13 @@
+{"login_id": "b", "login_label": "Login B", "mode": "followers_only", "listen_port": 8778,
+ "journal_dir": "{root}/logins/b/journal",
+ "master_kill_switch_file": "{root}/ENTRIES-DISABLED",
+ "peer_logins": [{"id": "a", "url": "http://127.0.0.1:8777", "token_env": "TVBRIDGE_TOKEN"}],
+ "followers": [
+   {"key": "account-f", "label": "Account F", "account_id": 200006,
+    "journal_dir": "{root}/logins/b/journal-account-f",
+    "kill_switch_file": "{root}/logins/b/ENTRIES-DISABLED-account-f",
+    "enabled": true, "prop_profile": "unrestricted", "native_exits_enabled": true},
+   {"key": "account-g", "label": "Account G", "account_id": 200007,
+    "journal_dir": "{root}/logins/b/journal-account-g",
+    "kill_switch_file": "{root}/logins/b/ENTRIES-DISABLED-account-g",
+    "enabled": true, "prop_profile": "unrestricted", "native_exits_enabled": true}]}

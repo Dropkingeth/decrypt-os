@@ -1,0 +1,25 @@
+{
+  "schema": "decrypt.contract-calendar.v1",
+  "product": "MNQ",
+  "exchange": "CME",
+  "verifiedOn": "2026-09-14",
+  "coverageEnds": "2026-12-31",
+  "source": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
+  "expirationSource": "https://www.cmegroup.com/education/courses/micro-e-mini-futures/micro-e-mini-futures-products-overview",
+  "dateBasis": "Customary roll Monday before the third Friday; quarterly expiration on third Friday. Roll date is not a mandatory position transfer time. Broker deadlines and liquidity require separate verification.",
+  "automaticSwitchingImplemented": false,
+  "rolls": [
+    {
+      "from": "MNQU2026",
+      "to": "MNQZ2026",
+      "rollDate": "2026-09-14",
+      "expirationDate": "2026-09-18"
+    },
+    {
+      "from": "MNQZ2026",
+      "to": "MNQH2027",
+      "rollDate": "2026-12-14",
+      "expirationDate": "2026-12-18"
+    }
+  ]
+}

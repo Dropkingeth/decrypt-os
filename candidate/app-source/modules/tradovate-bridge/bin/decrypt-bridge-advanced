@@ -1,0 +1,40 @@
+#!/bin/bash
+# Opens (or focuses) the Bridge Advanced window on workspace 5. Called by its desktop entry and by
+# the decrypt-advanced:// link (the gear in the Bridge window). The admin service makes a new token
+# each start; a window opened with an older token is closed and reopened. The token never goes on a
+# command line: the window gets a one-time launch code (0600 file, single use, 60 s) and trades it.
+set -u
+export HYPRLAND_INSTANCE_SIGNATURE=${HYPRLAND_INSTANCE_SIGNATURE:-$(ls -t "$XDG_RUNTIME_DIR/hypr/" 2>/dev/null | head -1)}
+CLASS=chrome-127.0.0.1__advanced-Default
+PROFILE="$HOME/.config/decrypt-advanced-browser"
+TOKF="$XDG_RUNTIME_DIR/tvbridge-admin/token-8781"
+CODEF="$XDG_RUNTIME_DIR/tvbridge-admin/launch-code-8781"
+STAMP="$XDG_RUNTIME_DIR/tvbridge-admin/window-token.sha256"
+token_sum() { [ -s "$TOKF" ] && sha256sum < "$TOKF" | cut -c1-64; }
+if [ ! -f "$HOME/.local/share/decrypt-os/tvbridge-admin/profile.json" ]; then
+  notify-send "Bridge Advanced" "The Tradovate bridge is not set up yet. Run its setup first."
+  exit 1
+fi
+# Hyprland 0.56 Lua dispatchers (the old "dispatch workspace 5" form fails silently there).
+hyprctl dispatch 'hl.dsp.focus({ workspace = "5" })' >/dev/null
+if hyprctl clients -j | grep -q "\"class\": \"$CLASS\""; then
+  if systemctl --user is-active --quiet tvbridge-admin.service && [ -n "$(token_sum)" ] \
+      && [ "$(token_sum)" = "$(cat "$STAMP" 2>/dev/null)" ]; then
+    hyprctl dispatch "hl.dsp.focus({ window = \"class:^${CLASS}\$\" })" >/dev/null; exit 0
+  fi
+  # Stale window: close only this profile's browser, then open a fresh one below.
+  pkill -f -- "--user-data-dir=$PROFILE" 2>/dev/null
+  for _ in $(seq 1 25); do pgrep -f -- "--user-data-dir=$PROFILE" >/dev/null || break; sleep 0.2; done
+fi
+systemctl --user is-active --quiet tvbridge-admin.service || systemctl --user start tvbridge-admin.service
+for _ in $(seq 1 25); do [ -s "$TOKF" ] && break; sleep 0.2; done
+[ -s "$TOKF" ] || { notify-send "Bridge Advanced" "Service not ready"; exit 1; }
+( umask 077; token_sum > "$STAMP" )
+CODE=$(head -c 32 /dev/urandom | base64 | tr '+/' '-_' | tr -d '=\n')
+( umask 077; rm -f "$CODEF.tmp" && printf '%s' "$CODE" > "$CODEF.tmp" && mv -f "$CODEF.tmp" "$CODEF" ) \
+  || { notify-send "Bridge Advanced" "Could not write the launch code"; exit 1; }
+# Own temp dir: Chromium cannot start its profile lock when /tmp runs out of inodes.
+export TMPDIR="$HOME/.cache/decrypt-advanced-tmp"; mkdir -p -m 700 "$TMPDIR"
+# Own browser profile; the URL carries only the one-time code, which is useless once the page used it.
+exec /usr/bin/chromium --user-data-dir="$PROFILE" --no-first-run \
+  --no-default-browser-check --disable-gpu --app="http://127.0.0.1:8781/advanced#c=$CODE"

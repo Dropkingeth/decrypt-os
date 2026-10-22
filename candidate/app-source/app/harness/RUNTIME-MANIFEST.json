@@ -1,0 +1,52 @@
+{
+  "schema": "decrypt.customer-runtime-recipe.v1",
+  "runtime": "OpenClaw embedded",
+  "openclaw": {
+    "version": "2026.9.9",
+    "license": "MIT",
+    "distribution": "normal complete package with dependency notices; no operator state",
+    "source": "https://www.npmjs.com/package/openclaw/v/2026.9.9"
+  },
+  "node": {
+    "version": "24.19.0",
+    "architecture": "linux-arm64"
+  },
+  "provider": "anthropic",
+  "models": {
+    "primary": "anthropic/claude-opus-5-5",
+    "fallbacks": [
+      "anthropic/claude-sonnet-5"
+    ],
+    "light": "anthropic/claude-haiku-4-5"
+  },
+  "agents": {
+    "main": "product helper, no tools",
+    "ict": "ICT assistant, session_status + web_fetch"
+  },
+  "gatewayPort": 19789,
+  "toolsEnabled": "ict agent only: session_status, web_fetch",
+  "credentialPersistence": "session_only_or_opt_in_encrypted",
+  "installerQualified": false,
+  "sourceFiles": {
+    "bootstrap.py": "7891151282bc1717d872c98dd0d7165c2a8643ce0aba37479b3c71e45b054d81",
+    "namespace_entry.py": "550f05dddba1a1d3983e30155ea05a123b294d6ffaf62265efc2b2d420de7df9",
+    "runtime.py": "80413fc1b7ca2d9613f7bd286b5082d040c25a6f828b0766154a7c119ebb2c7c",
+    "vault_control.py": "d02843a7bf17c486ebebfd65d69ef240f8b79f23a8a9401053bbac5dd1a97c51",
+    "vault_storage.py": "446cdf080c45202d99fccd0e01181e139a064fcc6ebbf29bce7b2ac567679df9"
+  },
+  "limitations": [
+    "Development-machine paths are not a portable system installer",
+    "No full dependency/license/security audit",
+    "Whole-VM reboot and encrypted backup/restore unqualified"
+  ],
+  "qualification": {
+    "claudeSignIn": "unverified",
+    "fixedModelResponse": "unverified",
+    "ictConsoleConversation": "unverified",
+    "gatewayChildReplacement": "passed_previous_milestone",
+    "refreshRevocation": "unverified",
+    "encryptedStorageSynthetic": "passed_previous_milestone",
+    "encryptedStorageLive": "passed_previous_milestone"
+  },
+  "qualificationScope": "Development environment only. No clean customer installation has passed."
+}

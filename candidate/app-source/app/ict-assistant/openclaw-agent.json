@@ -1,0 +1,22 @@
+{
+  "agents": {
+    "entries": {
+      "ict": {
+        "name": "ICT Mentor",
+        "skills": [
+          "decrypt-unslop",
+          "decrypt-frontend-design",
+          "review-skill-imports"
+        ],
+        "bootstrapMaxChars": 60000,
+        "bootstrapTotalMaxChars": 90000,
+        "tools": {
+          "profile": "minimal",
+          "alsoAllow": [
+            "web_fetch"
+          ]
+        }
+      }
+    }
+  }
+}

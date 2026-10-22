@@ -1,0 +1,120 @@
+{
+  "inputs": {
+    "be_offset_handles": {
+      "type": "number",
+      "min": -20.0,
+      "max": 50.0
+    },
+    "cat_stop_handles": {
+      "type": "number",
+      "min": 1.0,
+      "max": 500.0
+    },
+    "close_all_eod": {
+      "type": "bool"
+    },
+    "enable_live_engine_alerts": {
+      "type": "bool"
+    },
+    "eod_session": {
+      "type": "string"
+    },
+    "initial_hard_stop_handles": {
+      "type": "number",
+      "min": 1.0,
+      "max": 150.0
+    },
+    "pause_after_cbdr_tp": {
+      "type": "bool"
+    },
+    "progress_fail_adverse_ratio": {
+      "type": "number",
+      "min": 0.0,
+      "max": 1.0
+    },
+    "progress_fail_checkpoint_seconds": {
+      "type": "int",
+      "min": 15,
+      "max": 600
+    },
+    "tp1_handles": {
+      "type": "number",
+      "min": 0.25
+    },
+    "use_catastrophe_stop": {
+      "type": "bool"
+    },
+    "use_cbdr_tp_for_eod_runner": {
+      "type": "bool"
+    },
+    "use_counter_ifvg_5s": {
+      "type": "bool"
+    },
+    "use_initial_hard_stop": {
+      "type": "bool"
+    },
+    "use_ltf_tp_exec": {
+      "type": "bool"
+    },
+    "use_progress_fail_rule": {
+      "type": "bool"
+    }
+  },
+  "input_patterns": [
+    {
+      "pattern": "^excl_[0-9]{4}_[0-9]{4}$",
+      "count": 8,
+      "type": "string"
+    }
+  ],
+  "unread_inputs": {
+    "name_pattern": "^[a-z][a-z0-9_]{0,63}$",
+    "max_count": 160
+  },
+  "constants_sha256": "c809ec8575e284cf1063e16e35fa51950fbeedb396689b89e6eeb4b76ceb9cda",
+  "entry_fields": [
+    "bias_runner_qty",
+    "break_even_price",
+    "catastrophe_stop_enabled",
+    "catastrophe_stop_price",
+    "effective_pre_tp1_stop_price",
+    "entry_action",
+    "entry_price",
+    "eod_runner_qty",
+    "event",
+    "execution_context",
+    "execution_profile",
+    "initial_hard_stop_enabled",
+    "initial_hard_stop_price",
+    "mintick",
+    "parent_runner_qty",
+    "quantity",
+    "runner_cbdr_target",
+    "schema_version",
+    "side",
+    "strategy_build",
+    "strategy_snapshot",
+    "stream_id",
+    "symbol",
+    "timestamp",
+    "tp1_price",
+    "tp1_qty",
+    "trade_id"
+  ],
+  "facts_fields": [
+    "event",
+    "execution_context",
+    "execution_profile",
+    "facts",
+    "price",
+    "root",
+    "schema_version",
+    "signalId",
+    "strategy_build",
+    "strategy_snapshot",
+    "stream_id",
+    "symbol",
+    "timestamp",
+    "trade_id"
+  ]
+}

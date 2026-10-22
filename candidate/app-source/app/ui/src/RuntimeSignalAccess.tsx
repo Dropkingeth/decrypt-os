@@ -1,0 +1,23 @@
+import {useEffect, useState} from 'react';
+import type {RuntimeAction} from './runtimeAction';
+
+export type SignalKey = {instanceId:string;channel:string;generation:number};
+export type PrivateIngress = {instanceId:string;url:string;generation?:number};
+
+export default function RuntimeSignalAccess({instance,keys,unlocked,listening,address,busy,run,dismiss,notice}:{instance:{instanceId:string;entriesHeld:boolean;tradePhase:string};keys?:SignalKey[]|null;unlocked:boolean;listening:boolean;address:PrivateIngress|null;busy:boolean;run:RuntimeAction;dismiss:()=>void;notice:(value:string)=>void}) {
+  const saved=keys?.find(key=>key.instanceId===instance.instanceId&&key.channel==='pine');
+  const current=address?.instanceId===instance.instanceId?address:null;
+  const [rotateGeneration,setRotateGeneration]=useState<number|null>(null);
+  const held=instance.entriesHeld&&unlocked;
+  const settled=held&&['idle','closed'].includes(instance.tradePhase);
+  const generation=typeof saved?.generation==='number'&&Number.isInteger(saved.generation)&&saved.generation>0?saved.generation:null;
+  useEffect(()=>{if(current&&(!unlocked||current.generation!==undefined&&generation!==null&&current.generation!==generation))dismiss()},[current,unlocked,generation,dismiss]);
+  return <details className="runtime-install"><summary>Private alert delivery</summary>
+    <p>Use this engine’s private address only for its matching TradingView alert. Preserve the strategy’s alert body. Creating or replacing an address does not verify public delivery or allow entries.</p>
+    {!listening&&<p className="field-hint">Configure your customer-owned HTTPS alert origin below before managing its private address.</p>}
+    {current?<><label htmlFor={'private-alert-'+instance.instanceId}>Private alert address</label><input id={'private-alert-'+instance.instanceId} type="password" readOnly autoComplete="off" value={current.url}/><p className="field-hint">{generation===null?'Saved private address':`Key generation ${generation}`}. Keep it out of messages and screenshots.</p><div className="guardian-actions"><button className="secondary" disabled={busy} onClick={()=>{void navigator.clipboard.writeText(current.url).then(()=>notice('Private address copied. Keep it out of messages and screenshots.')).catch(()=>notice('Clipboard access failed. Select and copy the address locally.'))}}>Copy private alert address</button><button className="text-button" disabled={busy} onClick={dismiss}>Dismiss private address</button></div></>:saved?<div className="guardian-actions"><button className="secondary" disabled={busy||!held||!listening} onClick={()=>void run('show-signal-address',{instanceId:instance.instanceId,acknowledgeOneTimeSecret:true})}>Show saved private address</button></div>:<div className="guardian-actions"><button className="secondary" disabled={busy||!held||!listening||!Array.isArray(keys)} onClick={()=>void run('create-signal-key',{instanceId:instance.instanceId,acknowledgeOneTimeSecret:true})}>Create private alert address</button></div>}
+    {saved&&<><p className="field-hint">Replacing a key immediately rejects the old address. Update the matching TradingView alert yourself; the app cannot edit it. Saved signals and trading history are not reset.</p><button className="text-button" disabled={busy||!settled||!listening||generation===null} onClick={()=>setRotateGeneration(generation)}>Review key replacement</button><p className="field-hint">If a response is interrupted, refresh status and use Show saved private address. Do not repeat replacement to recover the address.</p></>}
+    {!settled&&saved&&<p className="field-hint">Unlock Guardian, hold new entries and finish or reconcile the current trade before replacing its alert key.</p>}
+    {rotateGeneration!==null&&<div className="callout" role="region" aria-label="Confirm alert key replacement"><p>Replace key generation {rotateGeneration}? The old private address stops working immediately. Keep entries held until you have updated the intended alert and reviewed delivery.</p>{generation!==rotateGeneration&&<p role="alert">The saved generation changed. Cancel and review the current key before replacing it.</p>}<div className="guardian-actions"><button className="secondary" disabled={busy||!settled||!listening||generation!==rotateGeneration} onClick={async()=>{const expectedGeneration=rotateGeneration;setRotateGeneration(null);dismiss();await run('rotate-signal-key',{instanceId:instance.instanceId,expectedGeneration,acknowledgeOneTimeSecret:true})}}>Confirm key replacement</button><button className="text-button" disabled={busy} onClick={()=>setRotateGeneration(null)}>Cancel key replacement</button></div></div>}
+  </details>;
+}

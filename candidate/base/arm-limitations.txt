@@ -1,0 +1,37 @@
+Experimental ARM64 desktop compatibility build, not an official Omarchy ARM ISO.
+Package versions follow rolling signed repositories; no frozen package archive yet.
+The Omarchy source commit is pinned; that does not pin its operating-system dependencies.
+Software rendering only. Audio, full app parity, PC/x86 hardware and first boot remain unverified.
+The guest root filesystem is not encrypted. The Decrypt application has its own encrypted assistant storage.
+No copied accounts, SSH keys, browser state, passwords or OpenClaw authentication.
+No automatic desktop login and no passwordless sudo.
+No Docker, printer or Bluetooth services in this candidate.
+The IPv4 NAT test policy denies private destinations and inbound connections; IPv6 is blocked.
+The following upstream packages were unavailable in the prior ARM installation, not rechecked today:
+aether
+asdcontrol
+cliamp
+dotnet-runtime
+herdr
+hyprland-preview-share-picker
+localsend
+mise-bin
+nvim
+obs-studio
+obsidian
+omacalc
+omacut
+omawrite
+omarchy-nvim
+pinta
+ttfx
+qemu-user-static-binfmt
+tensaku
+tobi-try
+ttf-ia-writer
+ttf-jetbrains-mono-nerd-basic
+tzupdate
+ufw-docker
+xdg-terminal-exec
+yaru-icon-theme
+yay

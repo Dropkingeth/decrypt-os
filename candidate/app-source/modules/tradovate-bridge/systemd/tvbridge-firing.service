@@ -1,0 +1,28 @@
+# Decrypt OS Tradovate bridge: firing order. Reads the engine's database read-only and fires the
+# follower accounts after the main account. Runs only when firing.json exists.
+[Unit]
+Description=Tradovate bridge firing order (fires follower accounts after the main account)
+After=tvbridge-daemon.service
+Wants=tvbridge-daemon.service
+StartLimitIntervalSec=300
+StartLimitBurst=5
+ConditionPathExists=%h/.local/share/decrypt-os/tvbridge/firing.json
+
+[Service]
+Type=simple
+WorkingDirectory=/usr/local/lib/decrypt-os/modules/tradovate-bridge/bridge
+EnvironmentFile=%h/.local/share/decrypt-os/tvbridge/tvbridge.env
+EnvironmentFile=-%h/.local/share/decrypt-os/tvbridge/logins/peers.env
+# Order tokens of the other logins, for this unit only.
+EnvironmentFile=-%h/.local/share/decrypt-os/tvbridge/logins/firing.env
+Environment=TVBRIDGE_ROOT=%h/.local/share/decrypt-os/tvbridge
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 -m tvbridge.firing --config %h/.local/share/decrypt-os/tvbridge/firing.json
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,21 @@
+{
+  "name": "pycparser",
+  "version": "3.0",
+  "source": "https://pypi.org/pypi/pycparser/3.0/json",
+  "files": [
+    {
+      "filename": "pycparser-3.0-py3-none-any.whl",
+      "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+      "url": "https://files.pythonhosted.org/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl",
+      "type": "bdist_wheel",
+      "requires_python": ">=3.10"
+    },
+    {
+      "filename": "pycparser-3.0.tar.gz",
+      "sha256": "600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29",
+      "url": "https://files.pythonhosted.org/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz",
+      "type": "sdist",
+      "requires_python": ">=3.10"
+    }
+  ]
+}

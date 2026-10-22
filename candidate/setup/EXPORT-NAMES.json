@@ -1,0 +1,13 @@
+{
+  "names": [
+    "setup/launch_setup.py",
+    "setup/monitor.py",
+    "setup/index.html",
+    "setup/styles.css",
+    "setup/app.js",
+    "setup/README.md",
+    "setup/assets/logo.svg",
+    "setup/assets/space-grotesk.woff2",
+    "setup/assets/jetbrains-mono.woff2"
+  ]
+}

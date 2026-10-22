@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=ICT Assistant
+Comment=Your personal ICT mentor, powered by your own Claude account. Education only; it cannot trade.
+Exec=/usr/bin/foot --app-id=decrypt-os-ict-assistant --title=ICT\sAssistant /usr/local/bin/decrypt-ict-assistant
+Terminal=false
+Categories=Office;Finance;Education;
+StartupNotify=true
+StartupWMClass=decrypt-os-ict-assistant
