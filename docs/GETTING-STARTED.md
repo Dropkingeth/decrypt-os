@@ -30,7 +30,7 @@ Pick the disk file for your computer, then download the check files for the same
 | --- | --- | --- |
 | Apple Silicon Mac, UTM | [decrypt-os-beta4-rc8-arm64.utm.tar](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/decrypt-os-beta4-rc8-arm64.utm.tar) | `~3.1 GB` |
 | ARM64 host, QEMU | [decrypt-os-beta4-rc8-arm64.qcow2](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/decrypt-os-beta4-rc8-arm64.qcow2) | `~3.1 GB` |
-| PC, VirtualBox or VMware | [decrypt-os-beta4-rc8-x86_64.vmdk](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/decrypt-os-beta4-rc8-x86_64.vmdk) | `~7.0 GB` |
+| PC, VirtualBox or VMware | [decrypt-os-beta4-rc8-x86_64.vmdk](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/decrypt-os-beta4-rc8-x86_64.vmdk) | `~7.1 GB` |
 | PC, QEMU/KVM on Linux | [decrypt-os-beta4-rc8-x86_64.qcow2](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/decrypt-os-beta4-rc8-x86_64.qcow2) | `~3.4 GB` |
 
 Sizes are approximate and rounded; see `MANIFEST.json` (linked below) for the exact byte count.
