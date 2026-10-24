@@ -6,7 +6,7 @@ The only proxied request is `POST /signal/*` for the exact configured host, forw
 
 ## Prerequisites
 
-- Use an installed, enrolled customer OS, with administrator access. This tool refuses the protected development machine and untrusted/mutable helper files.
+- Use an installed, enrolled customer OS, with administrator access. This tool refuses hosts listed in the optional protected-host file and untrusted/mutable helper files.
 - In Decrypt OS, set your **customer-owned HTTPS alert origin** and start the local receiver. Use only `https://` plus a lowercase public fully qualified domain, without a path, trailing slash, credentials, port, query or fragment. The installer reads only that public-origin setting as the enrolled desktop account and requires an exact match.
 - Install the optional distribution **Caddy v2** package through your normal reviewed OS package procedure. Its root-owned executable must be `/usr/bin/caddy`. Caddy is not downloaded or installed by this tool; its version and executable hash are recorded. Python 3, systemd and the existing customer application are also required.
 - Dedicate this origin and the guest's TCP port **443** to this service. An existing/enabled Caddy service or occupied port is refused, not replaced. There is no merge into another website's proxy.

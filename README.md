@@ -6,7 +6,7 @@ It is built on Arch Linux ARM with the Omarchy/Hyprland desktop, and it runs ins
 
 ## How trading works
 
-- Strategies run as engines inside the Decrypt app. Today Soup can trade; FVG and Silver Bullet install but have no order route yet.
+- Strategies run as engines inside the Decrypt app. In this beta only Soup can be installed from the app and trade; the other six engines are not tradeable yet.
 - Soup sends its orders to the Tradovate bridge on the same machine. The bridge drives your own Tradovate web session in its own browser window. You sign in there once and the browser saves the login, encrypted by your desktop keyring.
 - The bridge checks safety only: the right account and contract, fresh account state, a flat account before a new entry, a positive whole-number size, exits that never exceed the open position, and no opposite position in your other accounts. The strategy alert sets the size; the strategy decides everything else.
 - Everything ships off. New entries stay held until you release them in the app and resume them in Bridge Advanced.

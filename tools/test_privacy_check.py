@@ -79,7 +79,7 @@ class PrivacyCheckTests(unittest.TestCase):
         self.assertIn('macOS host path', out)
 
     def test_macos_user_path_with_no_trailing_slash_is_caught(self):
-        # T3 regression: a bare path at end-of-line (no trailing '/') must
+        # A bare path at end-of-line (no trailing '/') must
         # still match, not just '/Users/<name>/'.
         total, out = self.findings({'notes.md': 'Logs were under /Users/someperson\n'})
         self.assertEqual(total, 1)
@@ -91,7 +91,7 @@ class PrivacyCheckTests(unittest.TestCase):
         self.assertIn('/home/<name>', out)
 
     def test_home_username_with_no_trailing_slash_is_caught(self):
-        # T3 regression: same no-trailing-slash fix as the macOS path above.
+        # Same no-trailing-slash case as the macOS path above.
         total, out = self.findings({'notes.md': 'Logs were under /home/realowner\n'})
         self.assertEqual(total, 1)
         self.assertIn('/home/<name>', out)
@@ -103,13 +103,10 @@ class PrivacyCheckTests(unittest.TestCase):
         self.assertIn('secret/token/key/password literal', out)
 
     def test_secret_value_with_marker_word_embedded_mid_run_is_caught(self):
-        # T4 regression: a real-looking 20+ char secret whose value merely
-        # contains "fake" as a substring with no delimiter on either side
-        # (e.g. inside a base64-ish blob) must not be waved through as a
-        # placeholder just because the word appears somewhere in it.
-        # Confirmed against the pre-fix regex directly that this exact
-        # value WAS wrongly exempted before narrowing FAKE_VALUE_MARKERS to
-        # \b-anchored whole words.
+        # A real-looking 20+ char secret whose value merely contains "fake"
+        # as a substring with no delimiter on either side (e.g. inside a
+        # base64-ish blob) must not be waved through as a placeholder:
+        # FAKE_VALUE_MARKERS only match \b-anchored whole words.
         total, out = self.findings(
             {'conf.py': "password = 'xZ9qPfakeM3vL8rN4wQ1cY7bH2kD6'\n"})
         self.assertEqual(total, 1)

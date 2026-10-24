@@ -61,7 +61,7 @@ Run the read-only check before applying anything:
 python3 installer/clean_base.py preflight --bundle . --user customer
 ```
 
-Read its result. A rejected host is not eligible for installation. The current development guest is rejected even if all dependencies are present.
+Read its result. A rejected host is not eligible for installation. Hosts listed in the optional protected-host file are rejected even if all dependencies are present.
 
 Record the selected fresh guest's machine identity hash and the reviewed source-manifest hash. These are identifiers, not credentials:
 

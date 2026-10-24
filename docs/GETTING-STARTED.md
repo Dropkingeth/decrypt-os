@@ -28,10 +28,10 @@ Pick the disk file for your computer, then download the check files for the same
 
 | Your computer | Disk file | Size |
 | --- | --- | --- |
-| Apple Silicon Mac, UTM | [decrypt-os-beta4-rc7-arm64.utm.tar](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/decrypt-os-beta4-rc7-arm64.utm.tar) | `~3.1 GB` |
-| ARM64 host, QEMU | [decrypt-os-beta4-rc7-arm64.qcow2](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/decrypt-os-beta4-rc7-arm64.qcow2) | `~3.1 GB` |
-| PC, VirtualBox or VMware | [decrypt-os-beta4-rc7-x86_64.vmdk](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/decrypt-os-beta4-rc7-x86_64.vmdk) | `~7.0 GB` |
-| PC, QEMU/KVM on Linux | [decrypt-os-beta4-rc7-x86_64.qcow2](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/decrypt-os-beta4-rc7-x86_64.qcow2) | `~3.4 GB` |
+| Apple Silicon Mac, UTM | [decrypt-os-beta4-rc8-arm64.utm.tar](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/decrypt-os-beta4-rc8-arm64.utm.tar) | `~3.1 GB` |
+| ARM64 host, QEMU | [decrypt-os-beta4-rc8-arm64.qcow2](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/decrypt-os-beta4-rc8-arm64.qcow2) | `~3.1 GB` |
+| PC, VirtualBox or VMware | [decrypt-os-beta4-rc8-x86_64.vmdk](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/decrypt-os-beta4-rc8-x86_64.vmdk) | `~7.0 GB` |
+| PC, QEMU/KVM on Linux | [decrypt-os-beta4-rc8-x86_64.qcow2](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/decrypt-os-beta4-rc8-x86_64.qcow2) | `~3.4 GB` |
 
 Sizes are approximate and rounded; see `MANIFEST.json` (linked below) for the exact byte count.
 
@@ -39,8 +39,8 @@ Check files for your architecture (same folder as the disk file, direct links):
 
 | Architecture | Check files |
 | --- | --- |
-| arm64 | [SHA256SUMS](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/SHA256SUMS) · [MANIFEST.json](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/MANIFEST.json) · [MANIFEST.json.sshsig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/MANIFEST.json.sshsig) · [MANIFEST.json.sig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/MANIFEST.json.sig) · [allowed_signers](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/allowed_signers) · [release-public.pem](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/release-public.pem) · [IMPORT.md](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/arm64/IMPORT.md) |
-| x86_64 | [SHA256SUMS](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/SHA256SUMS) · [MANIFEST.json](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/MANIFEST.json) · [MANIFEST.json.sshsig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/MANIFEST.json.sshsig) · [MANIFEST.json.sig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/MANIFEST.json.sig) · [allowed_signers](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/allowed_signers) · [release-public.pem](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/release-public.pem) · [IMPORT.md](https://downloads.decryptlabs.io/decrypt-os/beta4-rc7/x86_64/IMPORT.md) |
+| arm64 | [SHA256SUMS](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/SHA256SUMS) · [MANIFEST.json](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/MANIFEST.json) · [MANIFEST.json.sshsig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/MANIFEST.json.sshsig) · [MANIFEST.json.sig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/MANIFEST.json.sig) · [allowed_signers](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/allowed_signers) · [release-public.pem](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/release-public.pem) · [IMPORT.md](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/arm64/IMPORT.md) |
+| x86_64 | [SHA256SUMS](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/SHA256SUMS) · [MANIFEST.json](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/MANIFEST.json) · [MANIFEST.json.sshsig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/MANIFEST.json.sshsig) · [MANIFEST.json.sig](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/MANIFEST.json.sig) · [allowed_signers](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/allowed_signers) · [release-public.pem](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/release-public.pem) · [IMPORT.md](https://downloads.decryptlabs.io/decrypt-os/beta4-rc8/x86_64/IMPORT.md) |
 
 Every folder also has these files:
 
@@ -110,7 +110,7 @@ It must print `Good "decrypt-os-release" signature for release@decryptlabs.io`.
 Then check the disk's checksum in **PowerShell**. Replace the file name if you downloaded a different disk:
 
 ```powershell
-$file = 'decrypt-os-beta4-rc7-x86_64.vmdk'
+$file = 'decrypt-os-beta4-rc8-x86_64.vmdk'
 $actual = (Get-FileHash -Algorithm SHA256 $file).Hash.ToLower()
 $expected = (Select-String -Path SHA256SUMS -Pattern $file -SimpleMatch).Line.Split(' ')[0]
 if ($actual -eq $expected) { 'OK: matches SHA256SUMS' } else { 'MISMATCH: do not use this file' }
@@ -126,7 +126,7 @@ Keep the downloaded files unchanged. Import a copy, so you can start over from a
 ### Apple Silicon Mac: UTM
 
 1. Install UTM from https://mac.getutm.app or the Mac App Store.
-2. Double-click `decrypt-os-beta4-rc7-arm64.utm.tar` in Finder, or run `tar -xf decrypt-os-beta4-rc7-arm64.utm.tar`. You get `Decrypt-OS.utm`.
+2. Double-click `decrypt-os-beta4-rc8-arm64.utm.tar` in Finder, or run `tar -xf decrypt-os-beta4-rc8-arm64.utm.tar`. You get `Decrypt-OS.utm`.
 3. Double-click `Decrypt-OS.utm`, or choose **File → Open** in UTM and select it.
 4. The VM is already set up: 4 CPU cores, 8 GB of memory, UEFI boot, VirtIO disk, display and network. You can check this under the VM's **Edit → System**.
 5. Press **Play**.
@@ -139,7 +139,7 @@ Copy the `.qcow2` and use the copy with an `aarch64` `virt` machine, UEFI firmwa
 
 Not boot-tested yet. Every option needs **UEFI (EFI) firmware** and **Secure Boot off**.
 
-1. Copy `decrypt-os-beta4-rc7-x86_64.vmdk` to the folder where you keep VMs. VirtualBox writes to the disk you attach, so attach the copy.
+1. Copy `decrypt-os-beta4-rc8-x86_64.vmdk` to the folder where you keep VMs. VirtualBox writes to the disk you attach, so attach the copy.
 2. **Machine → New.** Name: `Decrypt OS`. Type: **Linux**. Version: **Arch Linux (64-bit)**. Do not choose an ISO.
 3. **Hardware:** Base Memory **8192 MB**, Processors **4**, and tick **Enable EFI**.
 4. **Hard Disk:** choose **Use an Existing Virtual Hard Disk File**, press the folder icon, **Add**, and select your copied `.vmdk`.
@@ -153,7 +153,7 @@ Not boot-tested yet. Every option needs **UEFI (EFI) firmware** and **Secure Boo
 
 Not boot-tested yet.
 
-1. Copy `decrypt-os-beta4-rc7-x86_64.vmdk` to the folder where you keep VMs.
+1. Copy `decrypt-os-beta4-rc8-x86_64.vmdk` to the folder where you keep VMs.
 2. **File → New Virtual Machine → Custom (advanced)**, hardware compatibility **Workstation 17.x**.
 3. Choose **I will install the operating system later**. Guest: **Linux**, version **Other Linux 6.x kernel 64-bit**.
 4. Name it `Decrypt OS`. Processors: 1 processor with **4 cores**. Memory: **8192 MB**. Network: **NAT**.
@@ -167,7 +167,7 @@ This is the tested x86_64 option.
 
 **With virt-manager:**
 
-1. Copy `decrypt-os-beta4-rc7-x86_64.qcow2` to your images folder (for example `/var/lib/libvirt/images/`).
+1. Copy `decrypt-os-beta4-rc8-x86_64.qcow2` to your images folder (for example `/var/lib/libvirt/images/`).
 2. **File → New Virtual Machine → Import existing disk image.** Select the copy. Operating system: **Arch Linux** (or **Generic Linux**).
 3. Memory **8192 MB**, CPUs **4**.
 4. Name it `Decrypt OS` and tick **Customize configuration before install**.
@@ -177,7 +177,7 @@ This is the tested x86_64 option.
 **With plain QEMU:** firmware file names differ by distribution. These are the Debian and Ubuntu names from the `ovmf` package.
 
 ```sh
-cp decrypt-os-beta4-rc7-x86_64.qcow2 decrypt-os.qcow2
+cp decrypt-os-beta4-rc8-x86_64.qcow2 decrypt-os.qcow2
 cp /usr/share/OVMF/OVMF_VARS_4M.fd decrypt-os-vars.fd
 qemu-system-x86_64 -machine q35,accel=kvm -cpu host -smp 4 -m 8192 \
   -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd \

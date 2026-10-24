@@ -17,7 +17,7 @@
   },
   "service": {
     "path": "/usr/local/lib/decrypt-firstboot/firstboot.py",
-    "sha256": "ccdda2e73aa8b6f518c7746121aa4dd12b6a1534a6c76bb8c72c1f639f666e2f"
+    "sha256": "7ef6c210295a526b776482fbad30a7fdef6d5da536f3fe1e0f4e10e8b3023b75"
   },
   "completionRequires": [
     "account-setup",

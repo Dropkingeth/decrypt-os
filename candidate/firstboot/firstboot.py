@@ -2,6 +2,7 @@
 """Pinned first-start service. Customer secrets never enter state, reports or argv."""
 import argparse
 import datetime
+import errno
 import fcntl
 import getpass
 import hashlib
@@ -14,6 +15,8 @@ import re
 import stat
 import subprocess
 import sys
+import syslog
+import traceback
 import uuid
 import warnings
 
@@ -544,11 +547,11 @@ def publish(report):
     atomic(REPORT,(json.dumps(report,sort_keys=True)+'\n').encode(),0o644)
 
 
-def main():
+def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__,allow_abbrev=False)
     parser.add_argument('action',choices=('setup','recover-identity','recover-account','accept-notice','readiness','completion'))
     parser.add_argument('--policy-sha256');parser.add_argument('--document-sha256');parser.add_argument('--instance-id')
-    args=parser.parse_args()
+    args=parser.parse_args(argv)
     need(platform.system()=='Linux' and os.geteuid()==0,'linux-root-required')
     config,policy=load_inputs()
     if args.action in ('readiness','completion'):
@@ -626,11 +629,58 @@ def main():
     finally:os.close(lockfd)
 
 
-if __name__=='__main__':
-    try:raise SystemExit(main())
+def journal(text):
+    """Best-effort error line in the system journal. The unit sends stderr to tty1 only,
+    so without this a boot-time failure leaves no record in journalctl."""
+    try:
+        syslog.openlog('decrypt-firstboot',syslog.LOG_PID,syslog.LOG_DAEMON)
+        syslog.syslog(syslog.LOG_ERR,text)
+    except Exception:pass
+
+
+def failure_detail(error):
+    """Non-secret diagnosis: exception type, refusal code, OS error number and path, and
+    code locations. Other exception messages are left out; they could carry command output."""
+    parts=[type(error).__name__]
+    if isinstance(error,Refusal) and re.fullmatch('[a-z0-9-]+',str(error)):parts.append(str(error))
+    if isinstance(error,OSError):
+        if error.errno:parts.append(errno.errorcode.get(error.errno,str(error.errno)))
+        if isinstance(error.filename,str):parts.append(error.filename)
+    frames=traceback.extract_tb(error.__traceback__)[-8:]
+    parts.append('at '+' <- '.join('%s:%s:%s'%(Path(frame.filename).name,frame.lineno,frame.name) for frame in reversed(frames)))
+    return ' '.join(parts)
+
+
+def login_already_released():
+    """True once an earlier run committed the account and removed this service's own login
+    gate. Both paths are root-controlled. Until then a failed setup keeps every login gated."""
+    try:
+        return not GATE.exists() and not GATE.is_symlink() and stat.S_ISREG((STATE_DIR/'state.json').lstat().st_mode)
+    except OSError:return False
+
+
+def run(argv=None):
+    argv=sys.argv[1:] if argv is None else list(argv)
+    try:return main(argv)
     except (KeyboardInterrupt,EOFError):
-        print('Setup paused. No consent was accepted.',file=sys.stderr);raise SystemExit(130)
+        print('Setup paused. No consent was accepted.',file=sys.stderr);return 130
     except Exception as error:
         code=str(error) if isinstance(error,Refusal) and re.fullmatch('[a-z0-9-]+',str(error)) else 'verification-or-operation-failed'
+        detail=failure_detail(error)
+        if argv==['setup'] and login_already_released():
+            # The boot-time re-check after a finished first start must not lock the owner
+            # out of their own computer (root is locked): sign-in was already allowed on an
+            # earlier boot. No report is published, so the Decrypt app stays locked.
+            try:REPORT.unlink(missing_ok=True)
+            except OSError:pass
+            journal('check after completed setup failed: '+code+'; sign-in stays allowed, app stays locked; '+detail)
+            print('First-start check failed: '+code+'. You can still sign in. The Decrypt app stays locked until this is fixed. '
+                  'Details: journalctl -u decrypt-firstboot',file=sys.stderr)
+            return 0
+        journal('setup stopped: '+code+'; '+detail)
         print('Setup stopped: '+code+'. Preserve state; use the documented recovery step.',file=sys.stderr)
-        raise SystemExit(1)
+        return 1
+
+
+if __name__=='__main__':
+    raise SystemExit(run())

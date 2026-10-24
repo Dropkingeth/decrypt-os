@@ -5,9 +5,9 @@ Software rendering only. Audio, full app parity, PC/x86 hardware and first boot 
 The guest root filesystem is not encrypted. The Decrypt application has its own encrypted assistant storage.
 No copied accounts, SSH keys, browser state, passwords or OpenClaw authentication.
 No automatic desktop login and no passwordless sudo.
-No Docker, printer or Bluetooth services in this candidate.
+No Docker, printer or Bluetooth services in this image.
 The IPv4 NAT test policy denies private destinations and inbound connections; IPv6 is blocked.
-The following upstream packages were unavailable in the prior ARM installation, not rechecked today:
+These upstream packages were unavailable for ARM64 when this list was made:
 aether
 asdcontrol
 cliamp

@@ -19,7 +19,7 @@ python3 /path/to/verified-media/guided/guided_setup.py start \
   --work "$HOME/decrypt-setup"
 ```
 
-The script on the media must itself match that media's reviewed manifest. The working directory is created privately if absent; an existing directory must be owned by the account and have mode 0700. The guide rejects root builds, unsupported hosts, the protected development machine and existing installations. Public npm/PyPI access is required by the pinned runtime recipe.
+The script on the media must itself match that media's reviewed manifest. The working directory is created privately if absent; an existing directory must be owned by the account and have mode 0700. The guide rejects root builds, unsupported hosts, hosts listed in the optional protected-host file and existing installations. Public npm/PyPI access is required by the pinned runtime recipe.
 
 The six steps are:
 

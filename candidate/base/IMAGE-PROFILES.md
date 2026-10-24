@@ -5,8 +5,7 @@
 This layer validates C1/C5 inputs and preserves fail-closed target checks. It never creates
 an account, collects a password, partitions a device, applies host network policy,
 or claims a native installation passed. Image export and first-start setup are
-separate workstreams. Any privileged install-time escalation tooling is internal
-qualification-only and is not part of this repository.
+documented separately. This layer does not include install-time privilege escalation.
 
 The default product path is `profiles/arm64-image-factory.json`. Its generic `user`
 is a placeholder required by C1, not an account to create, preload or distribute.

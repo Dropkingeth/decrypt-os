@@ -15,7 +15,7 @@ import stat
 import subprocess
 import tarfile
 
-VERSION = '2026.09.24-beta1-dev'
+VERSION = 'beta4'
 # Single source of truth for where a diagnostics bundle gets filed.
 REPO_URL = 'https://github.com/Dropkingeth/decrypt-os'
 COMMANDS = ('python3', 'systemctl', 'sudo', 'foot', 'xdg-open', 'hyprctl', 'cryptsetup', 'chromium', 'notify-send')

@@ -1,10 +1,16 @@
 # Decrypt OS public beta: release notes
 
-Version: **beta4** (release candidate `beta4-rc7`)
+Version: **beta4** (release candidate `beta4-rc8`)
 
 **This is beta software.** It is provided as is, without warranty. It is not financial advice. You trade with your own broker and TradingView accounts, and you are responsible for every order they place. Futures trading can lose money. Start with a Tradovate Simulation or demo account. The engines are not qualified for funded or live accounts in this beta.
 
 Get started: [docs/GETTING-STARTED.md](https://github.com/Dropkingeth/decrypt-os/blob/HEAD/docs/GETTING-STARTED.md). Report a problem or send feedback: [GitHub Issues](https://github.com/Dropkingeth/decrypt-os/issues/new/choose).
+
+## What's new
+
+**rc8: fixes a reboot lockout (root password / SSH host keys).** In rc7, some system changes made after first start, such as setting a root password or deleting the SSH host keys, stopped every later boot at "Setup stopped" and you couldn't sign in. In rc8 you can always sign in after first start. If the boot check fails, the Decrypt app stays locked until you undo the change, and the reason is logged (`journalctl -u decrypt-firstboot`). rc8 also says plainly that only Soup can trade, and fixes some test and wording issues.
+
+**Upgrading from rc7:** there is no in-place update. Download the rc8 image, check it, and import it as a new VM, then set it up again, including your sign-ins. You can keep your rc7 VM until the rc8 one works.
 
 ## What Decrypt OS is
 
@@ -41,11 +47,9 @@ Each release is signed. The download folder has checksums, a signed manifest and
 
 ## Known issues and limits
 
-**Some system changes stop the next boot**
+**Some system changes lock the Decrypt app (fixed in rc8: they no longer block sign-in)**
 
-After first start, Decrypt OS checks your login account and this computer's identity at every boot. In this release, if that check fails, the boot stops at a black screen that says "Setup stopped: …" followed by a reason, and you can't sign in. Normal restarts and power loss don't cause this. The next image fixes it.
-
-Until then, don't make these changes after first start:
+After first start, Decrypt OS checks your login account and this computer's identity at every boot. These changes make that check fail:
 
 - set a root password
 - add a second login account
@@ -53,9 +57,11 @@ Until then, don't make these changes after first start:
 - add a sudo rule that needs no password
 - delete or regenerate the SSH host keys in `/etc/ssh`, or change the machine ID
 
-Take a VM snapshot after first start. If a boot stops at "Setup stopped":
+In rc8 you can still sign in. The Decrypt app stays locked until the change is undone, and the reason is in `journalctl -u decrypt-firstboot`. If you set a root password (the reason is `root-not-locked`), run `sudo passwd -l root` and restart. For the other changes, restore a VM snapshot from after first start, or import the image again. Take that snapshot after first start.
 
-- If you set a root password (the reason is `root-not-locked`): press Ctrl+Alt+F2, sign in as `root`, run `passwd -l root`, then run `reboot`.
+Still on rc7? There, a failed check stops the boot at a black screen that says "Setup stopped: …" and you can't sign in. Normal restarts and power loss don't cause this. Move to rc8, and until then avoid the changes above. If a boot stops at "Setup stopped":
+
+- If the reason is `root-not-locked`: press Ctrl+Alt+F2, sign in as `root`, run `passwd -l root`, then run `reboot`.
 - Otherwise, restore your snapshot. Without a snapshot, delete the VM and import it again. You'll have to set it up again, including your sign-ins.
 
 **Installing**

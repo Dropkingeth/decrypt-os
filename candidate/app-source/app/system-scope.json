@@ -133,7 +133,7 @@
         "app/strategy-catalog.json",
         "app/CONTRACT.md"
       ],
-      "purpose": "Five named strategies and paired-engine display labels, with explicit installed/commissioning limits. Catalog presence is not an installed or ready engine.",
+      "purpose": "Seven named strategies and paired-engine display labels, with explicit installed/commissioning limits. Catalog presence is not an installed or ready engine.",
       "diagnosticScope": "Count inventory only. Catalog presence, inspected rows and saved selection do not indicate a ready bot.",
       "repair": "not_available"
     },

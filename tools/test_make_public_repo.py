@@ -18,7 +18,7 @@ SCRIPT = HERE / 'make_public_repo.sh'
 
 # A synthetic stand-in for the owner's real DECRYPT_PRIVATE_PATTERNS file, so
 # that every test below runs with the env var the script now requires
-# (T2), regardless of whether the ambient shell happens to export it.
+# regardless of whether the ambient shell happens to export it.
 _patterns_fd, _patterns_path = tempfile.mkstemp(suffix='-private-patterns.txt')
 with os.fdopen(_patterns_fd, 'w') as _fh:
     _fh.write('synthetic-test-private-pattern-not-a-real-secret\n')
@@ -122,7 +122,7 @@ class MakePublicRepoTests(unittest.TestCase):
     def test_refuses_to_run_without_decrypt_private_patterns(self):
         # Without DECRYPT_PRIVATE_PATTERNS, the owner's real private patterns
         # are never checked at all -- the script must fail loudly rather than
-        # silently falling back to privacy_check.py's built-in patterns (T2).
+        # silently falling back to privacy_check.py's built-in patterns.
         with tempfile.TemporaryDirectory() as src_tmp, tempfile.TemporaryDirectory() as out_parent:
             src = make_source_repo(src_tmp)
             out = Path(out_parent) / 'public'

@@ -58,7 +58,7 @@ fi
 commit=$(git -C "$repo" rev-parse HEAD)
 # The release records the source *tree* id, not the commit id: the tree id is
 # identical in the squashed public repo (tools/make_public_repo.sh), while the
-# commit id belongs to the private development history.
+# commit id differs between the development history and that squashed repo.
 tree=$(git -C "$repo" rev-parse "$commit^{tree}")
 epoch=$(git -C "$repo" log -1 --format=%ct HEAD)
 image_id=$(printf 'decrypt-os-%s-arm64' "$version" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9._\n-' '-')

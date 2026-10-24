@@ -20,7 +20,7 @@ Apple Silicon virtualization qualifies this ARM64 compatibility target only. Sta
 
 ## Reproducible source handoff
 
-After the integration owner marks the source ready:
+To build the source bundle:
 
 ```sh
 python3 lab/build_source_bundle.py --out-dir lab/artifacts/source-v0.1.0

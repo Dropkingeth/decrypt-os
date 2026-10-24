@@ -156,6 +156,62 @@ class StateFlow(unittest.TestCase):
         self.assertEqual(self.store.path.read_bytes(),raw);self.assertEqual(self.store.path.stat().st_mtime_ns,before.st_mtime_ns)
 
 
+class BootRecheck(unittest.TestCase):
+    """Regression: after a finished first start, a failed boot-time re-check (for example
+    deleted SSH host keys) kept systemd-user-sessions and the greeter from starting.
+    With root locked that locked the owner out of the computer on every boot."""
+    def setUp(self):
+        self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
+        root=Path(self.temp.name).resolve();self.state_dir=root/'state';self.state_dir.mkdir()
+        self.gate=root/'nologin';self.report=root/'run'/'report.json';self.report.parent.mkdir()
+        self.lines=[]
+        for name,value in (('GATE',self.gate),('STATE_DIR',self.state_dir),('REPORT',self.report)):
+            patcher=patch.object(fb,name,value);patcher.start();self.addCleanup(patcher.stop)
+        patcher=patch.object(fb,'journal',self.lines.append);patcher.start();self.addCleanup(patcher.stop)
+    def completed(self):(self.state_dir/'state.json').write_text('{}')
+    def run_failing(self,argv,error):
+        def failing(_argv):raise error
+        stderr=__import__('io').StringIO()
+        with patch.object(fb,'main',failing),patch.object(sys,'stderr',stderr):code=fb.run(argv)
+        return code,stderr.getvalue()
+    def missing_key(self):
+        return FileNotFoundError(2,'No such file or directory','/etc/ssh/ssh_host_rsa_key')
+
+    def test_drift_after_completed_setup_keeps_sign_in_and_logs_the_cause(self):
+        self.completed();self.report.write_text('{}')
+        code,stderr=self.run_failing(['setup'],self.missing_key())
+        self.assertEqual(code,0);self.assertFalse(self.report.exists())
+        self.assertIn('verification-or-operation-failed',stderr);self.assertIn('journalctl -u decrypt-firstboot',stderr)
+        self.assertEqual(len(self.lines),1)
+        for part in ('FileNotFoundError','ENOENT','/etc/ssh/ssh_host_rsa_key','failing'):self.assertIn(part,self.lines[0])
+        code,_=self.run_failing(['setup'],fb.Refusal('unexpected-customer-accounts'))
+        self.assertEqual(code,0);self.assertIn('unexpected-customer-accounts',self.lines[-1])
+
+    def test_failure_before_login_release_still_keeps_logins_gated(self):
+        self.completed();self.gate.write_bytes(fb.GATE_BYTES)
+        code,stderr=self.run_failing(['setup'],self.missing_key())
+        self.assertEqual(code,1);self.assertIn('Setup stopped: verification-or-operation-failed',stderr)
+        self.assertIn('ENOENT',self.lines[0])
+        self.gate.unlink();(self.state_dir/'state.json').unlink()
+        self.assertEqual(self.run_failing(['setup'],self.missing_key())[0],1)
+        self.gate.symlink_to(self.state_dir);self.completed()
+        self.assertEqual(self.run_failing(['setup'],self.missing_key())[0],1)
+
+    def test_only_the_boot_setup_action_is_relaxed(self):
+        self.completed()
+        for argv in (['recover-account'],['completion','--policy-sha256','a'*64],['accept-notice']):
+            with self.subTest(argv=argv):self.assertEqual(self.run_failing(argv,fb.Refusal('identity-changed'))[0],1)
+        self.assertEqual(self.run_failing(['setup'],KeyboardInterrupt())[0],130)
+
+    def test_journal_detail_never_carries_free_form_messages(self):
+        try:raise ValueError(PASSWORD)
+        except ValueError as error:detail=fb.failure_detail(error)
+        self.assertNotIn(PASSWORD,detail);self.assertTrue(detail.startswith('ValueError at '))
+        self.completed()
+        self.run_failing(['setup'],RuntimeError(PASSWORD))
+        self.assertNotIn(PASSWORD,self.lines[-1])
+
+
 class Sources(unittest.TestCase):
     def test_installed_notice_is_required_and_exact(self):
         policy=(HERE/'policy.json').read_bytes()

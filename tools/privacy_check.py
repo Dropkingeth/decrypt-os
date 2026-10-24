@@ -125,7 +125,7 @@ PUBLIC_ROLE_ADDRESSES = {'release@decryptlabs.io', 'noreply@decryptlabs.io', 'co
 # The public source repository. Its URL necessarily carries the hosting
 # account's handle, so this exact URL (case-sensitive, nothing else) is masked
 # before patterns run; any other use of the handle is still flagged.
-# Intentional, owner-approved publication address: the project is published under this account.
+# The project is published under this account.
 PUBLIC_REPO_URL = 'https://github.com/Dropkingeth/decrypt-os'
 
 # The one identity public commits/tags are allowed to carry (--history mode).
