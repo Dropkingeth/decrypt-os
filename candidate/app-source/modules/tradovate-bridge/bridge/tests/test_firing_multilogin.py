@@ -461,7 +461,7 @@ class MultiLoginLanes(SoupSide, unittest.TestCase):
         return time.time_ns() // 1_000_000 + self.offset
 
     def firing_cfg(self, url_b=None, **over):
-        c = {'soup_db': str(self.workspace / 'engine.sqlite'), 'soup_engine_dir': str(SOUP / 'engine'),
+        c = {'soup_db': str(self.soup_db), 'soup_engine_dir': str(SOUP / 'engine'),
              'soup_quantity_policy': str(self.tmp / 'policy.json'), 'soup_pairing': str(self.tmp / 'pairing.json'),
              'ticker': CONFIG['ticker'], 'bridge_url': self.a.url, 'firing_dir': str(self.tmp / 'firing'),
              'logins_file': write_registry(self.tmp, self.a.url, url_b or self.b.url),

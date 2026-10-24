@@ -19,7 +19,7 @@ export default function NativeBridge({bridge, login, packages: allPackages, inst
   const [symbol,setSymbol]=useState(''), [offset,setOffset]=useState(''), [loginGroup,setLoginGroup]=useState('login-1'), [stream,setStream]=useState('soup-main'), [feed,setFeed]=useState('mnq-1s');
   const [setupConsent,setSetupConsent]=useState(false);
   const request=useRef(crypto.randomUUID());
-  // Only Soup installs from the app in this release; the other engines are set up with the bridge's own setup.
+  // Only Soup installs and trades in this release; the app service has no route for the other engines yet.
   const packages=allPackages.filter(p=>!comingSoonEngines.has(p.engineId||''));
   const selected=packages.find(p=>p.pairId===pair)||packages[0];
   const routed=instances.filter(row=>row.route==='tradovate_bridge');

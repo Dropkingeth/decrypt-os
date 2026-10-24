@@ -25,7 +25,7 @@ from unittest import mock
 import logging
 
 from harness import Harness, seed_market_price
-from soup_inputs import named  # synthetic Soup input names -> the package's own
+from soup_inputs import engine_db, named  # synthetic Soup input names -> the package's own
 from test_firing import LoginDouble, Pub, follower_entry, records  # noqa: F401 (also sets sys.path)
 
 SOUP = Path(os.environ.get('TVBRIDGE_SOUP_NATIVE_PACKAGE',
@@ -529,6 +529,7 @@ class NativeFiringE2E(unittest.TestCase):
         self.leader_transport = Recorder(TradovateBridgeTransport(self.bridge_url, TOKEN))
         self.service = Service(self.workspace, CONFIG, self.leader_transport, tp1_limit_offset_handles=TP1_OFFSET,
                                quantity_policy=POLICY, native_exits=NATIVE)
+        self.soup_db = engine_db(self.workspace)
         self.soup_lock = threading.RLock()
         self.feed_soup = threading.Event()  # cleared: snapshots are built and numbered but Soup gets none
         self.feed_soup.set()
@@ -545,7 +546,7 @@ class NativeFiringE2E(unittest.TestCase):
 
     def firing_cfg(self):
         tmp = self.h.tmp
-        cfg = {'soup_db': str(self.workspace / 'engine.sqlite'), 'soup_engine_dir': str(SOUP / 'engine'),
+        cfg = {'soup_db': str(self.soup_db), 'soup_engine_dir': str(SOUP / 'engine'),
                'soup_quantity_policy': str(tmp / 'policy.json'), 'soup_pairing': str(tmp / 'pairing.json'),
                'ticker': CONFIG['ticker'], 'bridge_url': self.bridge_url, 'firing_dir': str(tmp / 'firing'),
                'firing_order': ['ta'] + [k for k, *_ in self.FOLLOWERS],

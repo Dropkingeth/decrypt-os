@@ -34,7 +34,7 @@ function availability(engine:EngineCatalogItem){
  return engine.packageStatus==='source_packaged'?'available':'not_included';
 }
 function installText(a:ReturnType<typeof availability>){
- return a==='available'?'Available in Execution runtime':a==='coming_soon'?'Not installable in this release':'Not included in this release';
+ return a==='available'?'Available in Execution runtime':a==='coming_soon'?"Can't trade in this release":'Not included in this release';
 }
 function accessText(state:State,strategyId:string){
  const strategy=strategies.find(item=>item.id===strategyId),access=state.strategyAccess;
@@ -56,7 +56,7 @@ export function EngineDetails({engine,state,installed,onClose,onInstall,onStrate
     <dl className="details"><div><dt>Engine</dt><dd>{installText(a)}</dd></div><div><dt>On this system</dt><dd>{installed.length?installed.map(i=>`${i.binding.nativeAccountName||i.binding.accountId} · ${i.binding.symbol} · ${i.entriesHeld?'entries held':'entries allowed'}`).join('; '):'Not installed'}</dd></div><div><dt>Strategy access</dt><dd>{accessText(state,engine.strategyId)}</dd></div></dl>
    </section>
    <details className="drawer-section" open><summary><h3>Before this engine can trade</h3></summary><ul className="ew-requirements">
-    <li><strong>Engine installed</strong>{a==='coming_soon'?parked?'Parked. It cannot be installed in this release.':'Coming soon in a later release.':a==='available'?'Install it in Execution runtime; it starts with entries held.':'Not included in this release.'}</li>
+    <li><strong>Engine installed</strong>{a==='coming_soon'?parked?"Parked. It can't be installed or trade in this release.":'Coming soon. In this release only Soup can be installed and trade.':a==='available'?'Install it in Execution runtime; it starts with entries held.':'Not included in this release.'}</li>
     <li><strong>Strategy access</strong>Decrypt Labs grants the invite-only TradingView script to your username. Request it in Strategy access.</li>
     <li><strong>Tradovate bridge</strong>Set up, turned on and signed in on workspace 3, for the same account.</li>
     <li><strong>Fresh account reading</strong>The bridge must report your account flat and synced before the first entry.</li>
@@ -69,7 +69,7 @@ export function EngineDetails({engine,state,installed,onClose,onInstall,onStrate
     <ol className="alert-steps" aria-label="Alert setup steps">{bridge.alertSetup.map(note=><li key={note}>{note}</li>)}</ol>
    </details>}
   </div>
-  <div className="drawer-actions">{a==='available'?<button className="primary" onClick={onInstall}>Install in Execution runtime</button>:requestable?<button className="secondary" onClick={onStrategyAccess}>Request strategy access</button>:null}<TradingViewScriptLink url={strategy?.tradingviewUrl} name={strategy?.name||engine.label}/><p className="action-reason">{a==='coming_soon'?(parked?'Parked. ':'Coming soon. ')+'This engine cannot be installed in this release.':a==='available'?'Installing saves a held engine for one account.':'Install unavailable. This engine is not included in this release.'}</p></div>
+  <div className="drawer-actions">{a==='available'?<button className="primary" onClick={onInstall}>Install in Execution runtime</button>:requestable?<button className="secondary" onClick={onStrategyAccess}>Request strategy access</button>:null}<TradingViewScriptLink url={strategy?.tradingviewUrl} name={strategy?.name||engine.label}/><p className="action-reason">{a==='coming_soon'?(parked?'Parked. ':'Coming soon. ')+"This engine can't be installed or trade in this release.":a==='available'?'Installing saves a held engine for one account.':'Install unavailable. This engine is not included in this release.'}</p></div>
  </dialog>;
 }
 
@@ -86,7 +86,7 @@ export function EngineCatalog({state,instances,packages,onConnections,onStrategy
  const installedFor=(id:string)=>instances.filter(i=>i.binding.pairId===pairsByEngine.get(id));
  const sizeLock=catalog.modules.find(m=>m.id==='size-lock');
  return <div className="engine-workspace">
- <section className="panel" aria-labelledby="ew-engines-heading"><div className="section-title"><h2 id="ew-engines-heading" tabIndex={-1}>Engines</h2><span className="version">{engines.length} in catalog</span></div><p className="panel-intro">An engine runs a strategy’s trades through the Tradovate bridge. Soup installs in Execution runtime above. The label on each row is the engine’s status; where the strategy is published on TradingView, you can request access to it now.</p>
+ <section className="panel" aria-labelledby="ew-engines-heading"><div className="section-title"><h2 id="ew-engines-heading" tabIndex={-1}>Engines</h2><span className="version">{engines.length} in catalog</span></div><p className="panel-intro">An engine runs a strategy’s trades through the Tradovate bridge. Only Soup can trade in this release; install it in Execution runtime above. The label on each row is the engine’s status; where the strategy is published on TradingView, you can request access to it now.</p>
   <ul className="engine-list">{engines.map(item=>{const strategy=strategies.find(entry=>entry.id===item.strategyId),a=availability(item),mine=installedFor(item.id),requestable=!!(strategy?.accessRequestAvailable&&strategy?.tradingviewUrl);return <li key={item.id} data-engine={item.id} data-status={strategy?.engineStatus} className={a==='coming_soon'?'coming-soon':undefined}><span className="glyph-wrap"><StrategyGlyph id={item.strategyId}/></span><div className="row-main"><h4>{item.label}</h4><p>Runs {strategy?.label||'a strategy not recorded'}</p><dl className="facts"><div><dt>Engine</dt><dd>{mine.length?`Installed · ${mine.length}`:installText(a)}</dd></div><div><dt>Strategy access</dt><dd>{!requestable?'Not published in TradingView':sent?'Username sent':'Not requested'}</dd></div></dl>{requestable&&<div className="row-links"><button className="text-button" aria-label={(sent?'View access status for ':'Request access to ')+strategy!.label} onClick={onStrategyAccess}>{sent?'Access status':'Request access'} →</button><TradingViewScriptLink url={strategy!.tradingviewUrl} name={strategy!.name}/></div>}</div><div className="row-actions"><EngineStatus status={strategy?.engineStatus}/><button className="secondary" aria-label={'View '+item.label} onClick={()=>{originTrigger.current=document.activeElement as HTMLElement;setDetail(item.id)}}>View engine</button></div></li>})}</ul>
   {!engines.length&&<p className="inline-empty">No engines are listed in this catalog.</p>}
  </section>

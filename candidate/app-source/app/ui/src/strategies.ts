@@ -4,9 +4,10 @@ import catalog from '../../strategy-catalog.json';
 export const strategies: Array<(typeof catalog.strategies)[number] & {publicationAuthor?: string; engineAvailability?: string}> = catalog.strategies;
 export const soup = strategies.find(strategy => strategy.id === 'soup')!;
 
-// Engines that ship in this release but cannot be installed from the app yet: every engine but Soup.
-// Their decrypt-bridge-v2 adapters ship off and are set up with the bridge's own setup. The UI enforces
-// this even if a catalog omits the flag.
+// Engines that ship in this release but cannot be installed or trade yet: every engine but Soup.
+// The app service installs and routes Soup only (backend/trading_service.py). The bridge's
+// `setup.py init --adapter <id>` prepares only the bridge side, so no engine sends their orders.
+// The UI enforces this even if a catalog omits the flag.
 export const comingSoonEngines = new Set<string>(strategies.filter(strategy => strategy.id !== 'soup').map(strategy => strategy.id));
 export function engineComingSoon(engine: {id: string; customerAvailability?: string}) {
   return engine.customerAvailability === 'coming_soon' || comingSoonEngines.has(engine.id);

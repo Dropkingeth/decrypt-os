@@ -29,7 +29,7 @@ from zoneinfo import ZoneInfo
 import sys
 
 from harness import Harness  # also puts the repository on sys.path
-from soup_inputs import named  # synthetic Soup input names -> the package's own
+from soup_inputs import engine_db, named  # synthetic Soup input names -> the package's own
 
 SOUP = Path(os.environ.get('TVBRIDGE_SOUP_PACKAGE',
                            ''))
@@ -152,11 +152,12 @@ class SoupSide:
         self.service = Service(self.workspace, CONFIG, transport, tp1_limit_offset_handles=TP1_OFFSET,
                                quantity_policy=POLICY)
         self.addCleanup(self.service.close)
+        self.soup_db = engine_db(self.workspace)
         (tmp / 'policy.json').write_text(json.dumps(POLICY))
         (tmp / 'pairing.json').write_text(json.dumps(CONFIG))
 
     def mirror_config(self, tmp, bridge_url, **overrides):
-        cfg = {'soup_db': str(self.workspace / 'engine.sqlite'), 'soup_engine_dir': str(SOUP / 'engine'),
+        cfg = {'soup_db': str(self.soup_db), 'soup_engine_dir': str(SOUP / 'engine'),
                'soup_quantity_policy': str(tmp / 'policy.json'), 'soup_pairing': str(tmp / 'pairing.json'),
                'ticker': CONFIG['ticker'], 'mirror_dir': str(tmp / 'mirror'), 'bridge_url': bridge_url,
                'reconcile_grace_ms': 300, 'reconcile_settle_ms': 300, 'reconcile_deadline_ms': 20000}

@@ -67,7 +67,7 @@ Add an engine setup, then review the modules listed for that setup. Only explici
 
 ### Install an execution package
 
-Use **Execution runtime** above the saved drafts. Each package is a fixed engine and strategy version. Soup sends its orders to the Tradovate bridge on this machine; no third-party relay is used. Soup is the only engine you install here. The other strategies' bridge engines read the decrypt-bridge-v2 alert and ship off; they are set up with the bridge's own setup and are not offered here yet.
+Use **Execution runtime** above the saved drafts. Each package is a fixed engine and strategy version. Soup sends its orders to the Tradovate bridge on this machine; no third-party relay is used. Soup is the only engine you can install here, and the only one that can trade in this release. The other six engines ship in the image but can't be installed or trade yet.
 
 1. Set up the Tradovate bridge in a terminal (once):
 

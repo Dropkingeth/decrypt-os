@@ -729,7 +729,7 @@ class GateAndLanes(SoupSide, unittest.TestCase):
         self.soup_setup(self.tmp, self.main_route, lambda: time.time_ns() // 1_000_000)
 
     def firing_cfg(self, **over):
-        c = {'soup_db': str(self.workspace / 'engine.sqlite'), 'soup_engine_dir': str(SOUP / 'engine'),
+        c = {'soup_db': str(self.soup_db), 'soup_engine_dir': str(SOUP / 'engine'),
              'soup_quantity_policy': str(self.tmp / 'policy.json'), 'soup_pairing': str(self.tmp / 'pairing.json'),
              'ticker': CONFIG['ticker'], 'bridge_url': 'http://127.0.0.1:%d' % dead_port(),
              'firing_dir': str(self.tmp / 'firing'), 'firing_order': ['aa', 'ac', 'ab'],
@@ -1015,7 +1015,7 @@ class FiringE2E(SoupSide, unittest.TestCase):
         self.bridge_url = 'http://127.0.0.1:%d' % self.server.server_address[1]
         # Soup's main route: POST /order on the daemon, exactly as the live bridge transport.
         self.soup_setup(tmp, Recorder(TradovateBridgeTransport(self.bridge_url, TOKEN)), self.now)
-        cfg = {'soup_db': str(self.workspace / 'engine.sqlite'), 'soup_engine_dir': str(SOUP / 'engine'),
+        cfg = {'soup_db': str(self.soup_db), 'soup_engine_dir': str(SOUP / 'engine'),
                'soup_quantity_policy': str(tmp / 'policy.json'), 'soup_pairing': str(tmp / 'pairing.json'),
                'ticker': CONFIG['ticker'], 'bridge_url': self.bridge_url, 'firing_dir': str(tmp / 'firing'),
                'firing_order': ['aa'] + [k for k, *_ in self.FOLLOWERS],

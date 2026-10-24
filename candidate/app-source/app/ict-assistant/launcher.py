@@ -123,7 +123,7 @@ def main(argv=None, read=input, run=subprocess.run, call=subprocess.call):
         if "--clock" in argv:
             return 0
         try:
-            read("\nPress Enter to open the ICT assistant. (Ctrl+C leaves this window open with the clock.) ")
+            read("\nPress Enter to open the ICT assistant. (Ctrl+C leaves this window open. The times above don't update.) ")
         except (EOFError, KeyboardInterrupt):
             return 0
     waited = 0

@@ -218,8 +218,8 @@ The app's Home page shows your next step. The full order:
 1. **Setup:** name your assistant and choose whether this computer trades.
 2. **Connections → Claude:** press **Start and connect**. A terminal opens on workspace 4. Choose 1 for a Claude setup token (run `claude setup-token` on any computer with Claude Code) or 2 for an Anthropic API key, and paste it there. Never paste it into a chat.
 3. **Strategy access:** the strategies are invite-only TradingView scripts. Enter your TradingView username and press send. The app sends it to access.decryptlabs.io. Decrypt Labs adds access to that username **by hand**, so allow some time. Then look in TradingView under **Indicators → Invite-only scripts**. See [PRIVACY.md](https://github.com/Dropkingeth/decrypt-os/blob/HEAD/PRIVACY.md) for what the request stores.
-4. **Tradovate bridge:** for Soup, fill in the form in **Connections → Tradovate bridge**, then turn the bridge on. For any other engine, use the setup command under "Engines" below instead of the form. Then sign in to Tradovate on workspace 3 and choose **Access Simulation**. Let the browser save the login. Decrypt OS never sees your Tradovate password.
-5. **Engine:** for Soup, install the Soup engine in **Execution runtime** for the same account. For any other engine, the bridge setup in step 4 is the engine setup.
+4. **Tradovate bridge:** fill in the form in **Connections → Tradovate bridge**, then turn the bridge on. Then sign in to Tradovate on workspace 3 and choose **Access Simulation**. Let the browser save the login. Decrypt OS never sees your Tradovate password.
+5. **Engine:** install the Soup engine in **Execution runtime** for the same account. Soup is the only engine that can trade in this release.
 6. **TradingView alert:** add the strategy to your chart and create the alert. The app shows the alert settings for each engine. Keep your private alert address out of messages, logs and screenshots.
 7. **Bridge Advanced (workspace 5):** open it from the app launcher. Resume entries only when you are ready. Entries stay paused after every setup and every restart.
 
@@ -227,38 +227,25 @@ Nothing trades until you finish step 7 and your strategy alert is set up in Trad
 
 ## Engines
 
-Decrypt OS ships 7 engines. Each one runs one TradingView strategy through the Tradovate bridge. The strategy's alert sets the size and the exits. The bridge sends exactly that and adds safety checks only.
+Decrypt OS ships 7 engines. Each one is built to run one TradingView strategy through the Tradovate bridge. The strategy's alert sets the size and the exits. The bridge sends exactly that and adds safety checks only.
 
-| Engine | Contract and chart | Status | How to set it up |
+**In this release only Soup can trade.** The other six engines are in the image, but the app can't install them yet, so they can't trade. The app marks each of them "Can't trade in this release".
+
+| Engine | Contract and chart | Status | In this release |
 | --- | --- | --- | --- |
-| ICT - Turtle Soup Shift | MNQ, dated contract | The reference engine | From the app (**Execution runtime**) |
-| Determining Order Flow Engine [FVG+IFVG] | MNQ, 1-minute | On hold, off by default | Setup command, adapter `fvg-r5b-bridge-v2` |
-| Lumi RTH Gap | MES, 2-minute | In development; needs the 1-second MES feed | Setup command, adapter `lumi-gap-bridge-v2` |
-| ICT - OTE Refined L | MNQ, dated contract | In development | Setup command, adapter `ote-refined-large-bridge-v2` |
-| ICT - OTE Refined S | MNQ, dated contract | In development | Setup command, adapter `ote-refined-small-bridge-v2` |
-| ICT - Silver Bullet OTE | MNQ, 30-second | Parked; paper or demo only | Setup command, adapter `ote-active-bridge-v2` |
-| Order Blocks Decoded | MNQ, 1-minute | Research build; paper only | Setup command, adapter `order-blocks-bridge-v2` |
+| ICT - Turtle Soup Shift | MNQ, dated contract | The reference engine | Install it from the app (**Execution runtime**) |
+| Determining Order Flow Engine [FVG+IFVG] | MNQ, 1-minute | On hold | Can't trade yet |
+| Lumi RTH Gap | MES, 2-minute | In development | Can't trade yet |
+| ICT - OTE Refined L | MNQ, dated contract | In development | Can't trade yet |
+| ICT - OTE Refined S | MNQ, dated contract | In development | Can't trade yet |
+| ICT - Silver Bullet OTE | MNQ, 30-second | Parked | Can't trade yet |
+| Order Blocks Decoded | MNQ, 1-minute | Research build | Can't trade yet |
 
 Always chart the dated contract (for example `MNQZ2026`), not a continuous one such as `MNQ1!`.
 
-The six engines other than Soup read the `decrypt-bridge-v2` alert format and are set up with the bridge's setup command. Run it in a terminal on a VM where the bridge is not set up yet. It never changes an existing bridge setup.
+Don't set up the bridge for one of the other six engines with the bridge's `setup.py --adapter` option. It prepares only the bridge, and that bridge then refuses Soup alerts, so nothing trades.
 
-```sh
-M=/usr/local/lib/decrypt-os/modules/tradovate-bridge
-python3 $M/setup.py init --account-name 'ACCOUNT NAME' --soup-account-id 'ACCOUNT NUMBER' --ticker MNQZ2026 --adapter ADAPTER-ID
-python3 $M/setup.py enable
-```
-
-- `ACCOUNT NAME` and `ACCOUNT NUMBER` are your Tradovate Simulation account's name and number. The `--soup-account-id` option keeps its old name for every engine.
-- `--ticker` is the current dated contract. For Lumi, use the MES contract, for example `MESZ2026`.
-- `ADAPTER-ID` is the adapter from the table.
-- `python3 $M/setup.py status` shows what is set up and running.
-
-One bridge account runs one engine on one contract. Run either OTE Refined L or OTE Refined S on an account, never both.
-
-**Lumi RTH Gap needs the bridge's 1-second MES feed.** The bridge reads live MES prices for your dated contract every second from your Tradovate session. The setup command turns the feed on for Lumi. If the feed is not live and fresh, Lumi does not start and takes no entry.
-
-Lumi RTH Gap and Order Blocks Decoded have no public TradingView page yet, so you cannot request access to them.
+You can still request access to a published strategy in **Strategy access** and use it on your TradingView chart. Lumi RTH Gap and Order Blocks Decoded have no public TradingView page yet, so you cannot request access to them.
 
 ## Updates and starting over
 

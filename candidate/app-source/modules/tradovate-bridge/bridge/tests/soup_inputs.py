@@ -1,4 +1,5 @@
-"""Synthetic Soup input names in the bridge tests -> the optional engine package's own names.
+"""Synthetic Soup input names in the bridge tests -> the optional engine package's own names,
+and the package's database file in a Soup workspace (`engine_db`).
 
 The suites set Soup's contract allocation with synthetic keys (`fixture_int_NN`), because the
 strategy's input names stay out of this repository. The package's `test_pair.fixture()` reads
@@ -52,3 +53,15 @@ def named(soup, settings):
         return settings
     names = _probe(soup)
     return {names.get(k, k): v for k, v in settings.items()}
+
+
+def engine_db(workspace):
+    """The database file the package's runtime created in `workspace` (call after `Service(...)`).
+
+    The bridge's own deployment names it `engine.sqlite`; the package's runtime picks its own
+    file name, so the suites read it from the workspace instead of assuming either."""
+    found = sorted(Path(workspace).glob('*.sqlite'))
+    if len(found) != 1:
+        raise AssertionError('engine package: %d database files in the Soup workspace (need exactly 1)'
+                             % len(found))
+    return found[0]

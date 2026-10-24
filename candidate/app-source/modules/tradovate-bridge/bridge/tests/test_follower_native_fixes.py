@@ -22,6 +22,7 @@ import threading
 import time
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from test_follower_native import (AFTER_TP1, BASE, CONFIG, CONTRACT, FC, FB, LEADER, QTY, SOUP, TOKEN, LivePub,
                                   NativeFiringE2E, SYMBOL, digest, message, native_trade, tp1_limit, until)
@@ -554,7 +555,13 @@ class EntrySkipped(NativeFiringE2E):
         After stop_confirm_ms (5 s) it is the normal fault path: exit-all, verified, one alert.
         Known interaction: C's leftover Sell stop is real cross-account exposure, so B's hedge guard
         may refuse B's entry for this trade if it checks while the leg is
-        there; B then skips the trade (info note). Either outcome is accepted; A is never affected."""
+        there; B then skips the trade (info note). Either outcome is accepted; A is never affected.
+        The follower's auto-protect would cancel the leftover legs after its own zero-fill grace (also
+        5 s) and the lane would then rightly skip C; that grace is lengthened here so the lane's
+        stop_confirm_ms path is what this test sees."""
+        grace = patch.object(followers.FollowerExecutor, 'ZERO_FILL_LEG_GRACE_MS', 60_000)
+        grace.start()
+        self.addCleanup(grace.stop)
         restore = self.reject_c('risk_reject_next', keep_legs=True)
         p = self.enter('long')
         until(lambda: self.net(LEADER) == QTY and (self.trade.get('native') or {}).get('stop_confirmed'), 10,

@@ -25,7 +25,7 @@ Every strategy runs through one adapter. Soup keeps its own format; every other 
 | OTE Active (Silver Bullet) | `ote-active-bridge-v2` | `decrypt-bridge-v2` | MNQ |
 | Order Blocks Decoded | `order-blocks-bridge-v2` | `decrypt-bridge-v2` | MNQ |
 
-Every adapter but Soup is off until its binding enables it. The TradingView alert setup of each strategy is in `app/strategy-catalog.json` (`bridge.alertSetup`); the app shows it in the engine dialog.
+Every adapter but Soup is off until its binding enables it. In this release the app installs and routes Soup only (`app/backend/trading_service.py`), so the other six cannot trade yet: `setup.py init --adapter <id>` prepares only the bridge side, and that bridge then refuses Soup alerts. The TradingView alert setup of each strategy is in `app/strategy-catalog.json` (`bridge.alertSetup`); the app shows it in the engine dialog.
 
 ## What changed
 

@@ -125,8 +125,9 @@ def load_pair_sources(pair_id):
 
 def package_catalog():
     """Engines installable from the app (Execution runtime): hash-verified, no activation or owner paths.
-    Only Soup in this release. The decrypt-bridge-v2 strategies (below) are set up per binding with the
-    bridge's `setup.py init --adapter <id>`; see modules/tradovate-bridge/bridge/ENGINES.md."""
+    Only Soup in this release. The decrypt-bridge-v2 strategies (below) are pinned here, but the app service
+    (app/backend/trading_service.py) neither installs nor routes them yet. The bridge side of a binding is
+    `setup.py init --adapter <id>`; see modules/tradovate-bridge/bridge/ENGINES.md."""
     load_pair_sources(PAIR_ID)
     return [{**pair_spec(PAIR_ID), 'label': 'Soup — native TP1 retry', 'engineId': 'turtle-soup',
              'version': 'soup-r4-os-1', 'runtimeSupported': True, 'publicationVerified': False,

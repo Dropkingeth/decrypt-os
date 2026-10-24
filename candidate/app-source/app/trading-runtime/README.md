@@ -216,8 +216,9 @@ established by these tests.
 
 `source.package_catalog()` verifies installed code hashes and returns the engines the app installs
 (Execution runtime): Soup r4 only, with its explicit TP1 offset. `source.BRIDGE_ENGINES` holds the
-pinned `decrypt-bridge-v2` strategies (`bridge_v2_registry.STRATEGIES`); each is set up per binding with
-the bridge's `setup.py init --adapter <id>`. All carry `publicationVerified:false` and
+pinned `decrypt-bridge-v2` strategies (`bridge_v2_registry.STRATEGIES`). The app service
+(`app/backend/trading_service.py`) neither installs nor routes them in this release, so they cannot
+trade yet. The bridge side of such a binding is `setup.py init --adapter <id>`. All carry `publicationVerified:false` and
 `providerCommissioned:false`.
 
 `dispatch_guard` is an optional internal synchronous callback checked before

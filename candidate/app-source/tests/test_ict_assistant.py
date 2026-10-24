@@ -2,7 +2,9 @@
 
 Pure unit tests. No OpenClaw process, network, sudo or terminal is started.
 """
+import contextlib
 from datetime import datetime, timezone
+import io
 import importlib.util
 import json
 import os
@@ -318,6 +320,16 @@ class LauncherTests(unittest.TestCase):
                                call=lambda argv: calls.append(argv[-1]) or 0)
         self.assertEqual(result, 0)
         self.assertEqual(calls, ['login', 'ict'])
+
+    def test_clock_prompt_says_the_times_are_a_snapshot(self):
+        # The clock is printed once when the window opens; the prompt must not suggest a live clock.
+        prompts = []
+        with contextlib.redirect_stdout(io.StringIO()):
+            result = launcher.main([], read=lambda prompt: prompts.append(prompt) or (_ for _ in ()).throw(EOFError()),
+                                   run=lambda *a, **k: None, call=lambda argv: 0)
+        self.assertEqual(result, 0)
+        self.assertIn("The times above don't update.", prompts[0])
+        self.assertNotIn('with the clock', prompts[0])
 
     def test_connect_mode_walks_to_login_then_verifies_and_stops(self):
         states = iter([{'status': 'not_started'}, {'status': 'needs_login'}, {'status': 'ready'}])

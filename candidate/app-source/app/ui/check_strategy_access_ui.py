@@ -138,7 +138,7 @@ with sync_playwright() as p:
     check('Soup install is not blocked by registration',page.get_by_text('Register this system first',exact=False).count()==0)
     page.locator('.engine-list').screenshot(path=str(OUT/'trading-engines-desktop.png'))
     page.locator('[data-engine="ote-silver-bullet"]').get_by_role('button',name='View ICT - Silver Bullet OTE engine',exact=True).click()
-    dialog=page.get_by_role('dialog');dialog.get_by_text('Parked. This engine cannot be installed in this release.',exact=True).wait_for()
+    dialog=page.get_by_role('dialog');dialog.get_by_text("Parked. This engine can't be installed or trade in this release.",exact=True).wait_for()
     check('Parked engine dialog shows the Parked label and a TradingView link',dialog.locator('.pill',has_text='Parked').count()==1 and dialog.locator('a[href*="tradingview.com/script/"]').count()==1)
     check('Engine dialog shows the catalog alert setup for decrypt-bridge-v2',dialog.get_by_text('TradingView alert setup',exact=True).count()==1 and dialog.get_by_text('decrypt-bridge-v2',exact=True).count()==1)
     dialog.screenshot(path=str(OUT/'trading-engine-dialog-parked.png'))
